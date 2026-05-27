@@ -1,27 +1,24 @@
 Abkürzung,Auflösung,Übersetzung,Anmerkungen,Wortstamm,Deklination,RG1,RG2,RG3,RG4,RG5,RG6,RG7,RG8,RG9,Bemerkungen_1,Bemerkungen_2,volumes
 a.,?,,,,,,a.,,,,,,,,,(Bd. II 25),1|2|3|4|5|6|7|8|9|10
-a.,annus,Jahr,"siehe Eintrag ""an.""",ann -i,o ,,,,,,,,,,,,1|2|3|4|5|6|7|8|9|10
 a.,annus,Jahr,,ann -i,o,a.,,a.,,,,,,,,,1|2|3|4|5|6|7|8|9|10
-a.,argentum,Silber,,argent -i,o (n.),,,,,,a.,a.,,a.,,meist in Verbindung m. a. p.; m. arg. p.,1|2|3|4|5|6|7|8|9|10
+a.,argentum,Silber,,argent -i,o (n.),,,,,,a.,a.,,a.,,meist in Verbindung m. a. p.,1|2|3|4|5|6|7|8|9|10
 abb.,abbas,Abt,,abbat -is,konsonantisch (m.),abb.,abb.,abb.,abb.,abb.,abb.,abb.,abb.,abb.,,,1|2|3|4|5|6|7|8|9|10
-abb.,abbatissam,Akk. Sg. von abbatissa: Äbtissin,,abbatiss -(a)e,a ,,,,abb.,,,,,,,"wo nicht benutzt, wahrscheinlich Abk. ""abba."" verwendet",1|2|3|4|5|6|7|8|9|10
-abb. et conv.,abbas et conventus,Abt und Konvent,,abbat -is; convent -us,konsonantisch/u,abb. et conv.,,,,,,,,,,,1|3|5|9|10
-abb. et. conv.,abbas et conventus,Abt und Konvent,,,,,,,,,,,,,,,1|3|5|9|10
-abb. et. conv.,abbas et conventus,Abt und Konvent,,abbat -is; convent -us,konsonantisch/u,,abb. et. conv.,abb. et. conv.,abb. et. conv.,abb. et. conv.,abb. et. conv.,,abb. et. conv.,abb. et. conv.,,,1|3|5|9|10
+abb.,abbatissam,Akk. Sg. von abbatissa: Äbtissin,,abbatiss -(a)e,a ,,,,abb.,,,,,,,,1|2|3|4|5|6|7|8|9|10
+abb. et conv.,abbas et conventus,Abt und Konvent,,abbat -is; convent -us,konsonantisch/u,,abb. et conv.,abb. et conv.,abb. et conv.,abb. et conv.,abb. et conv.,,abb. et conv.,abb. et conv.,,,1|3|5|9|10
 abb. etc.,abbas et conventus,Abt und Konvent,,abbat -is; convent -us,konsonantisch/u,abb. etc.,abb. etc.,,abb. etc.,abb. etc.,abb. etc.,abb. etc.,abb. etc.,abb. etc.,,,1|2|3|4|5|6|7|8|9|10
 abba.,abbatissa,Äbtissin,,abbatiss -(a)e,a ,abba.,abba.,,abba.,abba.,abba.,abba.,abba.,abba.,,,1|2|4|5|6|7|8|9|10
-abbam.,abbatissam,Akk. Sg. von abbatissa: Äbtissin,,abbatiss -(a)e,a ,,abbam.,,,abbam.,,,,,,"wo nicht benutzt, wahrscheinlich Abk. ""abba."" verwendet",2|4|5
+abba.,abbatissam,Akk. Sg. von abbatissa: Äbtissin,,abbatiss -(a)e,a,abba.,,,,,abba.,abba.,abba.,abba.,,"wahrscheinlich verwendet wo abbam. nicht verwendet wurde",1|2|4|5|6|7|8|9|10
+abbam.,abbatissam,Akk. Sg. von abbatissa: Äbtissin,,abbatiss -(a)e,a,,abbam.,,,abbam.,,,,,,,2|4|5
 abbat.,abbatia,Abtei; Stelle/Amt des Abtes,,abbati -(a)e,a,abbat.,,abbat.,,abbat.,abbat.,abbat.,abbat.,abbat.,,,1|3|5|6|7|8|9|10
 abbat.,abbatissa,Äbtissin,,abbatiss -(a)e,a ,,,abbat.,,,,,,,,,1|3|5|6|7|8|9|10
-abbat.,abbatissa,Äbtissin,Bd. 3 ,,,,,,,,,,,,,,1|3|5|6|7|8|9|10
 abbe.,abbatisse,Gen./Dat. Sg. + Nom. Pl. von abbatissa: Äbtissin,,abbatiss -arum,a,abbe.,abbe.,,abbe.,abbe.,,abbe.,,,,,1|2|4|5|7
 abbr.,litterarum apostolicarum abbreviator,"Abbreviator, Abfasser von Konzepten in der päpstlichen Kanzlei",,,,,,,,,,,,,,,3
 absolv.,absolvere,lossprechen ,,,,,,,,,,,,,,,1|4|6|8
 accept.,acceptare,,,,,,,,,,,,,,,,4
 accept.,acceptatio,Annahme,,,,,,,,,,,,,,,4
 accept.,acceptus,,,,,,,,,,,,,,,,4
-acolit.,acolitatus,"Weihegrad, Amt des Akoluth","in RG 3 steht ""acolit."" nicht für ""acolitatus"", sondern für ""acolitus""",acolitat -us,u,,,,acolit.,acolit.,acolit.,acolit.,acolit.,acolit.,,,3|4|5|6|7|8|9|10
-acolit.,acolitus,"Akoluth, Geistlicher mit der höchsten der niederen Weihen",Bd. 3 ,,,,,,,,,,,,,,3|4|5|6|7|8|9|10
+acolit.,acolitatus,"Weihegrad, Amt des Akoluth",,acolitat -us,u,,,,acolit.,acolit.,acolit.,acolit.,acolit.,acolit.,,,3|4|5|6|7|8|9|10
+acolit.,acolitus,"Akoluth, Geistlicher mit der höchsten der niederen Weihen", ,,,,,acolit.,,,,,,,,,3|4|5|6|7|8|9|10
 adc.,auri de camera (fl. vel duc.),"Kammergulden, Dukaten",,,,,,,,adc.,,adc.,adc.,adc.,,,5|7|8|9|10
 add.,addendo,,,,Gerundium,,add.,,add.,,,,,,,,2|4
 add. ment.,addendo mentionem,,,,Gerundium,,add. ment.,,add. ment.,,,,,,,,2|4
@@ -39,7 +36,7 @@ alt.,altare,Altar,,altar -is,konsonantisch (n.),alt.,alt.,alt.,alt.,alt.,alt.,al
 alt. port.,altare portatile,Tragaltar,,portatil -is,i-Dekl. (Adj.) (n.),alt. port.,alt. port.,alt. port.,alt. port.,alt. port.,alt. port.,alt. port.,alt. port.,alt. port.,,,1|2|3|4|5|6|7|8|9|10
 altare port.,altare portatile,Tragaltar,,portatil -is,i-Dekl. (Adj.) (n.),altare port.,,,,,,,,,,,1
 an.,annus,Jahr,,ann -i,o,,,an.,,an.,an.,an.,an.,an.,,,2|3|4|5|6|7|8|9|10
-annat.,annata,"Jahresertrag; Gebühr, berechnet aufgrund des Jahresertrages",,annat -(a)e,a,,,annat.,,,,,annat.,annat.,,"""ann."" ist für RG 7 NICHT als Abkürzung für ""annata"" aufgeführt, doch wohl benutzt, da ausgeschrieben ""annat*"" nicht verwendet wurde; nicht auszuschließen, dass ""ann."" möglicherweise auch in den Bd. 3, 8, 9 für ""annata"" verwendet wurde",3|4|5|6|7|8|9|10
+annat.,annata,"Jahresertrag; Gebühr, berechnet aufgrund des Jahresertrages",,annat -(a)e,a,,,annat.,,,,,annat.,annat.,,,3|4|5|6|7|8|9|10
 ap. sed.,apostolica sedes,,siehe sed. ap.,,,,,,,,,,,,,,3|4|5|6|7|8|9|10
 apl.,apostolus,Apostel,,apostol -i,o,,,,apl.,,apl.,apl.,apl.,apl.,,,1|2|3|4|6|7|8|9|10
 Apost.,Apostolus,Apostel,siehe apl.,,,,,,,,,,,,,,2
