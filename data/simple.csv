@@ -51,7 +51,6 @@ archidiac.,archidiaconus,Erzdiakon,,archidiacon-i,o,archidiac.,,archidiac.,archi
 archidiacon.,archidiaconatus,Amt/Stelle des Erzdiakons,,archidiaconat  -us,u,,,archidiacon.,archidiacon.,archidiacon.,archidiacon.,,,,,,4|5
 archidiaconat.,archidiaconatus,Amt/Stelle des Erzdiakons,,archidiaconat  -us,u,archidiaconat.,,,,,,,,,,,1
 arg.,argentum,Silber,,argent -i,o (n.),,,,arg.,arg.,arg.,arg.,arg.,arg.,,,4|5|6|7|8|9|10
-Arm.,?,,,,,,Arm.,Arm.,Arm.,Arm.,Arm.,Arm.,Arm.,Arm.,,,2|3|4|5|6|7|8|9|10
 armig.,armiger,Knappe,,armiger -i,o,,armig.,armig.,armig.,armig.,armig.,armig.,armig.,armig.,,,2|3|4|5|6|7|8|9|10
 asad.,apud sedem apostolicam defunctus,,,,,,,,,,,asad.,,asad.,,,7|9
 auct.,auctoritas,Vollmacht,,auctoritat -is,konsonantisch,,auct.,auct.,auct.,auct.,,auct.,auct.,auct.,,,2|3|4|5|7|8|9|10
@@ -118,7 +117,6 @@ coniug.,coniugatus,verheiratet,,coniugat,o (Adj.),,coniug.,coniug.,coniug.,coniu
 cons.,consanguinitas,(Bluts-)verwandtschaft,,consanguinitat -is,konsonantisch,cons.,,,,,,,,,,,2|3|4
 cons.,consul,,,consul -is,konsonantisch,,cons.,cons.,cons.,,,,,,,,2|3|4
 consul.,consul,,,consul -is,konsonantisch,,,,consul.,consul.,,,,,,,2|3|4|5|6|7|8|9|10
-cont.,?,,jeweils einmal in 1 und 2,,,cont.,cont.,,,,,,,,,,1
 conthor.,conthoralis,Ehefrau,,conthoral -is,gemischt,,,,,,,,conthor.,conthor.,,,8|9|10
 conv.,conventus,Konvent,,convent -us,u,conv.,conv.,conv.,conv.,conv.,conv.,conv.,conv.,conv.,,,1|2|3|4|5|6|7|8|9|10
 corp.,corpus,Körper; körperliche Unversehrtheit,,corpor -is,konsonantisch (n.),,corp.,corp.,corp.,corp.,corp.,corp.,corp.,corp.,,,2|3|4|5|6|7|8|9|10
@@ -174,7 +172,6 @@ dom. hosp.,domus hospitalis,,,hospital -is,i (Adj.),,dom. hosp.,dom. hosp.,dom. 
 domus hosp.,domus hospitalis,,,hospital -is,i (Adj.),domus hosp.,domus hosp.,domus hosp.,domus hosp.,domus hosp.,,domus hosp.,domus hosp.,,,,1|2|4|5|7|8
 dot.,dotare,,,"dot, dotav, dotat",A-Konj.,,dot.,,,,dot.,,,,,,2|6
 dotat.,dotatio,,,dotation -is,konsonantisch,,,dotat.,,,,,,,,,3
-e.m.,extra muros,außerhalb der Mauern,,,,,e.m.,e.m.,e.m.,e.m.,e.m.,e.m.,e.m.,e.m.,,,2|3|4|6|7|8|10
 e. m.,extra muros,außerhalb der Mauern,,,,,e. m.,e. m.,e. m.,e. m.,e. m.,e. m.,e. m.,e. m.,,,2|3|4|6|7|8|10
 ecc.,ecclesia,Kirche,,ecclesi -(a)e,a ,,,,,ecc.,,,,,,,4|6
 eccl.,ecclesia,Kirche,,ecclesi -(a)e,a ,eccl.,eccl.,eccl.,eccl.,,eccl.,eccl.,eccl.,eccl.,,,1|2|3|4|5|6|7|8|9|10
@@ -305,12 +302,11 @@ o. in cur.,obitus in cur.,am päpstlichen Hof gestorben,,,,,,,,,,,o. in cur.,,,,
 o. in curia,obitus in cur.,am päpstlichen Hof gestorben,,,,,,,o. in curia,,,,,,,,4|10
 o. pred.,ordo predicatorum,Predigerorden (Dominikaner),,,,,,,,,,,,,,,1|2|3|4|5|6|7|8|9|10
 o. Prem.,ordo Premonstratensium,Prämonstratenserorden,,,,,,,,,,,,,,,1|2|4|5|6|7|8|9|10
-o. s. a.,obligatio super annata,,,,,,,,o. s. a.,.,,,,,,,4
+o. s. a.,obligatio super annata,,,,,,,,o. s. a.,o. s. a.,,,,,,,4
 o. s. Ant.,ordo sancti Antonii,Antoniterorden,,,,,,,,,,,,,,,4|5|10
 o. s. Aug.,ordo sancti Augustini,Augustinerorden,,,,,,,,,,,,,,,1|2|3|4|5|6|7|8|10
 o. s. Ben.,ordo sancti Benedicti,Benediktinerorden,,,,,,,,,,,,,,,1|2|3|4|5|6|7|8|9|10
 o. s. Clare,ordo sancte Clare,Klarissenorden,,,,,,,,,,,,,,,1|2|3|4|5|6|7|8|9|10
-o.s.a.,obligatio super annata,,,,,,,,,o.s.a,,,,,,,5
 obed.,obedientia,,,obedienti -(a)e,a,,,obed.,obed.,obed.,obed.,obed.,obed.,,,,3|4|5|6|7|8
 obed.,obedire,,,"obed, obediv, obedit",i-Konj.  ,,,,,,,,,,,,3|4|5|6|7|8
 obl.,obligare,,,,,,,,,,,,,,,,4
@@ -336,7 +332,6 @@ opp.,oppidum,Stadt,,op(p)id -i,o (n.),,,,,opp.,,,,,,,5
 oppid.,oppidanus,Stadtbewohner,,op(p)idan -i,o,,,,,,,,,oppid.,,,10
 p. m.,per manus,,,,,,p. m.,p. m.,,p. m.,,p. m.,p. m.,p. m.,,,2|3|7|8|9|10
 p. o.,per obitum,durch Tod,,,,,p. o.,,p. o.,p. o.,p. o.,p. o.,p. o.,p. o.,,,2|4|6|7|8|9|10
-p.m.,per manus,,,,,,,,,,,,,,,,5
 pal.,palatium,Palast,,palati -i,o (n.),pal.,pal.,pal.,pal.,pal.,pal.,,pal.,pal.,,,4|5|10
 palat.,palatium,Palast,,palati -i,o (n.),,palat.,palat.,palat.,,,,,,,,1|2|3|4|5|6|8|9
 paroch.,parochia,"Pfarrei, Pfarrsprengel; Amt des ",,parochi -(a)e,a,paroch.,,paroch.,paroch.,paroch.,paroch.,paroch.,paroch.,paroch.,,,1|3|4|5|6|7|8|9|10
