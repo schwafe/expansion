@@ -28,7 +28,7 @@ accip.,accipere,"empfangen, erhalten",,,,,,,,,,,,,,
 acol.,acolitus,"Akoluth, Geistlicher mit der höchsten der niederen Weihen",,acolit(h) -i; acolut -i,o,acolitus,acol.; acolit(h)us,acolit.; acolitus; acolutus,acol.; acolitus,acol.,acol.,acol.,acol.; acolitus,acol.; acolitus; acolutus,,
 acolit.,acolitatus,"Weihegrad, Amt des Akoluth","in RG 3 steht ""acolit."" nicht für ""acolitatus"", sondern für ""acolitus""",acolitat -us,u,,,,acolit.,acolit.,acolit.,acolit.,acolit.,acolit.,,
 ,acolitus,"Akoluth, Geistlicher mit der höchsten der niederen Weihen",Bd. 3 ,,,,,,,,,,,,,
-adc.,auri de camera (fl. vel duc.),"Kammergulden, Dukaten",,,,,,,,adc.,auri de cam.,adc.,adc.,adc.,,
+adc.,auri de camera,"Kammergulden, Dukaten",,,,,,,,adc.,auri de cam.,adc.,adc.,adc.,,(fl. vel duc.)
 add.,addendo,,,,Gerundium,,add.,,add.,,,,,,,
 add. ment.,addendo mentionem,,,,Gerundium,,add. ment.,,add. ment.,,,,,,,
 adh.,adherens; adherentes,,,adherent -is,gemischt,adh.; adher.; adherens; adherentes,adher.; adherens; adherentes,adh.,adherens; adherentes,adherens; adherentes,adher.; adherens; adherentes,adherens; adherentes,adherens; adherentes,adherens; adherentes,,
@@ -62,7 +62,7 @@ ap. sed.,apostolica sedes,,siehe sed. ap.,,,,,,,,,,,,,
 apl.,apostolus,Apostel,,apostol -i,o,Ap. ,apost.; Apost.; apostolus,Apost.; apostolus,apl.; apost.,apostolus,apl.,apl.,apl.,apl.; apostolus,,
 Apost.,Apostolus,Apostel,siehe apl.,,,,,,,,,,,,,
 apost.,apostolicus,apostolisch; päpstlich,siehe apl.,,,,,,,,,,,,,
-appl.,apostoli (Plural),die Apostel,,apostol -orum,o,,,,appl.,appl.,appl.,appl.,appl.,appl.,,"in den Bd. 1, 2, 3 wahrscheinlich die selben Abk. wie für Sg. "
+appl.,apostoli,die Apostel,Plural,apostol -orum,o,,,,appl.,appl.,appl.,appl.,appl.,appl.,,"in den Bd. 1, 2, 3 wahrscheinlich die selben Abk. wie für Sg. "
 approb.,approbare;,billigen,,"approb, approbav, approbat", a-Konj.,,approbare; approbatio,approb.; approbare; approbatio,approbare; approbatio,approb.; approbare; approbatio,approb.,approb.,approb.; approbare; approbatio,approb.; approbare,,
 ,approbatio,Billigung,,approbation -is,konsonantisch  ,,,,,,,,,,,
 apr.,aprilis,April,,april -is,gemischt,apr.,apr.,apr.,apr.; april.,apr.; aprilis,apr.,apr.,apr.,apr.,,
@@ -92,7 +92,7 @@ aug.,augustus,August,,august -i,o,aug.,aug.,aug.,aug.; augustus,aug.; augustus,a
 b.,beatus;,heilig,,beat -i,o/a (Adj.),b.,b.,b.,b.,b.,b. ,b.,b.,b.,,"b. für ""bulla"" nur in RG 4, in allen Bd. (inkl 4) sonst ausgeschrieben "
 ,bulla,Bulle,"v. a. in ""l. b.""; siehe dortigen Eintrag",bull -(a)e,a,,,,,,,,,,,
 b. m.,bone memorie,,,,,,,,,,b. m.,,,,,
-bb.,beati (Plural),die heiligen,,beat -orum/arum,o/a (Adj.),bb.,bb.,bb.,bb.,bb.,bb.,bb.,bb.,bb.,,
+bb.,beati,die heiligen,Plural,beat -orum/arum,o/a (Adj.),bb.,bb.,bb.,bb.,bb.,bb.,bb.,bb.,bb.,,
 bac.,baccalaureus,Bakkalaureus (akademischer Grad),,baccalari -i; bacallari -i; baccalauri -i,o,bac.; bacal.; bacall.; baccal.; baccalarius; bacallarius,bac.,bac.,bac.,bac.; baccalaurius,bac.,bac.,bac.,bac.,,
 bacal.,bacalaureus,Bakkalaureus (akademischer Grad),siehe bac.,,,,,,,,,,,,,
 bacall.,bacallaureus,Bakkalaureus (akademischer Grad),siehe bac.,,,,,,,,,,,,,
@@ -208,6 +208,7 @@ concordat.,concordatio,,nur einmal verwendet,concordation -is,konsonantisch,,,,c
 condit.,conditio,,,condition -is,konsonantisch,,,condit.; conditio,conditio,conditio,condit.; conditio,conditio,conditio,conditio,,
 conf.,confirmare;,bestätigen;,,"confirm, confirmav, confirmat",A-Konj.,confirm.; confirmare; confirmatio,conf.; confirm.; confirmare; confirmatio,conf.; confirm.; confirmatio,conf.; confirmare; confirmatio,conf.; confirmare; confirmatio,conf.; confirm.,conf.,conf.; confirmatio,conf.; confirmare; confirmatio,,
 ,confirmatio,Bestätigung,,confirmation,konsonantisch,,,,,,,,,,,
+conf. disp. sup. matrim.,confirmatio dispensationis super matrimonio,,,,,,,,,,,,,,,OpenAI GPT-5.5
 confer.,conferre,"übertragen, verleihen",,"confer, contul, collat (conlat)",,,confer.,confer.,confer.,confer.,confer.,confer.,confer.,confer.,,"in allen Bd. auch ""conferre"""
 confess.,confessio;,Beichte,,confession -is,konsonantisch,confessor,confess.; confessio; confessor,confess.; confessor,confess.; confessionale; confessio; confessor,confess.; confessionalia; confessio; confessor,confess.; confessio; confessor,confess.; confessio,confess.; confessio; confessor,confess.; confessionale; confessio; confessor,,
 ,confessionale;,Beichtbrief,,confessional -is,konsonantisch,,,,,,,,,,,
@@ -251,7 +252,10 @@ d.,dictus;,genannt;,,dict -i,o (Adj.),d.; dictus,d.; dictus,d.; dict.; dictus,d.
 d. d.,de dato/data,,,,,,de dat.; de dato,d. d.,de data; de dato,de data,,d. d.; de data,de data; dato,de dat.; de dato,,
 dat.,data;,(Urkunden) ausgestellt;,,dat -(a)e,a (Adj.),dat.; data,dat.; datum,d.; data; datum,dat.; data; datum,dat.; data; datum,d.; dat.; data; datum,dat.; data,dat.; data; datum,dat.; data; datum,,"möglicherweise ""d."" auch in anderen Bd. als ""datum/a"" verwendet, aber zuviel zum überprüfen; meist in Verb. ""s.e.d./s.d./d.d."""
 ,datum,"Datum, Ausstellung",,dat -i,o (n.),,,,,,,,,,,
-dd.,dicti (Plural),die genannten,,dict -orum,o,dicti,dicti,dicti,dd.; dicti,dicti,dd.,dd.; dicti,dd.; dicti,dd.; dicti,,
+dd.,dicti,die genannten,Plural,dict -orum,o,dicti,dicti,dicti,dd.; dicti,dicti,dd.,dd.; dicti,dd.; dicti,dd.; dicti,,
+de disp. sup. matrim.,de dispensatione super matrimonio,,,,,,,,,,,,,,,OpenAI GPT-5.5
+de conf. disp. sup. matrim.,confirmatione dispensationis super matrimonio,,,,,,,,,,,,,,,OpenAI GPT-5.5
+de ref. disp. sup. matrim.,de reformatione dispensationis super matrimonio,,,,,,,,,,,,,,,OpenAI GPT-5.5
 dec.,decanus,Dekan,,decan -i,o,dec.; decan.,dec.,dec.,dec.,dec.,dec.,dec.,dec.,dec.,,"in allen Bd. auch ""decanus"""
 ,december,Dezember,,decembr -is,konsonantisch?,,,,,,,,,,,
 dec. etc.,"decanus, capitulum et singuli canonici","Dekan, Kapitel und die einzelnen Kanoniker",,,,dec. et cap.,dec. etc.; dec. et cap.; dec. et capit.,dec. et capit.,dec. etc.; dec. et cap.; dec. et capit.,dec. etc.; dec. et capit.,dec. etc.; dec. et capit.,dec. etc.; dec. et capit.,dec. etc.; dec. et capit.,dec. etc.; dec. et capit.,,
@@ -475,7 +479,7 @@ iudic.,iudiciaria;,,,iudiciari -(a)e,a,,iudic.,iudic.,,,iudic.,,,,,
 iul.,iulius,Juli,,iuli -i,o,iul.,iul.,iul.,iul.,iul.,iul.,iul.,iul.,iul.,,
 iun.,iunior;,der jüngere;,,iunior -is,konsonantisch,iun.,iun.,iun.,iun.,iun.,iun.,iun.,iun.; iunior.,iun.,,
 ,iunius,Juni,,iuni -i,o,,,,,,,,,,,
-iur.,iuris (usw.),des Rechts (usw.),,iur -is,konsonantisch,,iur.,iur.,iur.,iur.,iur.,iur.,iur.,iur.,,
+iur.,iuris,des Rechts (usw.),,iur -is,konsonantisch,,iur.,iur.,iur.,iur.,iur.,iur.,iur.,iur.,,
 iuram.,iuramentum,Eid,,iurament -i,o (n.),,iuram.,iuram.,iuram.,iuram.,iuram.,iuram.,iuram.,iuram.,,
 iurisd.,iurisdictio,Gerichtsbarkeit; Gerichtshoheit,,iurisdiction -is,konsonantisch,,iurisd.,,,,iurisd.,iurisd.,iurisd.,iurisd.,,
 karl.,karlinus,,nur in 5; kommt ausgeschrieben nicht vor,,,,,,,karl.,,,,,,
@@ -495,9 +499,11 @@ libr.,libra,Pfund,"und ""l."", aber nur in Abk. ""l.T.p."" und ""l. Tur. p.""",l
 lic.,licentia;,Erlaubnis,,licenti -(a)e,a,lic.,lic.,lic.,lic.,lic.,lic.,lic.,lic.,lic.,,
 ,licentiatus,,"in 2,4,6,7 ",,,,,,,,,,,,,
 licent.,licentiatus,Lizentiat (akademischer Grad),"in 2,4,6,7: lic.",,,,lic.,,lic.,licent.,lic.,lic.,licent.,,,
-lim.,limina (appl.),Schwellen (der Gräber der Apostel Petrus und Paulus); (Pflicht der Bischöfe zum regelmäßigen Besuch der Kurie);,,limin -um (bereits Pl.),konsonantisch,,lim.,,limin.,lim.,lim.,lim.,lim.,lim.,,
+lim.,limina,Schwellen,,limin -um (bereits Pl.),konsonantisch,,lim.,,limin.,lim.,lim.,lim.,lim.,lim.,,
+lim. appl.,limina apostolorum,Schwellen der Gräber der Apostel Petrus und Paulus; (Pflicht der Bischöfe zum regelmäßigen Besuch der Kurie);,,limin -um (bereits Pl.),konsonantisch,,,,,,,,,,,
 ,limites,Grenzen,,limit -um (bereits Pl.),konsonantisch,,,,,,,,,,,
-limin.,limina (appl.),Schwellen (der Gräber der Apostel Petrus und Paulus); (Pflicht der Bischöfe zum regelmäßigen Besuch der Kurie);,siehe lim.,,,,,,,,,,,,,
+limin.,limina,Schwellen,siehe lim.,,,,,,,,,,,,,
+limin. appl.,limina apostolorum,Schwellen der Gräber der Apostel Petrus und Paulus; (Pflicht der Bischöfe zum regelmäßigen Besuch der Kurie);,,limin -um (bereits Pl.),konsonantisch,,,,,,,,,,,
 lit.,lite/litis,,,?,?,,lit.,lit.,lit.,,lit.,lit.,,,,
 lit. pend.,lite pendente,,,,,,,,,,,,,,,
 lite pend.,lite pendente,,,,,,,lit. pend.,lite pend.,,lit. pend.,lit. pend.,,,,
@@ -924,8 +930,8 @@ spir.,spiritualis;,geistlich;,,spiritual -is,i (Adj.),spir.,spir.; spirit.,spir.
 ,spiritualia,den geistlichen Bereich Betreffendes,,spiritual -ium,i (Adj.),,,,,,,,,,,
 spirit.,spiritualis;,geistlich;,siehe spir.,,,,,,,,,,,,,
 ,spiritualia,den geistlichen Bereich Betreffendes,,,,,,,,,,,,,,
-SS.,sancti (Plural),die heiligen,siehe ss.,,,,,,,,,,,,,
-ss.,sancti (Plural),die heiligen,,sanct -orum,o,ss.; SS.,ss.,ss.,ss.,ss.,ss.,ss.,ss.,ss.,,
+SS.,sancti,die heiligen,siehe ss.,,,,,,,,,,,,,
+ss.,sancti,die heiligen,Plural,sanct -orum,o,ss.; SS.,ss.,ss.,ss.,ss.,ss.,ss.,ss.,ss.,,
 statut.,statuta/um,,,statut -(a)e/-i,a/o,,,statut.,statut.,statut.,,,,statut.,,
 stud.,studere;,studieren;,,"stude, studu, -",e-Konj.,,stud.,,stud.,stud.,stud.,stud.,stud.,stud.,,
 ,studium,Studium; Universität,,studi -i,o (n.),,,,,,,,,,,

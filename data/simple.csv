@@ -19,7 +19,7 @@ accept.,acceptatio,Annahme,,,,,,,,,,,,,,,4
 accept.,acceptus,,,,,,,,,,,,,,,,4
 acolit.,acolitatus,"Weihegrad, Amt des Akoluth",,acolitat -us,u,,,,acolit.,acolit.,acolit.,acolit.,acolit.,acolit.,,,3|4|5|6|7|8|9|10
 acolit.,acolitus,"Akoluth, Geistlicher mit der höchsten der niederen Weihen", ,,,,,acolit.,,,,,,,,,3|4|5|6|7|8|9|10
-adc.,auri de camera (fl. vel duc.),"Kammergulden, Dukaten",,,,,,,,adc.,,adc.,adc.,adc.,,,5|7|8|9|10
+adc.,auri de camera,"Kammergulden, Dukaten",,,,,,,,adc.,,adc.,adc.,adc.,,(fl. vel duc.),5|7|8|9|10
 add.,addendo,,,,Gerundium,,add.,,add.,,,,,,,,2|4
 add. ment.,addendo mentionem,,,,Gerundium,,add. ment.,,add. ment.,,,,,,,,2|4
 adhes.,adhesio,,,adhesion -is,konsonantisch,,,,,adhes.,,,,,,,5
@@ -43,7 +43,7 @@ Ap.,apostolus,Apostel,,apostol -i,o,Ap.,,,,,,,,,,,5|7
 ap. sed.,apostolica sedes,,,,,,,ap. sed.,ap. sed.,ap. sed.,ap. sed.,ap. sed.,ap. sed.,ap. sed.,,,3|4|5|6|7|8|9|10
 apl.,apostolus,Apostel,,apostol -i,o,,,,apl.,,apl.,apl.,apl.,apl.,,,1|2|3|4|6|7|8|9|10
 Apost.,Apostolus,Apostel,,apostol -i,o,,Apost.,Apost.,,,,,,,,,2
-appl.,apostoli (Plural),die Apostel,,apostol -orum,o,,,,appl.,appl.,appl.,appl.,appl.,appl.,,"in den Bd. 1, 2, 3 wahrscheinlich die selben Abk. wie für Sg. ",4|5|6|7|8|9|10
+appl.,apostoli,die Apostel,Plural,apostol -orum,o,,,,appl.,appl.,appl.,appl.,appl.,appl.,,"in den Bd. 1, 2, 3 wahrscheinlich die selben Abk. wie für Sg. ",4|5|6|7|8|9|10
 apr.,aprilis,April,,april -is,gemischt,apr.,apr.,apr.,apr.,apr.,apr.,apr.,apr.,apr.,,,1|2|3|4|5|6|7|8|9|10
 archid.,archidiaconus,Erzdiakon,,archidiacon-i,o,,archid.,,archid.,,archid.,archid.,archid.,archid.,,,2|10
 archidiac.,archidiaconatus,Amt/Stelle des Erzdiakons,,archidiaconat  -us,u,,archidiac.,,,,archidiac.,archidiac.,archidiac.,archidiac.,,,1|2|3|4|5|6|7|8|9|10
@@ -55,12 +55,12 @@ armig.,armiger,Knappe,,armiger -i,o,,armig.,armig.,armig.,armig.,armig.,armig.,a
 asad.,apud sedem apostolicam defunctus,,,,,,,,,,,asad.,,asad.,,,7|9
 auct.,auctoritas,Vollmacht,,auctoritat -is,konsonantisch,,auct.,auct.,auct.,auct.,,auct.,auct.,auct.,,,2|3|4|5|7|8|9|10
 aug.,augustus,August,,august -i,o,aug.,aug.,aug.,aug.,aug.,aug.,aug.,aug.,aug.,,,1|2|3|4|5|6|7|8|9|10
-auri de cam.,auri de camera (fl. vel duc.),"Kammergulden, Dukaten",,,,,,,,,auri de cam.,,,,,,6|8|10
+auri de cam.,auri de camera,"Kammergulden, Dukaten",,,,,,,,,auri de cam.,,,,,(fl. vel duc.),6|8|10
 b. m.,bone memorie,,,,,,,,,,b. m.,,,,,,6
 bar.,baro,"Freiherr, Baron",,baron -is,konsonantisch,,bar.,bar.,bar.,bar.,bar.,bar.,bar.,bar.,,,2|3|4|5|6|7|8|9|10
 baron.,baronia,,,baroni -(a)e,a,,,baron.,baron.,,,,,,,,3|4
 Barth.,Bartholomeus,Urbanus VI,1,Bartholome -i,o,,,,,,,,,,,,1|2
-bb.,beati (Plural),die heiligen,,beat -orum/arum,o/a (Adj.),bb.,bb.,bb.,bb.,bb.,bb.,bb.,bb.,bb.,,,1|2|3|4|5|6|7|8|9|10
+bb.,beati,die heiligen,Plural,beat -orum/arum,o/a (Adj.),bb.,bb.,bb.,bb.,bb.,bb.,bb.,bb.,bb.,,,1|2|3|4|5|6|7|8|9|10
 ben. c. v. s. c.,beneficium cum vel sine cura,Pfründe mit oder ohne Seelsorge,,,,ben. c. v. s. c.,,,,,,,,,,,1
 Bened.,Benedictus,Benedictus XIII,1,Benedict -i,o,,,,,,,,,,,,2|3
 benef. c. c.,beneficium cum cura,Pfründe mit Seelsorge,,,,,,,,benef. c. c.,benef. c. c.,benef. c. c.,benef. c. c.,benef. c. c.,,,1|6|7|8|10
@@ -244,7 +244,7 @@ instrum.,instrumentum,(Notariats-)Instrument,,instrument -i,o (n.),,instrum.,ins
 introduc.,introducere,,,"introduc, introdux, introduct",konsonantische Konj.,,introduc.,introduc.,,,,,,,,,2|3
 iud.,iudex,,nur in 6,iudic -is,konsonantisch,,,,,,iud.,,,,,,6
 iul.,iulius,Juli,,iuli -i,o,iul.,iul.,iul.,iul.,iul.,iul.,iul.,iul.,iul.,,,1|2|3|4|5|6|7|8|9|10
-iur.,iuris (usw.),des Rechts (usw.),,iur -is,konsonantisch,,iur.,iur.,iur.,iur.,iur.,iur.,iur.,iur.,,,2|3|4|5|6|7|8|9|10
+iur.,iuris,des Rechts (usw.),,iur -is,konsonantisch,,iur.,iur.,iur.,iur.,iur.,iur.,iur.,iur.,,,2|3|4|5|6|7|8|9|10
 iuram.,iuramentum,Eid,,iurament -i,o (n.),,iuram.,iuram.,iuram.,iuram.,iuram.,iuram.,iuram.,iuram.,,,2|3|4|5|6|7|8|9|10
 iurisd.,iurisdictio,Gerichtsbarkeit; Gerichtshoheit,,iurisdiction -is,konsonantisch,,iurisd.,,,,iurisd.,iurisd.,iurisd.,iurisd.,,,2|6|7|8|9|10
 karl.,karlinus,,,,,,,,,karl.,,,,,,,5
@@ -256,9 +256,10 @@ len.,lenitas,,,lenitat -is,konsonantisch,,len.,,,,,,,,,,2
 lib.,libra,Pfund,,libr -(a)e,a,,,,,,lib.,,,,,,6
 libr.,libra,Pfund,,libr -(a)e,a,,,,,libr.,libr.,libr.,libr.,libr.,,,5|6|7|8|9|10
 licent.,licentiatus,Lizentiat (akademischer Grad),,,,,,,,licent.,,,licent.,,,,5|8|10
-lim.,limina (appl.),Schwellen (der Gräber der Apostel Petrus und Paulus); (Pflicht der Bischöfe zum regelmäßigen Besuch der Kurie);,,limin -um (bereits Pl.),konsonantisch,,lim.,,,lim.,lim.,lim.,lim.,lim.,,,2|5|6|7|8|9|10
+lim.,limina,Schwellen,,limin -um (bereits Pl.),konsonantisch,,lim.,,,lim.,lim.,lim.,lim.,lim.,,,2|5|6|7|8|9|10
+lim. appl.,limina apostolorum,Schwellen der Gräber der Apostel Petrus und Paulus; (Pflicht der Bischöfe zum regelmäßigen Besuch der Kurie);,,limin -um (bereits Pl.),konsonantisch,,,,,,,,,,,,
 lim.,limites,Grenzen,,limit -um (bereits Pl.),konsonantisch,,,,,,,,,,,,2|5|6|7|8|9|10
-limin.,limina (appl.),Schwellen (der Gräber der Apostel Petrus und Paulus); (Pflicht der Bischöfe zum regelmäßigen Besuch der Kurie);,,limin -um (bereits Pl.),konsonantisch,,,,limin.,,,,,,,,4
+limin.,limina,Schwellen,,limin -um (bereits Pl.),konsonantisch,,,,limin.,,,,,,,,4
 lit.,lite/litis,,,?,?,,lit.,lit.,lit.,,lit.,lit.,,,,,2|4|6|7
 lite pend.,lite pendente,,,,,,,,lite pend.,,,,,,,,3|4
 litt.,littere,"Urkunde, Brief",,litter -is,konsonantisch,,litt.,litt.,litt.,litt.,litt.,litt.,litt.,litt.,,,1|2|3|4|5|6|7|8|9|10
@@ -270,7 +271,7 @@ mag.,magister,"Magister, Meister, Vorsteher",,magistr -i,o,mag.,mag.,mag.,mag.,m
 mai.,maior,"der größere, der höhere; Groß-. Haupt-",,maior -is,konsonantisch,,mai.,,mai.,,mai.,,,,,,1|2|3|4|5|6|7|8|9|10
 mai.,maius,Mai,,mai -i,o,mai.,,mai.,,mai.,,mai.,mai.,mai.,,,1|2|3|4|5|6|7|8|9|10
 maior eccl.,maior ecclesia,Bischofskirche,,,,,,,,,,,,,,,9
-maior.,"maior (ungekürzt, dekl.)","der größere, der höhere; Groß-. Haupt-",,maior -is,konsonantisch,,,maior.,,maior.,,,maior.,,,,1|3|4|5|8|9|10
+maior.,maior,"der größere, der höhere; Groß-. Haupt-","ungekürzt, dekl.",maior -is,konsonantisch,,,maior.,,maior.,,,maior.,,,,1|3|4|5|8|9|10
 maior. eccl.,maior ecclesia,Bischofskirche,,,,,,maior. eccl.,,maior. eccl.,,,maior. eccl.,,,,3|5|8|9
 marc. arg.,marca argenti,Mark Silbers,,marc -(a)e (argenti wird nicht verändert),,,,,,marc. arg.,,,,,,,4
 matrim.,matrimonialis (disp.),Ehe-(dispens),,matrimonial -i,i (Adj.),,,,,,,,,,,,2|3|4|5|6|7|8|9|10
@@ -288,7 +289,7 @@ motu pr.,motu proprio,(vorgeblich) aus eigenem Antrieb (erlassene Verfügung des
 mul.,mulier,(Ehe-)Frau,,mulier -is,konsonantisch,,mul.,,mul.,mul.,mul.,mul.,mul.,mul.,,,2|4|5|6|7|8|9|10
 mun.,munus,,2.3,muner -is,konsonantisch,,mun.,mun.,,,,,,,,,2|3
 n.,non,nicht,,,,,n.,n.,n.,n.,n.,n.,n.,n.,"in Bd. 1 hat ""n."" andere, mir unbekannte Bedeutung",,1|2|3|4|5|6|7|8|9|10
-n. o.,non obstante/obstantibus (als Ablativus absolutus),ungeachtet (von – aufgezählten Pfründen und Rechten),,,,,n. o.,n. o.,n. o.,n. o.,n. o.,n. o.,n. o.,n. o.,,,1|2|3|4|5|6|7|8|9|10
+n. o.,non obstante/obstantibus,ungeachtet (von – aufgezählten Pfründen und Rechten),(als Ablativus absolutus),,,,n. o.,n. o.,n. o.,n. o.,n. o.,n. o.,n. o.,n. o.,,,1|2|3|4|5|6|7|8|9|10
 nat.,natalis (def.),Geburts-(makel),,natal -i,i (Adj.),nat.,nat.,nat.,nat.,nat.,nat.,nat.,nat.,nat.,,,1|2|3|4|5|6|7|8|9|10
 nob.,nobilis,adelig,,nobil -is,i (Adj.),nob.,nob.,nob.,nob.,nob.,nob.,nob.,nob.,nob.,,,1|2|3|4|5|6|7|8|9|10
 nov.,november,November,,novembr -is,konsonantisch,nov.,nov.,nov.,nov.,nov.,nov.,nov.,nov.,nov.,,,1|2|3|4|5|6|7|8|9|10
