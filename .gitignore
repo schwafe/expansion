@@ -1,3 +1,17 @@
+# output folder (might want to upload it later, but not for now)
+transformed
+# rg_header_sublemma_all table from the RG database -- too large to upload it for no good reason
+data/rg.csv
+# uv's files (if this becomes a proper project, I'll want to upload them later, but for now that's not necessary or helpful)
+uv.lock
+pyproject.toml
+.python-version
+
+
+# -------------
+# below is the list of ignores that GitHub defines for any Python project
+# -------------
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
