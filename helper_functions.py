@@ -1,8 +1,13 @@
 import re
+import time
 import pandas as pd
 import polars as pl
 from IPython.display import HTML
 
+from openai import InternalServerError, OpenAI
+from ratelimit import limits, sleep_and_retry
+
+ONE_MINUTE = 60
 
 # NOTE: copied from https://ai.plainenglish.io/displaying-dataframes-side-by-side-in-jupyter-notebook-871e1a6fc692 and then adjusted slightly
 def side_by_side(*dfs):
@@ -134,6 +139,22 @@ def find_abbreviations(texts: pl.DataFrame) -> pl.Series:
     return abbreviations.rename("Abkürzung").unique()
 
 
+def determine_candidates(vita: pl.DataFrame, simple: pl.DataFrame, complex: pl.DataFrame):
+    volume = vita.get_column("volume").unique().item() # implicit assertion that there is just one vita and consequently one volume in the dataframe
+    simple = simple.filter(pl.col(f"^RG{volume}$").is_not_null())
+    simple = simple.filter(pl.col("Abkürzung").is_duplicated())
+
+    abbreviations = find_abbreviations(vita)
+    multiword_abbreviations_with_spaces = abbreviations.filter(abbreviations.str.find(r"\.\w").is_not_null()).str.replace_all(r"\.(\w)", r". $1")
+    abbreviations = pl.concat((abbreviations, multiword_abbreviations_with_spaces))
+
+    simple_candidates = pl.DataFrame(abbreviations).join(simple, on="Abkürzung", how="inner").select("Abkürzung", "Auflösung").group_by("Abkürzung").agg(pl.col("Auflösung"))
+    complex_candidates = pl.DataFrame(abbreviations).join(complex, on="Abkürzung", how="inner").select("Abkürzung", "Auflösung").group_by("Abkürzung").agg(pl.col("Auflösung"))
+    
+    candidates = pl.concat((simple_candidates, complex_candidates)).sort(by="Abkürzung")
+    return {row["Abkürzung"]: row["Auflösung"] for row in candidates.iter_rows(named=True)}
+
+
 def vita_df_to_text(vita:pl.DataFrame):
     header = vita.get_column("header_no_tags").drop_nulls().item() # implicit assertion that there is just one header
     regests = vita.sort(by=["volume", "nr_RG", "nr_suffix"]).get_column("regest_no_tags").drop_nulls().implode().item().to_list()
@@ -156,3 +177,29 @@ def text_to_vita_df(text: str, volume: int, nr: int):
         "regest_no_tags": regests,
         "id_RG_all": [f"1{volume:02d}{nr:05d}-{i}" for i in range(len(pieces))]})
     return vita
+
+@sleep_and_retry
+@limits(calls=15, period=ONE_MINUTE)
+def _call_chat_ai_once(client: OpenAI, model: str, system_prompt: str, user_prompt: str):
+    chat_completion = client.chat.completions.create(
+        messages=[
+            {
+                "role": "system",
+                "content": system_prompt,
+            },
+            {"role": "user", "content": user_prompt},
+        ],
+        model=model,
+        temperature=0,
+    )
+    return chat_completion.model_dump()
+
+def call_chat_ai(client: OpenAI, model: str, system_prompt: str, user_prompt: str, max_retries: int = 5, retry_wait: float = 5):
+    for retry in range(max_retries + 1):
+        try:
+            return _call_chat_ai_once(client, model, system_prompt, user_prompt)
+        except InternalServerError as e:
+            if retry == max_retries:
+                raise
+            print(f"server error ({e.status_code}), retrying in {retry_wait}s ({retry + 1}/{max_retries})")
+            time.sleep(retry_wait)
