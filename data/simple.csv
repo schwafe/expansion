@@ -1,16 +1,16 @@
 Abkürzung,Auflösung,Übersetzung,Anmerkungen,Wortstamm,Deklination,RG1,RG2,RG3,RG4,RG5,RG6,RG7,RG8,RG9,Bemerkungen_1,Bemerkungen_2,volumes
 a.,annus,Jahr,,ann -i,o,a.,,a.,,,,,,,,,1|2|3|4|5|6|7|8|9|10
 a.,argentum,Silber,,argent -i,o (n.),,,,,,a.,a.,,a.,,meist in Verbindung m. a. p.; m. arg. p.,1|2|3|4|5|6|7|8|9|10
-abb.,abbas,Abt,,abbat -is,konsonantisch (m.),abb.,abb.,abb.,abb.,abb.,abb.,abb.,abb.,abb.,,,1|2|3|4|5|6|7|8|9|10
-abb.,abbatissam,Akk. Sg. von abbatissa: Äbtissin,,abbatiss -(a)e,a ,,,,abb.,,,,,,,,1|2|3|4|5|6|7|8|9|10
-abb. et conv.,abbas et conventus,Abt und Konvent,,abbat -is; convent -us,konsonantisch/u,,abb. et conv.,abb. et conv.,abb. et conv.,abb. et conv.,abb. et conv.,,abb. et conv.,abb. et conv.,,,1|3|5|9|10
-abb. et. conv.,abbas et conventus,Abt und Konvent,,abbat -is; convent -us,konsonantisch/u,,abb. et. conv.,abb. et. conv.,abb. et. conv.,abb. et. conv.,abb. et. conv.,,abb. et. conv.,abb. et. conv.,,,1|3|5|9|10
-abb. etc.,abbas et conventus,Abt und Konvent,,abbat -is; convent -us,konsonantisch/u,abb. etc.,abb. etc.,,abb. etc.,abb. etc.,abb. etc.,abb. etc.,abb. etc.,abb. etc.,,,1|2|3|4|5|6|7|8|9|10
-abba.,abbatissa,Äbtissin,,abbatiss -(a)e,a ,abba.,abba.,,abba.,abba.,abba.,abba.,abba.,abba.,,,1|2|4|5|6|7|8|9|10
-abba.,abbatissam,Akk. Sg. von abbatissa: Äbtissin,,abbatiss -(a)e,a,abba.,,,,,abba.,abba.,abba.,abba.,,wahrscheinlich verwendet wo abbam. nicht verwendet wurde,1|2|4|5|6|7|8|9|10
-abbam.,abbatissam,Akk. Sg. von abbatissa: Äbtissin,,abbatiss -(a)e,a,,abbam.,,,abbam.,,,,,,,2|4|5
-abbat.,abbatia,Abtei; Stelle/Amt des Abtes,,abbati -(a)e,a,abbat.,,abbat.,,abbat.,abbat.,abbat.,abbat.,abbat.,,,1|3|5|6|7|8|9|10
-abbat.,abbatissa,Äbtissin,,abbatiss -(a)e,a ,,,abbat.,,,,,,,,,1|3|5|6|7|8|9|10
+abb.,abbas,Abt,,abbat -is,kons. (m.),abb.,abb.,abb.,abb.,abb.,abb.,abb.,abb.,abb.,,,1|2|3|4|5|6|7|8|9|10
+abb.,abbatissam,Akk. Sg. von abbatissa: Äbtissin,,abbatiss -e,a,,,,abb.,,,,,,,,1|2|3|4|5|6|7|8|9|10
+abb. et conv.,abbas et conventus,Abt und Konvent,,abbat -is; et; convent -us,kons. (m.); -; u,,abb. et conv.,abb. et conv.,abb. et conv.,abb. et conv.,abb. et conv.,,abb. et conv.,abb. et conv.,,,1|3|5|9|10
+abb. et. conv.,abbas et conventus,Abt und Konvent,,abbat -is; et; convent -us,kons. (m.); -; u,,abb. et. conv.,abb. et. conv.,abb. et. conv.,abb. et. conv.,abb. et. conv.,,abb. et. conv.,abb. et. conv.,,,1|3|5|9|10
+abb. etc.,abbas et conventus,Abt und Konvent,,abbat -is; et; convent -us,kons. (m.); -; u,abb. etc.,abb. etc.,,abb. etc.,abb. etc.,abb. etc.,abb. etc.,abb. etc.,abb. etc.,,,1|2|3|4|5|6|7|8|9|10
+abba.,abbatissa,Äbtissin,,abbatiss -e,a,abba.,abba.,,abba.,abba.,abba.,abba.,abba.,abba.,,,1|2|4|5|6|7|8|9|10
+abba.,abbatissam,Akk. Sg. von abbatissa: Äbtissin,,abbatiss -e,a,abba.,,,,,abba.,abba.,abba.,abba.,,wahrscheinlich verwendet wo abbam. nicht verwendet wurde,1|2|4|5|6|7|8|9|10
+abbam.,abbatissam,Akk. Sg. von abbatissa: Äbtissin,,abbatiss -e,a,,abbam.,,,abbam.,,,,,,,2|4|5
+abbat.,abbatia,Abtei; Stelle/Amt des Abtes,,abbati -e,a,abbat.,,abbat.,,abbat.,abbat.,abbat.,abbat.,abbat.,,,1|3|5|6|7|8|9|10
+abbat.,abbatissa,Äbtissin,,abbatiss -e,a,,,abbat.,,,,,,,,,1|3|5|6|7|8|9|10
 abbe.,abbatisse,Gen./Dat. Sg. + Nom. Pl. von abbatissa: Äbtissin,,abbatiss -arum,a,abbe.,abbe.,,abbe.,abbe.,,abbe.,,,,,1|2|4|5|7
 abbr.,litterarum apostolicarum abbreviator,"Abbreviator, Abfasser von Konzepten in der päpstlichen Kanzlei",,,,,,,,,,,,,,,3
 absolv.,absolvere,lossprechen ,,,,,,,,,,,,,,,1|4|6|8
@@ -22,45 +22,45 @@ acolit.,acolitus,"Akoluth, Geistlicher mit der höchsten der niederen Weihen", ,
 adc.,auri de camera,"Kammergulden, Dukaten",,,,,,,,adc.,,adc.,adc.,adc.,,(fl. vel duc.),5|7|8|9|10
 add.,addendo,,,,Gerundium,,add.,,add.,,,,,,,,2|4
 add. ment.,addendo mentionem,,,,Gerundium,,add. ment.,,add. ment.,,,,,,,,2|4
-adhes.,adhesio,,,adhesion -is,konsonantisch,,,,,adhes.,,,,,,,5
-adiudic.,adiudicare,,,adiudic,a-Konj.,,adiudic.,,,,,,,,,,2
+adhes.,adhesio,,,adhesion -is,kons.,,,,,adhes.,,,,,,,5
+adiudic.,adiudicare,,,"adiudic, adiudicav, adiudicat",a-Konj.,,adiudic.,,,,,,,,,,2
 aep.,archiepiscopus,Erzbischof,,archiepiscop -i,o,aep.,aep.,aep.,aep.,aep.,aep.,aep.,aep.,aep.,,,1|2|3|4|5|6|7|8|9|10
 aep. et cap.,"archiepiscopus, prepositus, decanus et canonici","Erzbischof, Propst, Dekan und die Kanoniker",,,,aep. et cap.,,,,,,,,,,,1
 aep. et capit.,"archiepiscopus, prepositus, decanus et canonici","Erzbischof, Propst, Dekan und die Kanoniker",,,,,aep. et capit.,aep. et capit.,aep. et capit.,aep. et capit.,,,,aep. et capit.,,,2|3|4|5|9|10
 aep. et eccl.,"archiepiscopus, prepositus, decanus et canonici","Erzbischof, Propst, Dekan und die Kanoniker",,,,,,,,,,,,aep. et eccl.,,,1|9|10
 aep. et prep. etc.,"archiepiscopus, prepositus, decanus et canonici","Erzbischof, Propst, Dekan und die Kanoniker",,,,,,,,,,aep. et prep. etc.,,,,,7
 aep. etc.,"archiepiscopus, prepositus, decanus et canonici","Erzbischof, Propst, Dekan und die Kanoniker",,,,aep. etc.,aep. etc.,,aep. etc.,aep. etc.,aep. etc.,aep. etc.,aep. etc.,aep. etc.,,,1|2|4|5|6|7|8|9|10
-aepisc.,archiepiscopalis,erzbischöflich,,archiepiscopal -is,i-Dekl. (Adj.),aepisc.,,aepisc.,,aepisc.,aepisc.,aepisc.,aepisc.,aepisc.,,,1|3|5|6|7|8|9|10
+aepisc.,archiepiscopalis,erzbischöflich,,archiepiscopal -is,i (Adj.),aepisc.,,aepisc.,,aepisc.,aepisc.,aepisc.,aepisc.,aepisc.,,,1|3|5|6|7|8|9|10
 aff.,affinitas,,,,,,,,,,,,,,,,5
-alt.,altare,Altar,,altar -is,konsonantisch (n.),alt.,alt.,alt.,alt.,alt.,alt.,alt.,alt.,alt.,,,1|2|3|4|5|6|7|8|9|10
-alt. port.,altare portatile,Tragaltar,,portatil -is,i-Dekl. (Adj.) (n.),alt. port.,alt. port.,alt. port.,alt. port.,alt. port.,alt. port.,alt. port.,alt. port.,alt. port.,,,1|2|3|4|5|6|7|8|9|10
-altare port.,altare portatile,Tragaltar,,portatil -is,i-Dekl. (Adj.) (n.),altare port.,,,,,,,,,,,1
+alt.,altare,Altar,,altar -is,kons. (n.),alt.,alt.,alt.,alt.,alt.,alt.,alt.,alt.,alt.,,,1|2|3|4|5|6|7|8|9|10
+alt. port.,altare portatile,Tragaltar,,altar -is; portatil -is,i (n.); i (Adj.),alt. port.,alt. port.,alt. port.,alt. port.,alt. port.,alt. port.,alt. port.,alt. port.,alt. port.,,,1|2|3|4|5|6|7|8|9|10
+altare port.,altare portatile,Tragaltar,,altar -is; portatil -is,i (n.); i (Adj.),altare port.,,,,,,,,,,,1
 an.,annus,Jahr,,ann -i,o,,,an.,,an.,an.,an.,an.,an.,,,2|3|4|5|6|7|8|9|10
-ann.,annata,"Jahresertrag; Gebühr, berechnet aufgrund des Jahresertrages",,annat -(a)e,a,,,,ann.,ann.,ann.,ann.,,,,"""ann."" ist für RG 7 NICHT als Abkürzung für ""annata"" aufgeführt, doch wohl benutzt, da ausgeschrieben ""annat*"" nicht verwendet wurde; nicht auszuschließen, dass ""ann."" möglicherweise auch in den Bd. 3, 8, 9 für ""annata"" verwendet wurde",2|4|5|6|7|8|9|10
-ann.,annuus,jährlich,"ann.  steht in Bd. 4 und 5 laut Abk.-Verzeichnis NICHT für ""annuus"", sondern für ""annata"", in Bd. 6 für beides, doch ist die Verwendung für ""annuus"" nicht auszuschließen",annu -i,o (Adj.),,ann.,,,,ann.,ann.,ann.,ann.,,,2|4|5|6|7|8|9|10
-annat.,annata,"Jahresertrag; Gebühr, berechnet aufgrund des Jahresertrages",,annat -(a)e,a,,,annat.,,,,,annat.,annat.,,"""ann."" ist für RG 7 NICHT als Abkürzung für ""annata"" aufgeführt, doch wohl benutzt, da ausgeschrieben ""annat*"" nicht verwendet wurde; nicht auszuschließen, dass ""ann."" möglicherweise auch in den Bd. 3, 8, 9 für ""annata"" verwendet wurde",3|4|5|6|7|8|9|10
+ann.,annata,"Jahresertrag; Gebühr, berechnet aufgrund des Jahresertrages",,annat -e,a,,,,ann.,ann.,ann.,ann.,,,,"""ann."" ist für RG 7 NICHT als Abkürzung für ""annata"" aufgeführt, doch wohl benutzt, da ausgeschrieben ""annat*"" nicht verwendet wurde; nicht auszuschließen, dass ""ann."" möglicherweise auch in den Bd. 3, 8, 9 für ""annata"" verwendet wurde",2|4|5|6|7|8|9|10
+ann.,annuus,jährlich,"ann.  steht in Bd. 4 und 5 laut Abk.-Verzeichnis NICHT für ""annuus"", sondern für ""annata"", in Bd. 6 für beides, doch ist die Verwendung für ""annuus"" nicht auszuschließen",annu -i,o/a (Adj.),,ann.,,,,ann.,ann.,ann.,ann.,,,2|4|5|6|7|8|9|10
+annat.,annata,"Jahresertrag; Gebühr, berechnet aufgrund des Jahresertrages",,annat -e,a,,,annat.,,,,,annat.,annat.,,"""ann."" ist für RG 7 NICHT als Abkürzung für ""annata"" aufgeführt, doch wohl benutzt, da ausgeschrieben ""annat*"" nicht verwendet wurde; nicht auszuschließen, dass ""ann."" möglicherweise auch in den Bd. 3, 8, 9 für ""annata"" verwendet wurde",3|4|5|6|7|8|9|10
 Ap.,apostolus,Apostel,,apostol -i,o,Ap.,,,,,,,,,,,5|7
 ap. sed.,apostolica sedes,,,,,,,ap. sed.,ap. sed.,ap. sed.,ap. sed.,ap. sed.,ap. sed.,ap. sed.,,,3|4|5|6|7|8|9|10
 apl.,apostolus,Apostel,,apostol -i,o,,,,apl.,,apl.,apl.,apl.,apl.,,,1|2|3|4|6|7|8|9|10
 Apost.,Apostolus,Apostel,,apostol -i,o,,Apost.,Apost.,,,,,,,,,2
 appl.,apostoli,die Apostel,Plural,apostol -orum,o,,,,appl.,appl.,appl.,appl.,appl.,appl.,,"in den Bd. 1, 2, 3 wahrscheinlich die selben Abk. wie für Sg. ",4|5|6|7|8|9|10
-apr.,aprilis,April,,april -is,gemischt,apr.,apr.,apr.,apr.,apr.,apr.,apr.,apr.,apr.,,,1|2|3|4|5|6|7|8|9|10
-archid.,archidiaconus,Erzdiakon,,archidiacon-i,o,,archid.,,archid.,,archid.,archid.,archid.,archid.,,,2|10
-archidiac.,archidiaconatus,Amt/Stelle des Erzdiakons,,archidiaconat  -us,u,,archidiac.,,,,archidiac.,archidiac.,archidiac.,archidiac.,,,1|2|3|4|5|6|7|8|9|10
-archidiac.,archidiaconus,Erzdiakon,,archidiacon-i,o,archidiac.,,archidiac.,archidiac.,archidiac.,,,,,,,1|2|3|4|5|6|7|8|9|10
-archidiacon.,archidiaconatus,Amt/Stelle des Erzdiakons,,archidiaconat  -us,u,,,archidiacon.,archidiacon.,archidiacon.,archidiacon.,,,,,,4|5
-archidiaconat.,archidiaconatus,Amt/Stelle des Erzdiakons,,archidiaconat  -us,u,archidiaconat.,,,,,,,,,,,1
+apr.,aprilis,April,,april -is,gem.,apr.,apr.,apr.,apr.,apr.,apr.,apr.,apr.,apr.,,,1|2|3|4|5|6|7|8|9|10
+archid.,archidiaconus,Erzdiakon,,archidiacon -i,o,,archid.,,archid.,,archid.,archid.,archid.,archid.,,,2|10
+archidiac.,archidiaconatus,Amt/Stelle des Erzdiakons,,archidiaconat -us,u,,archidiac.,,,,archidiac.,archidiac.,archidiac.,archidiac.,,,1|2|3|4|5|6|7|8|9|10
+archidiac.,archidiaconus,Erzdiakon,,archidiacon -i,o,archidiac.,,archidiac.,archidiac.,archidiac.,,,,,,,1|2|3|4|5|6|7|8|9|10
+archidiacon.,archidiaconatus,Amt/Stelle des Erzdiakons,,archidiaconat -us,u,,,archidiacon.,archidiacon.,archidiacon.,archidiacon.,,,,,,4|5
+archidiaconat.,archidiaconatus,Amt/Stelle des Erzdiakons,,archidiaconat -us,u,archidiaconat.,,,,,,,,,,,1
 arg.,argentum,Silber,,argent -i,o (n.),,,,arg.,arg.,arg.,arg.,arg.,arg.,,,4|5|6|7|8|9|10
 armig.,armiger,Knappe,,armiger -i,o,,armig.,armig.,armig.,armig.,armig.,armig.,armig.,armig.,,,2|3|4|5|6|7|8|9|10
 asad.,apud sedem apostolicam defunctus,,,,,,,,,,,asad.,,asad.,,,7|9
-auct.,auctoritas,Vollmacht,,auctoritat -is,konsonantisch,,auct.,auct.,auct.,auct.,,auct.,auct.,auct.,,,2|3|4|5|7|8|9|10
+auct.,auctoritas,Vollmacht,,auctoritat -is,kons.,,auct.,auct.,auct.,auct.,,auct.,auct.,auct.,,,2|3|4|5|7|8|9|10
 aug.,augustus,August,,august -i,o,aug.,aug.,aug.,aug.,aug.,aug.,aug.,aug.,aug.,,,1|2|3|4|5|6|7|8|9|10
 auri de cam.,auri de camera,"Kammergulden, Dukaten",,,,,,,,,auri de cam.,,,,,(fl. vel duc.),6|8|10
 b. m.,bone memorie,,,,,,,,,,b. m.,,,,,,6
-bar.,baro,"Freiherr, Baron",,baron -is,konsonantisch,,bar.,bar.,bar.,bar.,bar.,bar.,bar.,bar.,,,2|3|4|5|6|7|8|9|10
-baron.,baronia,,,baroni -(a)e,a,,,baron.,baron.,,,,,,,,3|4
+bar.,baro,"Freiherr, Baron",,baron -is,kons.,,bar.,bar.,bar.,bar.,bar.,bar.,bar.,bar.,,,2|3|4|5|6|7|8|9|10
+baron.,baronia,,,baroni -e,a,,,baron.,baron.,,,,,,,,3|4
 Barth.,Bartholomeus,Urbanus VI,1,Bartholome -i,o,,,,,,,,,,,,1|2
-bb.,beati,die heiligen,Plural,beat -orum/arum,o/a (Adj.),bb.,bb.,bb.,bb.,bb.,bb.,bb.,bb.,bb.,,,1|2|3|4|5|6|7|8|9|10
+bb.,beati,die heiligen,Plural,beat -orum/-arum,o/a (Adj.) (Pl.),bb.,bb.,bb.,bb.,bb.,bb.,bb.,bb.,bb.,,,1|2|3|4|5|6|7|8|9|10
 ben. c. v. s. c.,beneficium cum vel sine cura,Pfründe mit oder ohne Seelsorge,,,,ben. c. v. s. c.,,,,,,,,,,,1
 Bened.,Benedictus,Benedictus XIII,1,Benedict -i,o,,,,,,,,,,,,2|3
 benef. c. c.,beneficium cum cura,Pfründe mit Seelsorge,,,,,,,,benef. c. c.,benef. c. c.,benef. c. c.,benef. c. c.,benef. c. c.,,,1|6|7|8|10
@@ -76,70 +76,70 @@ c. reserv. preb.,cum reservatione prebende,,,,,,,,c. reserv. preb.,c. reserv. pr
 c. v. s. c.,cum vel sine cura,mit oder ohne Seelsorge,,,,c. v. s. c.,,,,,c. v. s. c.,,,,,,1|6
 ca.,circa,ungefähr,,,,,,,ca.,ca.,,,,ca.,,,5|9|10
 camer.,camerarius,Kämmerer,,camerari -i,o,,camer.,camer.,,camer.,,camer.,camer.,camer.,,,2|3|4|5|7|8|9|10
-cant.,cantor,Kantor,,cantor -is,konsonantisch,,cant.,cant.,cant.,cant.,cant.,cant.,cant.,cant.,,"Bei Bd. 5-9 möglicherweise auch ""cantor"" statt Abk. benutzt, aber zu viel zum überprüfen",2|3|4|5|6|7|8|9|10
-cantor.,cantoria,Amt/Stelle des Kantors,,cantori -(a)e,a,,cantor.,cantor.,cantor.,cantor.,cantor.,cantor.,cantor.,cantor.,,,1|2|3|4|5|6|7|8|9|10
+cant.,cantor,Kantor,,cantor -is,kons.,,cant.,cant.,cant.,cant.,cant.,cant.,cant.,cant.,,"Bei Bd. 5-9 möglicherweise auch ""cantor"" statt Abk. benutzt, aber zu viel zum überprüfen",2|3|4|5|6|7|8|9|10
+cantor.,cantoria,Amt/Stelle des Kantors,,cantori -e,a,,cantor.,cantor.,cantor.,cantor.,cantor.,cantor.,cantor.,cantor.,,,1|2|3|4|5|6|7|8|9|10
 cap.,capellanus,Kaplan,,capellan -i,o,cap.,cap.,cap.,cap.,cap.,cap.,cap.,cap.,cap.,,,1|2|3|4|5|6|7|8|9|10
 cap.,capitulum,,,,,,,,,,,,,,,,1|2|3|4|5|6|7|8|9|10
 cap. hon.,capellanus honoris,,,,,,cap. hon.,,cap. hon.,,,,,,,,2|4
-capel.,capella,Kapelle,,capell -(a)e,a,,,capel.,,capel.,capel.,capel.,capel.,capel.,,,3|5|6|7|8|9|10
-capn.,capellania,Kaplanei,,capellani -(a)e,a,,,,capn.,capn.,capn.,capn.,capn.,capn.,,,4|5|6|7|8|9|10
-card.,cardinalis,"Kardinal(-bischof, -priester, -diakon)",,cardinal -is,gemischt,card.,card.,card.,card.,card.,card.,card.,card.,card.,,,1|2|3|4|5|6|7|8|9|10
+capel.,capella,Kapelle,,capell -e,a,,,capel.,,capel.,capel.,capel.,capel.,capel.,,,3|5|6|7|8|9|10
+capn.,capellania,Kaplanei,,capellani -e,a,,,,capn.,capn.,capn.,capn.,capn.,capn.,,,4|5|6|7|8|9|10
+card.,cardinalis,"Kardinal(-bischof, -priester, -diakon)",,cardinal -is,gem.,card.,card.,card.,card.,card.,card.,card.,card.,card.,,,1|2|3|4|5|6|7|8|9|10
 cath.,catholicus ?,,,catholic -i,o,,,,cath.,,,,,,,,4
-cathedr.,cathedralis,Bischofs-(kirche),,cathedral -is,gemischt,cathedr.,cathedr.,cathedr.,,cathedr.,cathedr.,cathedr.,cathedr.,cathedr.,,,1|2|3|4|5|6|7|8|9|10
-caus.,causa,,,caus -(a)e,a,,,,caus.,,caus.,,,,,,4|6
-celebr.,celebrare,,,"celebr, celebrav, celebrat", a-Konj.,,,,celebr.,celebr.,,,celebr.,,,,4|5|8
-cess.,cessio,"Abtretung, Verzicht",,cession -is,konsonantisch,,,,cess.,,,,cess.,cess.,,,4|8|9|10
+cathedr.,cathedralis,Bischofs-(kirche),,cathedral -is,gem.,cathedr.,cathedr.,cathedr.,,cathedr.,cathedr.,cathedr.,cathedr.,cathedr.,,,1|2|3|4|5|6|7|8|9|10
+caus.,causa,,,caus -e,a,,,,caus.,,caus.,,,,,,4|6
+celebr.,celebrare,,,"celebr, celebrav, celebrat",a-Konj.,,,,celebr.,celebr.,,,celebr.,,,,4|5|8
+cess.,cessio,"Abtretung, Verzicht",,cession -is,kons.,,,,cess.,,,,cess.,cess.,,,4|8|9|10
 cf.,confer,vergleiche,,,,cf.,,,,cf.,,,,cf.,,,1|5|9
-cimit.,cimiterium,Friedhof,,cim[i/e]teri -i,o (n.),,,cimit.,,cimit.,cimit.,cimit.,cimit.,cimit.,,,3|5|6|7|8|9|10
-civ.,civis,Bürger,,civ -is,gemischt,,civ.,civ.,,civ.,civ.,civ.,civ.,civ.,,,1|2|3|4|5|6|7|8|9|10
-civ.,civitas,(Bischofs-)Stadt,,civitat -is,konsonantisch,civ.,civ.,civ.,civ.,,,,,,,,1|2|3|4|5|6|7|8|9|10
-civit.,civitas,(Bischofs-)Stadt,,civitat -is,konsonantisch,,,civit.,,civit.,civit.,civit.,civit.,civit.,,,3|5|6|7|8|9|10
-Clem.,Clemens,Clemens VII,1,Clement -is,gemischt,,,,,,,,,,,,2|3|5
-collect.,collector,Kollektor,,collector -is,konsonantisch,,collect.,collect.,collect.,collect.,collect.,collect.,collect.,collect.,,,2|3|4|5|6|7|8|9|10
-colleg.,collegiata,Stifts-(kirche),,collegiat -(a)e,a,colleg.,colleg.,colleg.,colleg.,colleg.,colleg.,colleg.,colleg.,colleg.,,,1|2|3|4|5|6|7|8|9|10
-com.,comes,Graf,,comit -is,konsonantisch,,com.,com.,com.,com.,com.,com.,com.,com.,,,1|2|3|4|5|6|7|8|9|10
+cimit.,cimiterium,Friedhof,,cimiteri/cimeteri -i,o (n.),,,cimit.,,cimit.,cimit.,cimit.,cimit.,cimit.,,,3|5|6|7|8|9|10
+civ.,civis,Bürger,,civ -is,gem.,,civ.,civ.,,civ.,civ.,civ.,civ.,civ.,,,1|2|3|4|5|6|7|8|9|10
+civ.,civitas,(Bischofs-)Stadt,,civitat -is,kons.,civ.,civ.,civ.,civ.,,,,,,,,1|2|3|4|5|6|7|8|9|10
+civit.,civitas,(Bischofs-)Stadt,,civitat -is,kons.,,,civit.,,civit.,civit.,civit.,civit.,civit.,,,3|5|6|7|8|9|10
+Clem.,Clemens,Clemens VII,1,Clement -is,gem.,,,,,,,,,,,,2|3|5
+collect.,collector,Kollektor,,collector -is,kons.,,collect.,collect.,collect.,collect.,collect.,collect.,collect.,collect.,,,2|3|4|5|6|7|8|9|10
+colleg.,collegiata,Stifts-(kirche),,collegiat -e,a,colleg.,colleg.,colleg.,colleg.,colleg.,colleg.,colleg.,colleg.,colleg.,,,1|2|3|4|5|6|7|8|9|10
+com.,comes,Graf,,comit -is,kons.,,com.,com.,com.,com.,com.,com.,com.,com.,,,1|2|3|4|5|6|7|8|9|10
 com.,communis,gewöhnlich ,,commun -is,i (Adj.),com.,,,,,,,,,,,1|2|3|4|5|6|7|8|9|10
-commor.,commorans,,,commorant -is,gemischt,,,commor.,,,,,,,,,3
-commun. serv.,commune servitium,allgemeines Servitium,,commun -is serviti -i,,,,,,commun. serv.,,,,commun. serv.,,,1|2|5|8|9|10
+commor.,commorans,,,commorant -is,gem.,,,commor.,,,,,,,,,3
+commun. serv.,commune servitium,allgemeines Servitium,,commun -is; serviti -i,i (Adj.) (n.); o (n.),,,,,commun. serv.,,,,commun. serv.,,,1|2|5|8|9|10
 communi serv.,communi servitium,,,,,,,,,,,communi serv.,,communi serv.,,,7|9|10
 communis serv.,communis servitium,,,,,,communis serv.,,,,,communis serv.,,communis serv.,,,2|7|9|10
-commut.,commutatio,Umwandlung,,commutation -is,konsonantisch,,,commut.,,,,,,,,,3
+commut.,commutatio,Umwandlung,,commutation -is,kons.,,,commut.,,,,,,,,,3
 compat.,compatibilis,vereinbar,,compatibil -is,i (Adj.),,,compat.,compat.,,,compat.,compat.,compat.,,,3|4|7|8|9|10
 compet.,competenter,"angemessen, befriedigend",,,Adverb,,,,compet.,,,,,,,,4|9
 complem.,complementum,,,complement -i,o (n.),,,complem.,,,,,,,,,3
-compon.,componere?,,,"compon, composu, compost",,,compon.,,,,,,,,,,2
+compon.,componere?,,,"compon, composu, composit",,,compon.,,,,,,,,,,2
 concil.,concilium,,,concili -i,o (n.),,,,concil.,concil.,,,concil.,,,,4|5|8
-concord.,concordare,,,concord -o,A-Konj.,,,,concord.,,,,,,,,4
-concordat.,concordatio,,,concordation -is,konsonantisch,,,,concordat.,,,,,,,,4|10
-condit.,conditio,,,condition -is,konsonantisch,,,condit.,,,condit.,,,,,,3|6
-confer.,conferre,"übertragen, verleihen",,"confer, contul, collat (conlat)",,,confer.,confer.,confer.,confer.,confer.,confer.,confer.,confer.,,,2|3|4|5|6|7|8|9|10
-coniug.,coniugatus,verheiratet,,coniugat,o (Adj.),,coniug.,coniug.,coniug.,coniug.,coniug.,coniug.,coniug.,coniug.,,,2|3|4|5|6|7|8|9|10
-cons.,consanguinitas,(Bluts-)verwandtschaft,,consanguinitat -is,konsonantisch,cons.,,,,,,,,,,,2|3|4
-cons.,consul,,,consul -is,konsonantisch,,cons.,cons.,cons.,,,,,,,,2|3|4
-consul.,consul,,,consul -is,konsonantisch,,,,consul.,consul.,,,,,,,2|3|4|5|6|7|8|9|10
-conthor.,conthoralis,Ehefrau,,conthoral -is,gemischt,,,,,,,,conthor.,conthor.,,,8|9|10
+concord.,concordare,,,concord -o,a-Konj.,,,,concord.,,,,,,,,4
+concordat.,concordatio,,,concordation -is,kons.,,,,concordat.,,,,,,,,4|10
+condit.,conditio,,,condition -is,kons.,,,condit.,,,condit.,,,,,,3|6
+confer.,conferre,"übertragen, verleihen",,"confer, contul, collat/conlat",,,confer.,confer.,confer.,confer.,confer.,confer.,confer.,confer.,,,2|3|4|5|6|7|8|9|10
+coniug.,coniugatus,verheiratet,,coniugat -i,o/a (Adj.),,coniug.,coniug.,coniug.,coniug.,coniug.,coniug.,coniug.,coniug.,,,2|3|4|5|6|7|8|9|10
+cons.,consanguinitas,(Bluts-)verwandtschaft,,consanguinitat -is,kons.,cons.,,,,,,,,,,,2|3|4
+cons.,consul,,,consul -is,kons.,,cons.,cons.,cons.,,,,,,,,2|3|4
+consul.,consul,,,consul -is,kons.,,,,consul.,consul.,,,,,,,2|3|4|5|6|7|8|9|10
+conthor.,conthoralis,Ehefrau,,conthoral -is,gem.,,,,,,,,conthor.,conthor.,,,8|9|10
 conv.,conventus,Konvent,,convent -us,u,conv.,conv.,conv.,conv.,conv.,conv.,conv.,conv.,conv.,,,1|2|3|4|5|6|7|8|9|10
-corp.,corpus,Körper; körperliche Unversehrtheit,,corpor -is,konsonantisch (n.),,corp.,corp.,corp.,corp.,corp.,corp.,corp.,corp.,,,2|3|4|5|6|7|8|9|10
-correct.,corrector,,,corrector -is,konsonantisch,,correct.,,correct.,correct.,correct.,,,,,,2|4|5|6
+corp.,corpus,Körper; körperliche Unversehrtheit,,corpor -is,kons. (n.),,corp.,corp.,corp.,corp.,corp.,corp.,corp.,corp.,,,2|3|4|5|6|7|8|9|10
+correct.,corrector,,,corrector -is,kons.,,correct.,,correct.,correct.,correct.,,,,,,2|4|5|6
 cubic.,cubicularius,"Kubikular (des Papstes), Kammerherr",,cubiculari -i,o,cubic.,cubic.,cubic.,cubic.,cubic.,,cubic.,cubic.,cubic.,,,1|2|3|4|5|7|8|9|10
 cum reserv. preb.,cum reservatione prebende,,,,,,,cum reserv. preb.,,,,,,,,,3
 cum reservatione preb.,cum reservatione prebende,,,,,cum reservatione preb.,,,,,,,,,,,1
-cur. Rom.,curia Romana,,,curi -(a)e Roman -(a)e,,,,,,,cur. Rom.,,,,,,3
-cur. Romana,curia Romana,,,curi -(a)e Roman -(a)e,,,,,,,,cur. Romana,,cur. Romana,,,7|9|10
-curia Rom.,curia Romana,,,curi -(a)e Roman -(a)e,,curia Rom.,,,curia Rom.,,,,,,,,1|2
-cust.,custos,"Kustos, Küster",,custod -is,konsonantisch,,cust.,cust.,cust.,cust.,cust.,cust.,cust.,cust.,,,2|3|4|5|6|7|8|9|10
-custod.,custodia,Amt des Kustos,,custodi -(a)e,a ,,custod.,custod.,custod.,custod.,custod.,custod.,custod.,custod.,,,2|3|4|5|6|7|8|9|10
+cur. Rom.,curia Romana,,,curi -e; Roman -e,a; o/a (Adj.),,,,,,cur. Rom.,,,,,,3
+cur. Romana,curia Romana,,,curi -e; Roman -e,a; o/a (Adj.),,,,,,,cur. Romana,,cur. Romana,,,7|9|10
+curia Rom.,curia Romana,,,curi -e; Roman -e,a; o/a (Adj.),curia Rom.,,,curia Rom.,,,,,,,,1|2
+cust.,custos,"Kustos, Küster",,custod -is,kons.,,cust.,cust.,cust.,cust.,cust.,cust.,cust.,cust.,,,2|3|4|5|6|7|8|9|10
+custod.,custodia,Amt des Kustos,,custodi -e,a,,custod.,custod.,custod.,custod.,custod.,custod.,custod.,custod.,,,2|3|4|5|6|7|8|9|10
 dec.,decanatus,Amt/Stelle des Dekans,,decanat -us,u,,dec.,dec.,dec.,dec.,dec.,dec.,dec.,dec.,,,1|2|3|4|5|6|7|8|9|10
 dec.,decanus,Dekan,,decan -i,o,dec.,dec.,dec.,dec.,dec.,dec.,dec.,dec.,dec.,,,1|2|3|4|5|6|7|8|9|10
-dec.,december,Dezember,,decembr -is,konsonantisch,dec.,dec.,dec.,dec.,,dec.,dec.,,,,,1|2|3|4|5|6|7|8|9|10
+dec.,december,Dezember,,decembr -is,kons.,dec.,dec.,dec.,dec.,,dec.,dec.,,,,,1|2|3|4|5|6|7|8|9|10
 dec. et cap.,"decanus, capitulum et singuli canonici","Dekan, Kapitel und die einzelnen Kanoniker",,,,dec. et cap.,dec. et cap.,,dec. et cap.,,,,,,,,1|2|4
 dec. et capit.,"decanus, capitulum et singuli canonici","Dekan, Kapitel und die einzelnen Kanoniker",,,,,dec. et capit.,dec. et capit.,dec. et capit.,dec. et capit.,dec. et capit.,dec. et capit.,dec. et capit.,dec. et capit.,,,2|3|4|5|6|7|8|9|10
 dec. etc.,"decanus, capitulum et singuli canonici","Dekan, Kapitel und die einzelnen Kanoniker",,,,,dec. etc.,,dec. etc.,dec. etc.,dec. etc.,dec. etc.,dec. etc.,dec. etc.,,,2|4|5|6|7|8|9|10
 decan.,decanatus,Amt/Stelle des Dekans,,decanat -us,u,decan.,,,,,,,,,,,1|2|3|4|5|6|7|8|9|10
 decan.,decanus,Dekan,,decan -i,o,decan.,,,,,,,,,,,1|2|3|4|5|6|7|8|9|10
 decanat.,decanatus,Amt/Stelle des Dekans,,decanat -us,u,decanat.,,,,,,,,,,,1
-decb.,december,Dezember,,decembr -is,konsonantisch,,,,,decb.,,,decb.,decb.,,,5|8|9|10
-decern.,decernere,,,"decern, decrev, decret",konsonantische Konj.,,,decern.,,,decern.,decern.,decern.,,,,3|6|7|8
+decb.,december,Dezember,,decembr -is,kons.,,,,,decb.,,,decb.,decb.,,,5|8|9|10
+decern.,decernere,,,"decern, decrev, decret",kons.-Konj.,,,decern.,,,decern.,decern.,decern.,,,,3|6|7|8
 decr.,decretum,Verordnung,,decret -i,o (n.),decr.,decr.,decr.,decr.,decr.,decr.,decr.,decr.,decr.,,,1|2|3|4|5|6|7|8|9|10
 def.,defectus,"Mangel, Makel",,defect -us,u,def.,def.,def.,def.,def.,def.,def.,def.,def.,,,1|2|3|4|5|6|7|8|9|10
 def. nat. (c. c.),defectus natalium (de coniugato et coniugata genitus),Geburtsmakel (von einem Verheirateten und einer Verheirateten abstammend),,,,,,,,,,,,,,,10
@@ -156,31 +156,31 @@ def. nat. s. c.,defectus natalium (de soluto et coniugata genitus),Geburtsmakel 
 def. nat. s. s.,defectus natalium (de soluto et soluta genitus),Geburtsmakel (von einem Ledigen und einer Ledigen abstammend),,,,,,,def. nat. s. s.,def. nat. s. s.,def. nat. s. s.,def. nat. s. s.,def. nat. s. s.,def. nat. s. s.,,,4|6|7|8
 den.,denarius,"Denar, Pfennig",,denari -i,o,den.,den.,den.,den.,den.,den.,den.,den.,den.,,,1|2|3|4|5|6|7|8|9|10
 depend.,dependere,abhängen,,"depende, dependev?, dependet?",e-Konj.,,depend.,depend.,depend.,depend.,depend.,depend.,depend.,depend.,,,2|3|4|5|6|7|8
-descript.,descriptus,,,descript -i,o (Adj.),,,,,,,,descript.,,,,8|10
+descript.,descriptus,,,descript -i,o/a (Adj.),,,,,,,,descript.,,,,8|10
 desup.,desuper,darüber,,,,,,,,desup.,,desup.,desup.,desup.,,,5|7|8|9|10
 detin.,detinere,unrechtmäßig in Besitz haben,,"detine, detinu, detent",e-Konj.,,,,,detin.,detin.,detin.,detin.,detin.,,,5|6|7|8|9|10
 diac.,diaconus,Diakon,,diacon -i,o,diac.,diac.,diac.,diac.,diac.,diac.,diac.,diac.,diac.,,,1|2|3|4|5|6|7|8|9|10
 diacon.,diaconatus,"Weihegrad, Amt des Diakons",,diaconat -us,u,,,diacon.,diacon.,diacon.,diacon.,diacon.,diacon.,diacon.,,,3|4|5|6|7|8|9|10
 dic.,dicere,,,"dic, dix, dict",,,,,,,,dic.,,,,,5
-dign.,dignitas,"Dignität, höheres Amt in einem Kapitel",,dignitat -is,konsonantisch,dign.,dign.,dign.,dign.,dign.,dign.,dign.,dign.,dign.,,,1|2|3|4|5|6|7|8|9|10
-diiudic.,diiudicare,,,"diiudic, diiudicav, diiudicat", a-Konj.,,diiudic.,,,,,,,,,,2
-dioc.,diocesis,Diözese,,dioces -is,gemischt,dioc.,dioc.,dioc.,dioc.,dioc.,dioc.,dioc.,dioc.,dioc.,,,1|2|3|4|5|6|7|8|9|10
-div. off.,divina officia,,,divin -orum offici -orum,o (Adj.; n. Pl.) o (n. Pl.),,,div. off.,,div. off.,div. off.,div. off.,div. off.,,,,3|5|6|7|8
-divina off.,divina officia,,,divin -orum offici -orum,o (Adj.; n. Pl.) o (n. Pl.),,,,,,divina off.,divina off.,divina off.,divina off.,,,6|7|8|9|10
-doct.,doctor,Doktor,,doctor -is,konsonantisch,,doct.,doct.,doct.,doct.,doct.,doct.,doct.,doct.,,,2|3|4|5|6|7|8|9|10
-dom. hosp.,domus hospitalis,,,hospital -is,i (Adj.),,dom. hosp.,dom. hosp.,dom. hosp.,,dom. hosp.,,,dom. hosp.,,,2|3|4|6|9|10
-domus hosp.,domus hospitalis,,,hospital -is,i (Adj.),domus hosp.,domus hosp.,domus hosp.,domus hosp.,domus hosp.,,domus hosp.,domus hosp.,,,,1|2|4|5|7|8
-dot.,dotare,,,"dot, dotav, dotat",A-Konj.,,dot.,,,,dot.,,,,,,2|6
-dotat.,dotatio,,,dotation -is,konsonantisch,,,dotat.,,,,,,,,,3
+dign.,dignitas,"Dignität, höheres Amt in einem Kapitel",,dignitat -is,kons.,dign.,dign.,dign.,dign.,dign.,dign.,dign.,dign.,dign.,,,1|2|3|4|5|6|7|8|9|10
+diiudic.,diiudicare,,,"diiudic, diiudicav, diiudicat",a-Konj.,,diiudic.,,,,,,,,,,2
+dioc.,diocesis,Diözese,,dioces -is,gem.,dioc.,dioc.,dioc.,dioc.,dioc.,dioc.,dioc.,dioc.,dioc.,,,1|2|3|4|5|6|7|8|9|10
+div. off.,divina officia,,,divin -orum; offici -orum,o/a (Adj.) (Pl.); o (n.) (Pl.),,,div. off.,,div. off.,div. off.,div. off.,div. off.,,,,3|5|6|7|8
+divina off.,divina officia,,,divin -orum; offici -orum,o/a (Adj.) (Pl.); o (n.) (Pl.),,,,,,divina off.,divina off.,divina off.,divina off.,,,6|7|8|9|10
+doct.,doctor,Doktor,,doctor -is,kons.,,doct.,doct.,doct.,doct.,doct.,doct.,doct.,doct.,,,2|3|4|5|6|7|8|9|10
+dom. hosp.,domus hospitalis,,,dom -us; hospital -is,u (f.); i (Adj.),,dom. hosp.,dom. hosp.,dom. hosp.,,dom. hosp.,,,dom. hosp.,,,2|3|4|6|9|10
+domus hosp.,domus hospitalis,,,dom -us; hospital -is,u (f.); i (Adj.),domus hosp.,domus hosp.,domus hosp.,domus hosp.,domus hosp.,,domus hosp.,domus hosp.,,,,1|2|4|5|7|8
+dot.,dotare,,,"dot, dotav, dotat",a-Konj.,,dot.,,,,dot.,,,,,,2|6
+dotat.,dotatio,,,dotation -is,kons.,,,dotat.,,,,,,,,,3
 e. m.,extra muros,außerhalb der Mauern,,,,,e. m.,e. m.,e. m.,e. m.,e. m.,e. m.,e. m.,e. m.,,,2|3|4|6|7|8|10
-ecc.,ecclesia,Kirche,,ecclesi -(a)e,a ,,,,,ecc.,,,,,,,4|6
-eccl.,ecclesia,Kirche,,ecclesi -(a)e,a ,eccl.,eccl.,eccl.,eccl.,,eccl.,eccl.,eccl.,eccl.,,,1|2|3|4|5|6|7|8|9|10
-eccles.,ecclesiasticus,kirchlich,,ecclesiastic -i,o (Adj.),,eccles.,eccles.,,eccles.,eccles.,eccles.,eccles.,eccles.,,,2|3|5|6|7|8|9|10
-ecclesiast.,ecclesiasticus,kirchlich,,ecclesiastic -i,o (Adj.),,ecclesiast.,,,,,,,,,,2
+ecc.,ecclesia,Kirche,,ecclesi -e,a,,,,,ecc.,,,,,,,4|6
+eccl.,ecclesia,Kirche,,ecclesi -e,a,eccl.,eccl.,eccl.,eccl.,,eccl.,eccl.,eccl.,eccl.,,,1|2|3|4|5|6|7|8|9|10
+eccles.,ecclesiasticus,kirchlich,,ecclesiastic -i,o/a (Adj.),,eccles.,eccles.,,eccles.,eccles.,eccles.,eccles.,eccles.,,,2|3|5|6|7|8|9|10
+ecclesiast.,ecclesiasticus,kirchlich,,ecclesiastic -i,o/a (Adj.),,ecclesiast.,,,,,,,,,,2
 ed.,ediert ?,,,,,,,,,ed.,,,,,,,5
-elect.,electio,Wahl,,election -is,konsonantisch,,,elect.,elect.,elect.,elect.,elect.,elect.,elect.,,,3|4|5|6|7|8|9|10
-elemos.,elemosina/elemosinaria ?,,,elemosin -(a)e,a,,elemos.,elemos.,elemos.,,,,,,,,2|3|4
-elemosin.,elemosina/elemosinaria ?,,,elemosin -(a)e,a,,,elemosin.,elemosin.,,,,,,,,3|4
+elect.,electio,Wahl,,election -is,kons.,,,elect.,elect.,elect.,elect.,elect.,elect.,elect.,,,3|4|5|6|7|8|9|10
+elemos.,elemosina/elemosinaria ?,,,elemosin/elemosinari -e,a,,elemos.,elemos.,elemos.,,,,,,,,2|3|4
+elemosin.,elemosina/elemosinaria ?,,,elemosin/elemosinari -e,a,,,elemosin.,elemosin.,,,,,,,,3|4
 elig.,eligere,wählen,,"elig, eleg, elect",,,elig.,elig.,elig.,elig.,elig.,elig.,elig.,elig.,,,2|3|4|5|6|7|8|9|10
 ep.,episcopus,Bischof,,episcop -i,o,ep.,ep.,ep.,ep.,ep.,ep.,ep.,ep.,ep.,,,1|2|3|4|5|6|7|8|9|10
 ep. et cap.,episcopus et capitulum,Bischof und Kapitel,,,,ep. et cap.,,,,,,,,,,,1
@@ -189,112 +189,112 @@ ep. etc.,"episcopus, prepositus, decanus et canonici","Bischof, Propst, Dekan un
 episc.,episcopalis,bischöflich,,episcopal -is,i (Adj.),,,episc.,,episc.,episc.,episc.,episc.,episc.,,,3|4|5|6|7|8|9|10
 Epp.,episcopi,Bischöfe,,episcop -orum,o,,,,,Epp.,,,,,,,4|5|6|9
 epp.,episcopi,Bischöfe,,episcop -orum,o,epp.,,epp.,,epp.,,,,,,,1|3|5
-erig.,erigere,errichten; (eine Kirche in einen höheren Status) erheben,,"erig, erex, erect",konsonantische Konj.,,erig.,,,erig.,erig.,erig.,erig.,erig.,,,2|5|6|7|8|9|10
-et.,etas,Alter,,etat -is,konsonantisch,,et.,,et.,et.,et.,et.,et.,et.,,"möglicherweise ""et."" für ""etas"" auch in Bd. 1 und 3 verwendet, aber wg. tausender Treffer zu ""et""(und) nicht nachzuprüfen""",1|2|3|4|5|6|7|8|9|10
-etat.,etas,Alter,,etat -is,konsonantisch,,,etat.,,,,,,,,,3
-ev.,evangelista,(Johannes) der Evangelist,,evangelist -(a)e,a (m.!),,ev.,,ev.,ev.,ev.,ev.,ev.,ev.,,,2|3|4|5|6|7|8|9
-evangelist.,evangelista,(Johannes) der Evangelist,,evangelist -(a)e,a (m.!),,,,evangelist.,,,,,,,,4
-evoc.,evocare,,,"evoc, evocav, evocat", a-Konj.,,evoc.,,,,,,,,,,2
-except.,exceptus ?,,,except -i,o (Adj.),,,except.,,,,,,,,,3
+erig.,erigere,errichten; (eine Kirche in einen höheren Status) erheben,,"erig, erex, erect",kons.-Konj.,,erig.,,,erig.,erig.,erig.,erig.,erig.,,,2|5|6|7|8|9|10
+et.,etas,Alter,,etat -is,kons.,,et.,,et.,et.,et.,et.,et.,et.,,"möglicherweise ""et."" für ""etas"" auch in Bd. 1 und 3 verwendet, aber wg. tausender Treffer zu ""et""(und) nicht nachzuprüfen""",1|2|3|4|5|6|7|8|9|10
+etat.,etas,Alter,,etat -is,kons.,,,etat.,,,,,,,,,3
+ev.,evangelista,(Johannes) der Evangelist,,evangelist -e,a (m.),,ev.,,ev.,ev.,ev.,ev.,ev.,ev.,,,2|3|4|5|6|7|8|9
+evangelist.,evangelista,(Johannes) der Evangelist,,evangelist -e,a (m.),,,,evangelist.,,,,,,,,4
+evoc.,evocare,,,"evoc, evocav, evocat",a-Konj.,,evoc.,,,,,,,,,,2
+except.,exceptus ?,,,except -i,o/a (Adj.),,,except.,,,,,,,,,3
 exerc.,exercere,,,"exerce, exercu, exercut",e-Konj.,,,,,,exerc.,,,,,,6
-exig.,exigere,,,"exig, exeg, exact",konsonantische Konj.,,exig.,exig.,,,exig.,exig.,exig.,,,,2|3|6|7|8
-exist.,existere,"sein, sich befinden",,"exist, extit",konsonantische Konj.,,,exist.,,exist.,exist.,exist.,exist.,exist.,,,3|5|6|7|8|9|10
+exig.,exigere,,,"exig, exeg, exact",kons.-Konj.,,exig.,exig.,,,exig.,exig.,exig.,,,,2|3|6|7|8
+exist.,existere,"sein, sich befinden",,"exist, extit, -",kons.-Konj.,,,exist.,,exist.,exist.,exist.,exist.,exist.,,,3|5|6|7|8|9|10
 extra temp.,extra tempora,,,,,,,,,extra temp.,,extra temp.,extra temp.,extra temp.,,,4|5|7|8|9|10
 f. gr.,fit gratia,,,,,,f. gr.,f. gr.,f. gr.,,,,,,,,1|2|3
 fac.,facultas,"Vollmacht, Fakultät",siehe facult.,,,,,,,,,,,,,,1|2|3|4|5|6|7|8|9
-fact.,factus,"geschehen, gemacht",,fact -i,o (Adj.),,fact.,fact.,fact.,fact.,fact.,fact.,fact.,fact.,,,2|3|4|5|6|7|8|9|10
+fact.,factus,"geschehen, gemacht",,fact -i,o/a (Adj.),,fact.,fact.,fact.,fact.,fact.,fact.,fact.,fact.,,,2|3|4|5|6|7|8|9|10
 feb.,februarius,Februar,,februari -i,o,,,,,,feb.,,feb.,,,,6|8|9
 febr.,februarius,Februar,,februari -i,o,febr.,febr.,febr.,febr.,febr.,febr.,febr.,,febr.,,,1|2|3|4|5|6|7|9|10
-fidel.,fidelitas,,,fidelitat -is,konsonantisch,,fidel.,fidel.,,,,,,,,,2|3
+fidel.,fidelitas,,,fidelitat -is,kons.,,fidel.,fidel.,,,,,,,,,2|3
 fit gr.,fit gratia,,,,,,fit gr.,,,,,,,,,,4
 fl.,florenus,Gulden,,floren -i,o,fl.,fl.,fl.,fl.,fl.,fl.,fl.,fl.,fl.,,,1|2|3|4|5|6|7|8|9|10
-fr.,frater,Bruder,,fratr -is,gemischt,fr.,fr.,fr.,fr.,fr.,fr.,fr.,fr.,fr.,,,1|2|3|4|5|6|7|8|9|10
+fr.,frater,Bruder,,fratr -is,gem.,fr.,fr.,fr.,fr.,fr.,fr.,fr.,fr.,fr.,,,1|2|3|4|5|6|7|8|9|10
 fragm.,fragmentum,"Bruchstück, unvollständiger Eintrag",,fragment -i,o (n.),,,,,fragm.,,,fragm.,fragm.,,,5|8|9|10
-fratern.,fraternitas,,,fraternitat -is,konsonantisch,,,fratern.,,,,,,,,,3
-fratr.,frater,Bruder,,fratr -is,gemischt,,fratr.,fratr.,fratr.,,,,,,,,2|3|4
+fratern.,fraternitas,,,fraternitat -is,kons.,,,fratern.,,,,,,,,,3
+fratr.,frater,Bruder,,fratr -is,gem.,,fratr.,fratr.,fratr.,,,,,,,,2|3|4
 fruct.,fructus,"Ertrag, Einkünfte",,fruct -us,u,,fruct.,fruct.,fruct.,fruct.,fruct.,fruct.,fruct.,fruct.,,,2|3|4|5|6|7|8|9|10
-fruct. etc.,"fructus, proventus et redditus",,,"fruct -us, provent -us, reddit -us",alle u,,,fruct. etc.,fruct. etc.,fruct. etc.,fruct. etc.,fruct. etc.,fruct. etc.,fruct. etc.,,,10
+fruct. etc.,"fructus, proventus et redditus",,,fruct -us; provent -us; et; reddit -us,u; u; -; u,,,fruct. etc.,fruct. etc.,fruct. etc.,fruct. etc.,fruct. etc.,fruct. etc.,fruct. etc.,,,10
 gener.,generalis,"allgemein, General-","gen. 1,4",general -is,i (Adj.),,gener.,,gener.,,,,,,,,2|4|5|6|7|8|9|10
 grad.,gradus,Grad,,grad -us,u,grad.,,grad.,,,grad.,,,grad.,,,1|3|6|9|10
 guard.,guardianus,Guardian,,guardian -i,o,,,,,,guard.,guard.,guard.,,,,6|7|8|10
 hab.,habere,,,"habe, habu, habit",e-Konj.,,hab.,,hab.,,,,,,,,2|4
 hab. pot.,habens potestatem,,,,,,hab. pot.,,hab. pot.,,,,,,,,2|4
-hon.,honoris,,,honor -is,konsonantisch,,hon.,hon.,hon.,,,,,,,,2|3|4
-hosp. paup.,hospitale pauperum,,,nur hospitale wird dekliniert,,,hosp. paup.,hosp. paup.,hosp. paup.,hosp. paup.,hosp. paup.,hosp. paup.,hosp. paup.,hosp. paup.,,,2|3|4|5|6|7|8|9|10
-hosp. pauperum,hospitale pauperum,,,nur hospitale wird dekliniert,,hosp. pauperum,hosp. pauperum,hosp. pauperum,hosp. pauperum,,,,hosp. pauperum,hosp. pauperum,,,1|2|3|4|8|9|10
+hon.,honoris,,,honor -is,kons.,,hon.,hon.,hon.,,,,,,,,2|3|4
+hosp. paup.,hospitale pauperum,,,hospital -is; pauperum,kons. (n.); -,,hosp. paup.,hosp. paup.,hosp. paup.,hosp. paup.,hosp. paup.,hosp. paup.,hosp. paup.,hosp. paup.,,,2|3|4|5|6|7|8|9|10
+hosp. pauperum,hospitale pauperum,,,hospital -is; pauperum,kons. (n.); -,hosp. pauperum,hosp. pauperum,hosp. pauperum,hosp. pauperum,,,,hosp. pauperum,hosp. pauperum,,,1|2|3|4|8|9|10
 i. m.,intra muros,innerhalb der Mauern,,,,,,,i. m.,i. m.,i. m.,i. m.,i. m.,i. m.,,,1|4|6|7|8|10
 i. p. i.,in partibus infidelium,,,,,,,,,,i. p. i.,,,,,,6
 ian.,ianuarius,Januar,,ianuari -i,o,ian.,ian.,ian.,ian.,ian.,ian.,ian.,ian.,ian.,,,1|2|3|4|5|6|7|8|9|10
-ieiun.,ieiunium,,,ieiuni -i/ieiune -i,o (n.),,,ieiun.,,,,,,,,,3
-immed.,immediatus,unmittelbar,,immediat -i,o (Adj.),,immed.,immed.,immed.,,,immed.,immed.,immed.,,,2|3|4|7|8|9|10
-in cur. defunct.,in curia defunctus,am päpstlichen Hof gestorben,,defunct -i,o (Adj.),,,,,,,,,,,,10
-in cur. defunctus,in curia defunctus,am päpstlichen Hof gestorben,,defunct -i,o (Adj.),,,,,,,,,,,,8|9|10
+ieiun.,ieiunium,,,ieiuni/ieiune -i,o (n.),,,ieiun.,,,,,,,,,3
+immed.,immediatus,unmittelbar,,immediat -i,o/a (Adj.),,immed.,immed.,immed.,,,immed.,immed.,immed.,,,2|3|4|7|8|9|10
+in cur. defunct.,in curia defunctus,am päpstlichen Hof gestorben,,in; curia; defunct -i,-; -; o/a (Adj.),,,,,,,,,,,,10
+in cur. defunctus,in curia defunctus,am päpstlichen Hof gestorben,,in; curia; defunct -i,-; -; o/a (Adj.),,,,,,,,,,,,8|9|10
 incorp.,incorporare,"inkorporieren, einverleiben",,"incorpor, incorporav, incorporat",a-Konj.,incorp.,incorp.,incorp.,incorp.,incorp.,incorp.,incorp.,incorp.,incorp.,,,2|3|4|5|6|7|8|9|10
-incorp.,incorporatio,Inkorporierung,,incorporation -is,konsonantisch,,,,,,,,,,,,2|3|4|5|6|7|8|9|10
+incorp.,incorporatio,Inkorporierung,,incorporation -is,kons.,,,,,,,,,,,,2|3|4|5|6|7|8|9|10
 indeb.,indebite,,,,,,,,indeb.,,,,,,,,4
-infer.,inferior,,6,inferior -is,konsonantisch (Adj.),,,infer.,infer.,,,,,,,,3|4|6
-inhab.,inhabilitas,Unfähigkeit (zur Ausübung klerikaler Funktionen),,inhabilitat -is,konsonantisch,,inhab.,,inhab.,,inhab.,inhab.,,inhab.,,,4|10
-inhabil.,inhabilitas,Unfähigkeit (zur Ausübung klerikaler Funktionen),,inhabilitat -is,konsonantisch,,inhabil.,inhabil.,inhabil.,inhabil.,,,inhabil.,,,,2|3|4|5|6|7|8|9
-inquir.,inquirere,,,"inquir, inquisiv, inquisit",konsonantische Konj.,,,inquir.,,,,,,,,,3
-insig.,insignia,,,insigni -um (bereits Pl.),i (n.),,,,insig.,,,,,,,,4
-insign.,insignia,,,insigni -um (bereits Pl.),i (n.),,insign.,insign.,,,,,,,,,2|3
-insignia pontific.,insignia pontificalia,,,insigni -um pontificali -um,beide i (n.),,,,,,,insignia pontific.,,,,,7|10
+infer.,inferior,,6,inferior -is,kons. (Adj.),,,infer.,infer.,,,,,,,,3|4|6
+inhab.,inhabilitas,Unfähigkeit (zur Ausübung klerikaler Funktionen),,inhabilitat -is,kons.,,inhab.,,inhab.,,inhab.,inhab.,,inhab.,,,4|10
+inhabil.,inhabilitas,Unfähigkeit (zur Ausübung klerikaler Funktionen),,inhabilitat -is,kons.,,inhabil.,inhabil.,inhabil.,inhabil.,,,inhabil.,,,,2|3|4|5|6|7|8|9
+inquir.,inquirere,,,"inquir, inquisiv, inquisit",kons.-Konj.,,,inquir.,,,,,,,,,3
+insig.,insignia,,,insigni -um,i (n.) (Pl.),,,,insig.,,,,,,,,4
+insign.,insignia,,,insigni -um,i (n.) (Pl.),,insign.,insign.,,,,,,,,,2|3
+insignia pontific.,insignia pontificalia,,,insigni -um; pontificali -um,i (n.) (Pl.); i (Adj.) (Pl.),,,,,,,insignia pontific.,,,,,7|10
 instr.,instrumentum,(Notariats-)Instrument,,instrument -i,o (n.),,instr.,instr.,instr.,,,,,instr.,,,2|3|4|9|10
 instrum.,instrumentum,(Notariats-)Instrument,,instrument -i,o (n.),,instrum.,instrum.,instrum.,,instrum.,,,,,,2|4
-introduc.,introducere,,,"introduc, introdux, introduct",konsonantische Konj.,,introduc.,introduc.,,,,,,,,,2|3
-iud.,iudex,,nur in 6,iudic -is,konsonantisch,,,,,,iud.,,,,,,6
+introduc.,introducere,,,"introduc, introdux, introduct",kons.-Konj.,,introduc.,introduc.,,,,,,,,,2|3
+iud.,iudex,,nur in 6,iudic -is,kons.,,,,,,iud.,,,,,,6
 iul.,iulius,Juli,,iuli -i,o,iul.,iul.,iul.,iul.,iul.,iul.,iul.,iul.,iul.,,,1|2|3|4|5|6|7|8|9|10
-iur.,iuris,des Rechts (usw.),,iur -is,konsonantisch,,iur.,iur.,iur.,iur.,iur.,iur.,iur.,iur.,,,2|3|4|5|6|7|8|9|10
+iur.,iuris,des Rechts (usw.),,iur -is,kons.,,iur.,iur.,iur.,iur.,iur.,iur.,iur.,iur.,,,2|3|4|5|6|7|8|9|10
 iuram.,iuramentum,Eid,,iurament -i,o (n.),,iuram.,iuram.,iuram.,iuram.,iuram.,iuram.,iuram.,iuram.,,,2|3|4|5|6|7|8|9|10
-iurisd.,iurisdictio,Gerichtsbarkeit; Gerichtshoheit,,iurisdiction -is,konsonantisch,,iurisd.,,,,iurisd.,iurisd.,iurisd.,iurisd.,,,2|6|7|8|9|10
+iurisd.,iurisdictio,Gerichtsbarkeit; Gerichtshoheit,,iurisdiction -is,kons.,,iurisd.,,,,iurisd.,iurisd.,iurisd.,iurisd.,,,2|6|7|8|9|10
 karl.,karlinus,,,,,,,,,karl.,,,,,,,5
-l. b.,lectio bulle,,,lection -is,konsonantisch,,,,,l. b.,l. b.,,l. b.,,,,6|8
+l. b.,lectio bulle,,,lection -is; bulle,kons.; -,,,,,l. b.,l. b.,,l. b.,,,,6|8
 l. T. p.,libra Turonensium parvorum,Pfund kleiner Turnosen (Münze),,,,,,,,,l. T. p.,l. T. p.,,l. T. p.,,,5|6|7|8|10
-lect.,lector,,,lector -is,konsonantisch,,lect.,lect.,lect.,,lect.,,,,,,2|3|4|6
-leg.,leges,Rechte,,leg -um (bereits Plural),konsonantisch,leg.,leg.,leg.,leg.,leg.,leg.,leg.,leg.,leg.,,,1|2|3|4|5|6|7|8|9|10
-len.,lenitas,,,lenitat -is,konsonantisch,,len.,,,,,,,,,,2
-lib.,libra,Pfund,,libr -(a)e,a,,,,,,lib.,,,,,,6
-libr.,libra,Pfund,,libr -(a)e,a,,,,,libr.,libr.,libr.,libr.,libr.,,,5|6|7|8|9|10
+lect.,lector,,,lector -is,kons.,,lect.,lect.,lect.,,lect.,,,,,,2|3|4|6
+leg.,leges,Rechte,,leg -um,kons. (Pl.),leg.,leg.,leg.,leg.,leg.,leg.,leg.,leg.,leg.,,,1|2|3|4|5|6|7|8|9|10
+len.,lenitas,,,lenitat -is,kons.,,len.,,,,,,,,,,2
+lib.,libra,Pfund,,libr -e,a,,,,,,lib.,,,,,,6
+libr.,libra,Pfund,,libr -e,a,,,,,libr.,libr.,libr.,libr.,libr.,,,5|6|7|8|9|10
 licent.,licentiatus,Lizentiat (akademischer Grad),,,,,,,,licent.,,,licent.,,,,5|8|10
-lim.,limina,Schwellen,,limin -um (bereits Pl.),konsonantisch,,lim.,,,lim.,lim.,lim.,lim.,lim.,,,2|5|6|7|8|9|10
-lim. appl.,limina apostolorum,Schwellen der Gräber der Apostel Petrus und Paulus; (Pflicht der Bischöfe zum regelmäßigen Besuch der Kurie);,,limin -um (bereits Pl.),konsonantisch,,,,,,,,,,,,
-lim.,limites,Grenzen,,limit -um (bereits Pl.),konsonantisch,,,,,,,,,,,,2|5|6|7|8|9|10
-limin.,limina,Schwellen,,limin -um (bereits Pl.),konsonantisch,,,,limin.,,,,,,,,4
+lim.,limina,Schwellen,,limin -um,kons. (n.) (Pl.),,lim.,,,lim.,lim.,lim.,lim.,lim.,,,2|5|6|7|8|9|10
+lim. appl.,limina apostolorum,Schwellen der Gräber der Apostel Petrus und Paulus; (Pflicht der Bischöfe zum regelmäßigen Besuch der Kurie);,,limin -um; apostolorum,kons. (n.) (Pl.); -,,,,,,,,,,,,
+lim.,limites,Grenzen,,limit -um,kons. (Pl.),,,,,,,,,,,,2|5|6|7|8|9|10
+limin.,limina,Schwellen,,limin -um,kons. (n.) (Pl.),,,,limin.,,,,,,,,4
 lit.,lite/litis,,,?,?,,lit.,lit.,lit.,,lit.,lit.,,,,,2|4|6|7
 lite pend.,lite pendente,,,,,,,,lite pend.,,,,,,,,3|4
-litt.,littere,"Urkunde, Brief",,litter -is,konsonantisch,,litt.,litt.,litt.,litt.,litt.,litt.,litt.,litt.,,,1|2|3|4|5|6|7|8|9|10
+litt.,littere,"Urkunde, Brief",,litter -is,kons.,,litt.,litt.,litt.,litt.,litt.,litt.,litt.,litt.,,,1|2|3|4|5|6|7|8|9|10
 litt. testim.,littere testimoniales,"Bescheinigung, Zeugnis",,,,,litt. testim.,,litt. testim.,litt. testim.,litt. testim.,litt. testim.,,litt. testim.,,,10
 m. a. p.,marca argenti puri,Mark reinen Silbers,,,,,,,,,m. a. p.,m. a. p.,,m. a. p.,,,5|6|7|8|9
-m. arg.,marca argenti,Mark Silbers,,marc -(a)e (argenti wird nicht verändert),,,,,,m. arg.,m. arg.,m. arg.,m. arg.,m. arg.,,,5|6|7|8|9|10
+m. arg.,marca argenti,Mark Silbers,,marc -e; argenti,a; -,,,,,m. arg.,m. arg.,m. arg.,m. arg.,m. arg.,,,5|6|7|8|9|10
 m. arg. p.,marca argenti puri,Mark reinen Silbers,,,,,,,,m. arg. p.,,,m. arg. p.,,,,5|6|7|8|9|10
 mag.,magister,"Magister, Meister, Vorsteher",,magistr -i,o,mag.,mag.,mag.,mag.,mag.,mag.,mag.,mag.,mag.,,,1|2|3|4|5|6|7|8|9|10
-mai.,maior,"der größere, der höhere; Groß-. Haupt-",,maior -is,konsonantisch,,mai.,,mai.,,mai.,,,,,,1|2|3|4|5|6|7|8|9|10
+mai.,maior,"der größere, der höhere; Groß-. Haupt-",,maior -is,kons.,,mai.,,mai.,,mai.,,,,,,1|2|3|4|5|6|7|8|9|10
 mai.,maius,Mai,,mai -i,o,mai.,,mai.,,mai.,,mai.,mai.,mai.,,,1|2|3|4|5|6|7|8|9|10
 maior eccl.,maior ecclesia,Bischofskirche,,,,,,,,,,,,,,,9
-maior.,maior,"der größere, der höhere; Groß-. Haupt-","ungekürzt, dekl.",maior -is,konsonantisch,,,maior.,,maior.,,,maior.,,,,1|3|4|5|8|9|10
+maior.,maior,"der größere, der höhere; Groß-. Haupt-","ungekürzt, dekl.",maior -is,kons.,,,maior.,,maior.,,,maior.,,,,1|3|4|5|8|9|10
 maior. eccl.,maior ecclesia,Bischofskirche,,,,,,maior. eccl.,,maior. eccl.,,,maior. eccl.,,,,3|5|8|9
-marc. arg.,marca argenti,Mark Silbers,,marc -(a)e (argenti wird nicht verändert),,,,,,marc. arg.,,,,,,,4
-matrim.,matrimonialis (disp.),Ehe-(dispens),,matrimonial -i,i (Adj.),,,,,,,,,,,,2|3|4|5|6|7|8|9|10
+marc. arg.,marca argenti,Mark Silbers,,marc -e; argenti,a; -,,,,,marc. arg.,,,,,,,4
+matrim.,matrimonialis (disp.),Ehe-(dispens),,matrimonial -i; disp.,i (Adj.); -,,,,,,,,,,,,2|3|4|5|6|7|8|9|10
 matrim.,matrimonium,Ehe,,matrimoni -i,o (n.),,matrim.,matrim.,matrim.,matrim.,matrim.,matrim.,matrim.,matrim.,,,2|3|4|5|6|7|8|9|10
-merc.,mercator,Kaufmann,,mercator -is,konsonantisch,,merc.,,,merc.,merc.,merc.,merc.,merc.,,,2|5|6|7|8|9|10
-mercat.,mercator,Kaufmann,,mercator -is,konsonantisch,,,mercat.,,,,,,,,,3
+merc.,mercator,Kaufmann,,mercator -is,kons.,,merc.,,,merc.,merc.,merc.,merc.,merc.,,,2|5|6|7|8|9|10
+mercat.,mercator,Kaufmann,,mercator -is,kons.,,,mercat.,,,,,,,,,3
 mon.,monachus,Mönch,,monach -i,o,,,mon.,,,,,,,möglicherweise auch in anderen Bänden für monachus verwendet,,1|2|3|4|5|6|7|8|9|10
 mon.,monasterium,Kloster,,monasteri -i,o (n.),mon.,mon.,mon.,mon.,mon.,mon.,mon.,mon.,mon.,,,1|2|3|4|5|6|7|8|9|10
 monach.,monachus,Mönch,,monach -i,o,monach.,monach.,monach.,monach.,monach.,monach.,monach.,monach.,monach.,,,1|2|3|4|5|6|7|8|9|10
 monial.,monialis,"Nonne, zur Nonne gehörig",,monial -is,i ?,monial.,monial.,monial.,monial.,monial.,monial.,monial.,monial.,monial.,,,1|2|3|4|5|6|7|8|9|10
-mort.,mortis,,,mort -is,konsonantisch,mort.,,,mort.,mort.,,,,,,,1|4|5
+mort.,mortis,,,mort -is,kons.,mort.,,,mort.,mort.,,,,,,,1|4|5
 mort. art.,mortis articulus/facultas absolvendi in mortis articulo,,,,,,,,mort. art.,,,,,,,,4
 mort. artic.,mortis articulus/facultas absolvendi in mortis articulo,,,,,,,,,mort. artic.,,,,,,,4|5
 motu pr.,motu proprio,(vorgeblich) aus eigenem Antrieb (erlassene Verfügung des Papstes),,,,,,,,motu pr.,motu pr.,motu pr.,motu pr.,motu pr.,,,5|6|7|8|9|10
-mul.,mulier,(Ehe-)Frau,,mulier -is,konsonantisch,,mul.,,mul.,mul.,mul.,mul.,mul.,mul.,,,2|4|5|6|7|8|9|10
-mun.,munus,,2.3,muner -is,konsonantisch,,mun.,mun.,,,,,,,,,2|3
+mul.,mulier,(Ehe-)Frau,,mulier -is,kons.,,mul.,,mul.,mul.,mul.,mul.,mul.,mul.,,,2|4|5|6|7|8|9|10
+mun.,munus,,2.3,muner -is,kons.,,mun.,mun.,,,,,,,,,2|3
 n.,non,nicht,,,,,n.,n.,n.,n.,n.,n.,n.,n.,"in Bd. 1 hat ""n."" andere, mir unbekannte Bedeutung",,1|2|3|4|5|6|7|8|9|10
 n. o.,non obstante/obstantibus,ungeachtet (von – aufgezählten Pfründen und Rechten),(als Ablativus absolutus),,,,n. o.,n. o.,n. o.,n. o.,n. o.,n. o.,n. o.,n. o.,,,1|2|3|4|5|6|7|8|9|10
-nat.,natalis (def.),Geburts-(makel),,natal -i,i (Adj.),nat.,nat.,nat.,nat.,nat.,nat.,nat.,nat.,nat.,,,1|2|3|4|5|6|7|8|9|10
+nat.,natalis (def.),Geburts-(makel),,natal -i; def.,i (Adj.); -,nat.,nat.,nat.,nat.,nat.,nat.,nat.,nat.,nat.,,,1|2|3|4|5|6|7|8|9|10
 nob.,nobilis,adelig,,nobil -is,i (Adj.),nob.,nob.,nob.,nob.,nob.,nob.,nob.,nob.,nob.,,,1|2|3|4|5|6|7|8|9|10
-nov.,november,November,,novembr -is,konsonantisch,nov.,nov.,nov.,nov.,nov.,nov.,nov.,nov.,nov.,,,1|2|3|4|5|6|7|8|9|10
-nunc.,nuncupatus,genannt,,nuncupat -i,o (Adj.),nunc.,nunc.,nunc.,nunc.,nunc.,nunc.,nunc.,nunc.,nunc.,,,1|2|3|4|5|6|7|8|9|10
-nuncup.,nuncupatus,genannt,,nuncupat -i,o (Adj.),,,nuncup.,nuncup.,,,,,,,,3
+nov.,november,November,,novembr -is,kons.,nov.,nov.,nov.,nov.,nov.,nov.,nov.,nov.,nov.,,,1|2|3|4|5|6|7|8|9|10
+nunc.,nuncupatus,genannt,,nuncupat -i,o/a (Adj.),nunc.,nunc.,nunc.,nunc.,nunc.,nunc.,nunc.,nunc.,nunc.,,,1|2|3|4|5|6|7|8|9|10
+nuncup.,nuncupatus,genannt,,nuncupat -i,o/a (Adj.),,,nuncup.,nuncup.,,,,,,,,3
 nunt.,nuntius,Gesandter (allgemein); Nuntius,,nunti -i,o,,nunt.,,nunt.,,nunt.,nunt.,nunt.,nunt.,,,2|4|6|7|8|9|10
 o. Cist.,ordo Cisterciensium,Zisterzienserorden,,,,,,,,,,,,,,,1|2|4|5|6|7|8|9|10
 o. Clun.,ordo Cluniacensium,Kluniazenserorden,,,,,,,,,,,,,,,1|4|5|6|7|8|9|10
@@ -308,63 +308,63 @@ o. s. Ant.,ordo sancti Antonii,Antoniterorden,,,,,,,,,,,,,,,4|5|10
 o. s. Aug.,ordo sancti Augustini,Augustinerorden,,,,,,,,,,,,,,,1|2|3|4|5|6|7|8|10
 o. s. Ben.,ordo sancti Benedicti,Benediktinerorden,,,,,,,,,,,,,,,1|2|3|4|5|6|7|8|9|10
 o. s. Clare,ordo sancte Clare,Klarissenorden,,,,,,,,,,,,,,,1|2|3|4|5|6|7|8|9|10
-obed.,obedientia,,,obedienti -(a)e,a,,,obed.,obed.,obed.,obed.,obed.,obed.,,,,3|4|5|6|7|8
-obed.,obedire,,,"obed, obediv, obedit",i-Konj.  ,,,,,,,,,,,,3|4|5|6|7|8
+obed.,obedientia,,,obedienti -e,a,,,obed.,obed.,obed.,obed.,obed.,obed.,,,,3|4|5|6|7|8
+obed.,obedire,,,"obed, obediv, obedit",i-Konj.,,,,,,,,,,,,3|4|5|6|7|8
 obl.,obligare,,,,,,,,,,,,,,,,4
-obl.,obligatio,"sich verpflichten (zur Zahlung), Verpflichtung",,obligation -is,konsonantisch,,obl.,,obl.,,,,,,,,4
+obl.,obligatio,"sich verpflichten (zur Zahlung), Verpflichtung",,obligation -is,kons.,,obl.,,obl.,,,,,,,,4
 oblig.,obligare,,,"oblig, obligav, obligat",a-Konj.,,,,,,,,,,,,1|2|3|4|5|6|7|8|9|10
-oblig.,obligatio,"sich verpflichten (zur Zahlung), Verpflichtung",,obligation -is,konsonantisch,oblig.,oblig.,oblig.,oblig.,oblig.,oblig.,oblig.,oblig.,oblig.,,,1|2|3|4|5|6|7|8|9|10
+oblig.,obligatio,"sich verpflichten (zur Zahlung), Verpflichtung",,obligation -is,kons.,oblig.,oblig.,oblig.,oblig.,oblig.,oblig.,oblig.,oblig.,oblig.,,,1|2|3|4|5|6|7|8|9|10
 oblig. sup. ann.,obligatio super annata,,,,,,,,,oblig. sup. ann.,oblig. sup. ann.,oblig. sup. ann.,,,,,4
 oblig. sup. annat.,obligatio super annata,,,,,,,,,,,,oblig. sup. annat.,oblig. sup. annat.,,,4|5|7|8|9|10
 oblig. super annata,obligatio super annata,,,,,,,oblig. super annata,,,,,,,,,3
 obt.,obtinere,innehaben ,,"obtine, obtinu, obtent",e-Konj.,,,,obt.,,obt.,,,,,,4
 obtin.,obtinere,innehaben ,,"obtine, obtinu, obtent",e-Konj.,obtin.,obtin.,,,obtin.,obtin.,obtin.,obtin.,obtin.,,,1|2|4|5|6|7|8|9|10
 occup.,occupare,,,"occup, occupav, occupat",a-Konj.,,occup.,occup.,occup.,occup.,occup.,occup.,occup.,,,,2|3|4|5|6|7|8
-occup.,occupatio,,,occupation -is,konsonantisch,,,,,,,,,,,,2|3|4|5|6|7|8
-occup.,occupator,,,occupator -is,konsonantisch,,,,,,,,,,,,2|3|4|5|6|7|8
-oct.,october,Oktober,,octobr -is,konsonantisch,oct.,oct.,oct.,oct.,oct.,oct.,oct.,oct.,oct.,,,1|2|3|4|5|6|7|8|9|10
+occup.,occupatio,,,occupation -is,kons.,,,,,,,,,,,,2|3|4|5|6|7|8
+occup.,occupator,,,occupator -is,kons.,,,,,,,,,,,,2|3|4|5|6|7|8
+oct.,october,Oktober,,octobr -is,kons.,oct.,oct.,oct.,oct.,oct.,oct.,oct.,oct.,oct.,,,1|2|3|4|5|6|7|8|9|10
 off. tab.,officium tabellionatus ?,,,,,,,,,off. tab.,off. tab.,off. tab.,off. tab.,off. tab.,,,3|5|6|7|8|9|10
 off. tabell,officium tabellionatus ?,,,,,,,,,,off. tabell,,,,,,10
 official.,officialis,Offizial,,official -is,i ?,,official.,,,,,,,,,,2
-omn.,omnes,,,omn -ium,konsonantisch ?,omn.,omn.,,omn.,omn.,omn.,omn.,,,,,1|2|4|5|6|7
+omn.,omnes,,,omn -ium,kons. ?,omn.,omn.,,omn.,omn.,omn.,omn.,,,,,1|2|4|5|6|7
 omn. SS.,Omnium Sanctorum,Allerheiligen,,,,omn. SS.,,,,,,,,,,,1|2|4|5|6
 omn. ss.,Omnium sanctorum,Allerheiligen,,,,,omn. ss.,,omn. ss.,omn. ss.,omn. ss.,,,,,,4
-opp.,oppidum,Stadt,,op(p)id -i,o (n.),,,,,opp.,,,,,,,5
-oppid.,oppidanus,Stadtbewohner,,op(p)idan -i,o,,,,,,,,,oppid.,,,10
+opp.,oppidum,Stadt,,opid/oppid -i,o (n.),,,,,opp.,,,,,,,5
+oppid.,oppidanus,Stadtbewohner,,opidan/oppidan -i,o,,,,,,,,,oppid.,,,10
 p. m.,per manus,,,,,,p. m.,p. m.,,p. m.,,p. m.,p. m.,p. m.,,,2|3|7|8|9|10
 p. o.,per obitum,durch Tod,,,,,p. o.,,p. o.,p. o.,p. o.,p. o.,p. o.,p. o.,,,2|4|6|7|8|9|10
 pal.,palatium,Palast,,palati -i,o (n.),pal.,pal.,pal.,pal.,pal.,pal.,,pal.,pal.,,,4|5|10
 palat.,palatium,Palast,,palati -i,o (n.),,palat.,palat.,palat.,,,,,,,,1|2|3|4|5|6|8|9
-paroch.,parochia,"Pfarrei, Pfarrsprengel; Amt des ",,parochi -(a)e,a,paroch.,,paroch.,paroch.,paroch.,paroch.,paroch.,paroch.,paroch.,,,1|3|4|5|6|7|8|9|10
+paroch.,parochia,"Pfarrei, Pfarrsprengel; Amt des ",,parochi -e,a,paroch.,,paroch.,paroch.,paroch.,paroch.,paroch.,paroch.,paroch.,,,1|3|4|5|6|7|8|9|10
 parochian.,parochianus,,,parochian -i,o,,,parochian.,,,,,,,,,3
-pec.,pecunia,Geld,,pecuni -(a)e,a,,pec.,,,pec.,pec.,pec.,pec.,pec.,,,2|4|5|6|7|8|9|10
-pens.,pensio,Rente (aus einer Pfründe) ,,pension -is,konsonantisch,,,,,pens.,pens.,pens.,pens.,pens.,,,5|6|7|8|9|10
+pec.,pecunia,Geld,,pecuni -e,a,,pec.,,,pec.,pec.,pec.,pec.,pec.,,,2|4|5|6|7|8|9|10
+pens.,pensio,Rente (aus einer Pfründe) ,,pension -is,kons.,,,,,pens.,pens.,pens.,pens.,pens.,,,5|6|7|8|9|10
 per ob.,per obitum,durch Tod,,,,per ob.,,per ob.,,,,,,,,,1|3
-percept.,perceptus,,,percept -i,o (Adj.),,,percept.,percept.,,percept.,,,,,,3|4|6
-percip.,percipere,beziehen (von Einkünften),,"percipi, percep, percept",gemischte Konj.,,percip.,percip.,percip.,percip.,percip.,percip.,percip.,percip.,,,2|3|4|5|6|7|8|9|10
-perp.,perpetuus,"ständig, dauernd",,perpetu -i,o (Adj.),perp.,,perp.,perp.,perp.,perp.,perp.,perp.,perp.,,,1|3|4|5|6|7|8|9|10
+percept.,perceptus,,,percept -i,o/a (Adj.),,,percept.,percept.,,percept.,,,,,,3|4|6
+percip.,percipere,beziehen (von Einkünften),,"percipi, percep, percept",gem.-Konj.,,percip.,percip.,percip.,percip.,percip.,percip.,percip.,percip.,,,2|3|4|5|6|7|8|9|10
+perp.,perpetuus,"ständig, dauernd",,perpetu -i,o/a (Adj.),perp.,,perp.,perp.,perp.,perp.,perp.,perp.,perp.,,,1|3|4|5|6|7|8|9|10
 pers.,persona,,,,,,,pers.,,,,,,,,,1|3
 pers.,personatus,Personat (kirchliche Würde),,personat -us,u,pers.,,pers.,,,,,,,,,1|3
-persolv.,persolvere,"zahlen, entrichten",,"persolv, persolv, persolut",konsonantische Konj.,,persolv.,,,,persolv.,,,persolv.,,,2|6|9|10
+persolv.,persolvere,"zahlen, entrichten",,"persolv, persolv, persolut",kons.-Konj.,,persolv.,,,,persolv.,,,persolv.,,,2|6|9|10
 person.,persona,,,,,,,person.,,,,,,,,,3|5|6|7|8|9|10
 person.,personatus,Personat (kirchliche Würde),,personat -us,u,,,person.,,person.,person.,person.,person.,person.,,,3|5|6|7|8|9|10
 pertin.,pertinere,gehören,,"pertine, pertinu, -",e-Konj.,,pertin.,,pertin.,pertin.,pertin.,pertin.,pertin.,pertin.,,,2|4|5|6|7|8|9|10
 pleb.,plebanus,Pfarrer,,pleban -i,o,,pleb.,pleb.,pleb.,pleb.,pleb.,pleb.,pleb.,pleb.,,,2|3|4|5|6|7|8|9|10
-pont.,pontificalia,dem Bischof zustehende Amtszeichen und Rechte,,pontifical -ium (bereits Pl.),i (Adj.),,,,,pont.,,,,,,,2|3|4|5
+pont.,pontificalia,dem Bischof zustehende Amtszeichen und Rechte,,pontifical -ium,i (Adj.) (Pl.),,,,,pont.,,,,,,,2|3|4|5
 pont.,pontificalis,,,,,,,,,,,,,,,,2|3|4|5
-pontific.,pontificalia,dem Bischof zustehende Amtszeichen und Rechte,,pontifical -ium (bereits Pl.),i (Adj.),,,pontific.,,,,pontific.,pontific.,pontific.,,,3|7|8|9|10
+pontific.,pontificalia,dem Bischof zustehende Amtszeichen und Rechte,,pontifical -ium,i (Adj.) (Pl.),,,pontific.,,,,pontific.,pontific.,pontific.,,,3|7|8|9|10
 pontific.,pontificalis,,,,,,,,,,,,,,,,3|7|8|9|10
-pontifical.,pontificalia,dem Bischof zustehende Amtszeichen und Rechte,,pontifical -ium (bereits Pl.),i (Adj.),,,,pontifical.,,pontifical.,,,,,,4|6
-pot.,potestas,Macht; Gewalt; volle päpstliche Gewalt,,potestat -is,konsonantisch,,pot.,,pot.,pot.,pot.,pot.,pot.,pot.,,,2|3|4|5|6|7|8|9|10
-potest.,potestas,Macht; Gewalt; volle päpstliche Gewalt,,potestat -is,konsonantisch,,,potest.,,,potest.,,,,,,2|4|5|6|7|8|9|10
-pr.,proprius,eigen,,propri -i,o (Adj.),,,,,pr.,pr.,pr.,pr.,pr.,,,5|6|7|8|9|10
-preb.,prebenda,"Präbende, Stiftspfründe",,prebend -(a)e,a,preb.,preb.,preb.,preb.,preb.,preb.,preb.,preb.,preb.,,,1|2|3|4|5|6|7|8|9|10
-preb.,prebendatus,mit einer Präbende ausgestattet,,prebendat -i,o (Adj.),preb.,,,,,,,,,"möglicherweise preb. auch in anderen Bänden, v. a. 2 (prebend. nur 1x!) und 3, Abk. für prebendatus",,1|2|3|4|5|6|7|8|9|10
-prebend.,prebendatus,mit einer Präbende ausgestattet,,prebendat -i,o (Adj.),,prebend.,,prebend.,prebend.,prebend.,prebend.,prebend.,prebend.,,,2|4|5|6|7|8|9|10
-prec.,preces,Bitte,,prec -um (bereits Pl.),konsonantisch,,,,prec.,prec.,,prec.,prec.,prec.,,,4|5|7|8|9|10
+pontifical.,pontificalia,dem Bischof zustehende Amtszeichen und Rechte,,pontifical -ium,i (Adj.) (Pl.),,,,pontifical.,,pontifical.,,,,,,4|6
+pot.,potestas,Macht; Gewalt; volle päpstliche Gewalt,,potestat -is,kons.,,pot.,,pot.,pot.,pot.,pot.,pot.,pot.,,,2|3|4|5|6|7|8|9|10
+potest.,potestas,Macht; Gewalt; volle päpstliche Gewalt,,potestat -is,kons.,,,potest.,,,potest.,,,,,,2|4|5|6|7|8|9|10
+pr.,proprius,eigen,,propri -i,o/a (Adj.),,,,,pr.,pr.,pr.,pr.,pr.,,,5|6|7|8|9|10
+preb.,prebenda,"Präbende, Stiftspfründe",,prebend -e,a,preb.,preb.,preb.,preb.,preb.,preb.,preb.,preb.,preb.,,,1|2|3|4|5|6|7|8|9|10
+preb.,prebendatus,mit einer Präbende ausgestattet,,prebendat -i,o/a (Adj.),preb.,,,,,,,,,"möglicherweise preb. auch in anderen Bänden, v. a. 2 (prebend. nur 1x!) und 3, Abk. für prebendatus",,1|2|3|4|5|6|7|8|9|10
+prebend.,prebendatus,mit einer Präbende ausgestattet,,prebendat -i,o/a (Adj.),,prebend.,,prebend.,prebend.,prebend.,prebend.,prebend.,prebend.,,,2|4|5|6|7|8|9|10
+prec.,preces,Bitte,,prec -um,kons. (Pl.),,,,prec.,prec.,,prec.,prec.,prec.,,,4|5|7|8|9|10
 pred.,predicatorum (in o. pred.),,,,,,pred.,,pred.,pred.,pred.,pred.,pred.,pred.,[weird],,1|2|3|4|5|6|7|8|9|10
-pred.,predictum,,,predict -i,o (Adj.),,,,,,,,,,,,1|2|3|4|5|6|7|8|9|10
-predec.,predecessor,,,predecessor -is,konsonantisch,,predec.,,,,,,,,,,2
+pred.,predictum,,,predict -i,o/a (Adj.),,,,,,,,,,,,1|2|3|4|5|6|7|8|9|10
+predec.,predecessor,,,predecessor -is,kons.,,predec.,,,,,,,,,,2
 predic.,predicare,,,"predic, predicav, predicat",a-Konj.,,predic.,predic.,,,,,,,,,2|3
 prep.,prepositus,"Propst, Vorsteher",,preposit -i ?,o ?,prep.,prep.,prep.,prep.,prep.,prep.,prep.,prep.,prep.,,,1|2|3|4|5|6|7|8|9|10
 prep. etc.,"prepositus, decanus et canonici","Propst, Dekan und die Kanoniker",,,,prep. etc.,prep. etc.,,prep. etc.,prep. etc.,prep. etc.,prep. etc.,prep. etc.,prep. etc.,,,1|2|4|5|6|7|8|9|10
@@ -372,38 +372,38 @@ prep. etc.,"prepositus, decanus et canonici","Propst, Dekan und die Kanoniker",,
 "prep., dec. et capit.","prepositus, decanus et canonici","Propst, Dekan und die Kanoniker",,,,,,"prep., dec. et capit.",,"prep., dec. et capit.",,,,"prep., dec. et capit.",,,3|5|9|10
 "prep., dec. etc.","prepositus, decanus et canonici","Propst, Dekan und die Kanoniker",,,,,,,,,,,"prep., dec. etc.",,,,8
 "prep., dec., can. et capit.","prepositus, decanus et canonici","Propst, Dekan und die Kanoniker",,,,,,,,,,,,"prep., dec., can. et capit.",,,9
-prerog.,prerogativa,"Vorrecht, Vorrang",,prerogativ -(a)e,a,,,,,prerog.,prerog.,prerog.,prerog.,prerog.,,,5|6|7|8|9|10
-pres.,presens,gegenwärtig; anwesend; vorliegend,,present -is,konsonantisch,,,,,pres.,pres.,,pres.,pres.,,,2|4|5|6|8|9|10
+prerog.,prerogativa,"Vorrecht, Vorrang",,prerogativ -e,a,,,,,prerog.,prerog.,prerog.,prerog.,prerog.,,,5|6|7|8|9|10
+pres.,presens,gegenwärtig; anwesend; vorliegend,,present -is,kons.,,,,,pres.,pres.,,pres.,pres.,,,2|4|5|6|8|9|10
 pres.,presentare,,,"present, presentav, presentat",a-Konj.,,pres.,,pres.,,,,,,,,2|4|5|6|8|9|10
-pres.,presentatio,,,presentation -is,konsonantisch,,pres.,,pres.,,,,,,,,2|4|5|6|8|9|10
+pres.,presentatio,,,presentation -is,kons.,,pres.,,pres.,,,,,,,,2|4|5|6|8|9|10
 presb.,presbiter,Priester,,,,presb.,presb.,presb.,presb.,presb.,presb.,presb.,presb.,presb.,,,1|2|3|4|5|6|7|8|9|10
-prim.,primarius,"der erste, vorrangige",,primari -i,o (Adj.),,,prim.,prim.,prim.,,prim.,prim.,prim.,,,3|4|5|7|8|9|10
+prim.,primarius,"der erste, vorrangige",,primari -i,o/a (Adj.),,,prim.,prim.,prim.,,prim.,prim.,prim.,,,3|4|5|7|8|9|10
 privil.,privilegium,Privileg,,privilegi -i,o (n.),,privil.,privil.,,privil.,privil.,privil.,privil.,privil.,,,2|3|4|5|6|7|8|9|10
-procur.,procurator,Prokurator,,procurator -is,konsonantisch,,,procur.,procur.,procur.,procur.,procur.,procur.,procur.,,,3|4|5|6|7|8|9|10
-procurat.,procurator,Prokurator,,procurator -is,konsonantisch,,,procurat.,procurat.,,,,,,,,10
-prothomart.,prothomartir,Erzmärtyrer,,prothmartir -,,,,,prothomart.,,,prothomart.,,prothomart.,,,4|7|9|10
+procur.,procurator,Prokurator,,procurator -is,kons.,,,procur.,procur.,procur.,procur.,procur.,procur.,procur.,,,3|4|5|6|7|8|9|10
+procurat.,procurator,Prokurator,,procurator -is,kons.,,,procurat.,procurat.,,,,,,,,10
+prothomart.,prothomartir,Erzmärtyrer,,prothomartir -is,kons.,,,,prothomart.,,,prothomart.,,prothomart.,,,4|7|9|10
 prothon.,prothonotarius,"Protonotar, Notar in der päpstlichen Kanzlei",,prothonotari -i,o,,,,prothon.,,,prothon.,prothon.,,,,4|7|8
 prothonot.,prothonotarius,"Protonotar, Notar in der päpstlichen Kanzlei",,prothonotari -i,o,,prothonot.,prothonot.,prothonot.,prothonot.,prothonot.,prothonot.,,prothonot.,,,2|3|4|5|6|7|9|10
-provin.,provincia,,,provinci -(a)e,a,provin.,,,,provin.,,,provin.,,,,1|3|4|5|8
+provin.,provincia,,,provinci -e,a,provin.,,,,provin.,,,provin.,,,,1|3|4|5|8
 quib.,quibus,welchen,,,,,quib.,,quib.,quib.,quib.,quib.,quib.,quib.,,,2|4|5|6|7|8|9|10
 quond.,quondam,"früher, verstorben",,,,,quond.,,quond.,quond.,quond.,quond.,quond.,quond.,,,2|4|5|6|7|8|9|10
-r.,reservatio,,,reservation -is,konsonantisch,,,,r.,r.,,,,,,,1|4|5|6|7|8|9|10
+r.,reservatio,,,reservation -is,kons.,,,,r.,r.,,,,,,,1|4|5|6|7|8|9|10
 r. b.,restitutio bulle,,,,,,,,r. b.,r. b.,,,,,,,4
 R. E.,Romana Ecclesia,Römische Kirche,,,,,R. E.,,,R. E.,R. E.,R. E.,R. E.,R. E.,,,2|5|6|7|8|10
 R. e.,Romana Ecclesia,Römische Kirche,,,,,R. e.,,,,,,,,,,2
 R. R.,Romanorum Rex,Römischer König,,,,,,,,R. R.,R. R.,R. R.,R. R.,,,,4|6|7|8|10
-recip.,recipere,"empfangen, aufnehmen",,"recipi, recep, recept",gemischte Konj.,,recip.,recip.,recip.,recip.,recip.,recip.,recip.,recip.,,,2|3|4|5|6|7|8|9|10
-rect.,rector,"Rektor, Pfarrer; (Schul-)Meister; Meister (eines Hospitals)",,rector -is,konsonantisch,,rect.,rect.,rect.,rect.,rect.,rect.,rect.,rect.,,,2|3|4|5|6|7|8|9|10
+recip.,recipere,"empfangen, aufnehmen",,"recipi, recep, recept",gem.-Konj.,,recip.,recip.,recip.,recip.,recip.,recip.,recip.,recip.,,,2|3|4|5|6|7|8|9|10
+rect.,rector,"Rektor, Pfarrer; (Schul-)Meister; Meister (eines Hospitals)",,rector -is,kons.,,rect.,rect.,rect.,rect.,rect.,rect.,rect.,rect.,,,2|3|4|5|6|7|8|9|10
 red.,reditus,Einkünfte,,redit -us,u,,red.,,red.,,red.,red.,,red.,,,2|4|5|6|7|9|10
 redd.,redditus,Einkünfte,,reddit -us,u,,,,redd.,redd.,,,,,,,5
-reddit.,redditus,Einkünfte,,red(d)it -us,u,,,reddit.,reddit.,,,,,,,,3|4|5|10
+reddit.,redditus,Einkünfte,,redit/reddit -us,u,,,reddit.,reddit.,,,,,,,,3|4|5|10
 refer.,referendarius,Referendar (des Papstes),,referendari -i,o,,refer.,refer.,refer.,refer.,refer.,refer.,refer.,refer.,,,2|3|4|5|6|7|8|9|10
-rem.,remissio,Vergebung (der Sünden),,remission -is,konsonantisch,rem.,,,rem.,rem.,rem.,rem.,rem.,rem.,,,1|3|4|5|6|7|8|9|10
+rem.,remissio,Vergebung (der Sünden),,remission -is,kons.,rem.,,,rem.,rem.,rem.,rem.,rem.,rem.,,,1|3|4|5|6|7|8|9|10
 reman.,remanere,,"3,6 (+remanens)","remane, remans, remans",e-Konj.,,,reman.,,,,,,,[weird],,3
-remitt.,remittere,,,"remitt, remis, remiss",konsonantische Konj.,,,,,,,,,,,,5
+remitt.,remittere,,,"remitt, remis, remiss",kons.-Konj.,,,,,,,,,,,,5
 renen.,renensis (fl.),rheinischer (Gulden),,,,,,,,,,renen.,renen.,renen.,,,7|8|9|10
-reservat.,reservatio,Reservation,,reservation -is,konsonantisch,,,reservat.,,,,,,,,,2|5|10
-resident.,residentia,Residenz(pflicht),,residenti -(a)e,a,,,,resident.,,,,,,,,5|10
+reservat.,reservatio,Reservation,,reservation -is,kons.,,,reservat.,,,,,,,,,2|5|10
+resident.,residentia,Residenz(pflicht),,residenti -e,a,,,,resident.,,,,,,,,5|10
 resp.,respective,,,,,resp.,,resp.,,,,,,,,,1|3
 restit. bulle,restitutio bulle,,,,,,,,,restit. bulle,restit. bulle,,restit. bulle,restit. bulle,,,4|8|9|10
 restit. bulla,restitutio bulla,,,,,,,,,,,,,,,,4|8|9|10
@@ -411,15 +411,15 @@ restit. bullam,restitutio bullam,,,,,,,,,,,,,,,,4|8|9|10
 restit. bullas,restitutio bullas,,,,,,,,,,,,,,,,4|8|9|10
 restit. bullarum,restitutio bullarum,,,,,,,,,,,,,,,,4|8|9|10
 retin.,retinere,"innehaben, besitzen",,"retine, retinu, retent",e-Konj.,,retin.,retin.,retin.,retin.,retin.,retin.,retin.,retin.,,,2|3|4|5|6|7|8|9|10
-revocat.,revocatio,,,revocation -is,konsonantisch,,,revocat.,,,,,,,,,2|4|5
-Rom.,Romana curia,,1,Roman -(a)e curi -(a)e,beide a,,Rom.,,,,,,,,,,1|2|3|4|5|6|8
+revocat.,revocatio,,,revocation -is,kons.,,,revocat.,,,,,,,,,2|4|5
+Rom.,Romana curia,,1,Roman -e; curi -e,o/a (Adj.); a,,Rom.,,,,,,,,,,1|2|3|4|5|6|8
 Rom.,Romanus,,,Roman -i,o,Rom.,Rom.,Rom.,Rom.,,Rom.,,,,,,1|2|3|4|5|6|8
-Rom. curia,Romana curia,,1,Roman -(a)e curi -(a)e,beide a,Rom. curia,Rom. curia,Rom. curia,Rom. curia,,,,,,,,1|2|3|4|6
+Rom. curia,Romana curia,,1,Roman -e; curi -e,o/a (Adj.); a,Rom. curia,Rom. curia,Rom. curia,Rom. curia,,,,,,,,1|2|3|4|6
 Rom. imper.,Romanorum Imperator,Römischer Kaiser,,,,,Rom. imper.,,,,,,,,,,2|3
 Rom. imperium,Romanorum Imperium,,,,,,,Rom. imperium,,,,,,,,,3
 Rom. rex,Romanorum Rex,Römischer König,,,,,Rom. rex,Rom. rex,,,,,,,,,2
 Roman.,Romanus,,,Roman -i,o,,,Roman.,Roman.,Roman.,,,Roman.,,,,3|10
-Romana cur.,Romana curia,,1,Roman -(a)e curi -(a)e,beide a,,,,,,,Romana cur.,Romana cur.,Romana cur.,,,7|8|9|10
+Romana cur.,Romana curia,,1,Roman -e; curi -e,o/a (Adj.); a,,,,,,,Romana cur.,Romana cur.,Romana cur.,,,7|8|9|10
 Romani imper.,Romanorum Imperator,Römischer Kaiser,,,,,,,,,,,,Romani imper.,,,9|10
 rot.,rotulus,,,rotul -i,o,rot.,,,rot.,,,,,,,,1|4
 s. e. d.,sub eodem dato,,,,,,,s. e. d.,,,,,,,,,3
@@ -433,87 +433,88 @@ S. R. I.,Sacrum Romanum Imperium,,,,,,,,,S. R. I.,,S. R. I.,S. R. I.,,,,7|8|10
 sacerdot.,sacerdotalis,,,sacerdotal -is,i (Adj.),,sacerdot.,sacerdot.,sacerdot.,sacerdot.,,,,,,,2|3|4|5
 salv. cond.,salvus conductus,,,,,,salv. cond.,,salv. cond.,,,,,,,,2|4
 scil.,scilicet,,,,,,,,,,scil.,,,,,,6
-scol.,scolaris,"Scholar, Schüler",,scolar -is,konsonantisch ?,,scol.,,scol.,scol.,scol.,scol.,scol.,scol.,,,2|3|4|5|6|7|8|9|10
+scol.,scolaris,"Scholar, Schüler",,scolar -is,kons. ?,,scol.,,scol.,scol.,scol.,scol.,scol.,scol.,,,2|3|4|5|6|7|8|9|10
 scol.,scolasticus,Scholaster,,scolastic -i,o,,,scol.,scol.,,,,,,,,2|3|4|5|6|7|8|9|10
 scolast.,scolaster,,,,,,,,scolast.,scolast.,,,,,,,1|2|3|4|5|6|7|8|9|10
 scolast.,scolasticus,Scholaster,,scolastic -i,o,scolast.,scolast.,scolast.,scolast.,scolast.,scolast.,scolast.,scolast.,scolast.,,,1|2|3|4|5|6|7|8|9|10
-scolast.,scolastria,Amt eines Scholasters,,scolastri -(a)e,a,scolast.,,scolast.,,,,,,,"möglicherweise in Bd. 1 und 3 ""scolast."" als Abk. für ""scolastria"" verwendet",,1|2|3|4|5|6|7|8|9|10
-scolastr.,scolastria,Amt eines Scholasters,,scolastri -(a)e,a,,scolastr.,,scolastr.,scolastr.,scolastr.,scolastr.,scolastr.,scolastr.,,,2|4|5|6|7|8|9|10
-scriptor.,scriptor,Schreiber; Reinschreiber (in der päpst lichen Kanzlei und Pönitentiarie),,scriptor -is,konsonantisch,,,scriptor.,,,,,,,,,1|9|10
+scolast.,scolastria,Amt eines Scholasters,,scolastri -e,a,scolast.,,scolast.,,,,,,,"möglicherweise in Bd. 1 und 3 ""scolast."" als Abk. für ""scolastria"" verwendet",,1|2|3|4|5|6|7|8|9|10
+scolastr.,scolastria,Amt eines Scholasters,,scolastri -e,a,,scolastr.,,scolastr.,scolastr.,scolastr.,scolastr.,scolastr.,scolastr.,,,2|4|5|6|7|8|9|10
+scriptor.,scriptor,Schreiber; Reinschreiber (in der päpst lichen Kanzlei und Pönitentiarie),,scriptor -is,kons.,,,scriptor.,,,,,,,,,1|9|10
 scult.,scultetus,,,scultet -i,o,,,,scult.,,,,,,,,4
 sec.,secularis,weltlich,,secular -is,,sec.,sec.,,sec.,sec.,sec.,sec.,sec.,sec.,,,1|2|3|4|5|6|7|8|9|10
 secr.,secretarius,Sekretär,,secretari -i,o,,secr.,,secr.,secr.,secr.,secr.,secr.,secr.,,,2|3|4|5|6|7|8|9|10
 secret.,secretarius,Sekretär,,secretari -i,o,,,secret.,secret.,,secret.,,,,,,3|4
-sed.,sedes,Sitz; (Bischofs-)Thron,,sed -is,konsonantisch,,sed.,sed.,sed.,sed.,sed.,sed.,sed.,sed.,,,2|3|4|5|6|7|8|9|10
-sed. ap.,sedes apostolica,,,sed -is apostolic -(a)e,konsonantisch und a,,,sed. ap.,sed. ap.,sed. ap.,sed. ap.,sed. ap.,sed. ap.,sed. ap.,,,3|4|5|6|7|8|9|10
-sen.,senior,der ältere,,senior -is,konsonantisch,,sen.,sen.,sen.,sen.,sen.,sen.,sen.,sen.,,,2|3|4|5|6|7|8|9|10
-sent.,sententia,"Spruch, Urteil",,sententi -(a)e,a,sent.,sent.,,,sent.,sent.,sent.,sent.,sent.,,,1|2|3|4|5|6|7|8|9|10
-sept.,september,September,,septembr -is,konsonantisch,sept.,sept.,sept.,sept.,sept.,sept.,sept.,sept.,sept.,,,1|2|3|4|5|6|7|8|9|10
-sepult.,sepultura,,,sepultur -(a)e,a,,,sepult.,,,sepult.,,,,,,3|6
-serv.,servire,,"6,7,8 (+serviens)","serv, serviv, servit",i-Konj.  ,serv.,serv.,serv.,serv.,serv.,serv.,serv.,serv.,serv.,[weird],,1|2|3|4|5|6|7|8|9|10
+sed.,sedes,Sitz; (Bischofs-)Thron,,sed -is,kons.,,sed.,sed.,sed.,sed.,sed.,sed.,sed.,sed.,,,2|3|4|5|6|7|8|9|10
+sed. ap.,sedes apostolica,,,sed -is; apostolic -e,kons. (f.); o/a (Adj.),,,sed. ap.,sed. ap.,sed. ap.,sed. ap.,sed. ap.,sed. ap.,sed. ap.,,,3|4|5|6|7|8|9|10
+sen.,senior,der ältere,,senior -is,kons.,,sen.,sen.,sen.,sen.,sen.,sen.,sen.,sen.,,,2|3|4|5|6|7|8|9|10
+sent.,sententia,"Spruch, Urteil",,sententi -e,a,sent.,sent.,,,sent.,sent.,sent.,sent.,sent.,,,1|2|3|4|5|6|7|8|9|10
+sept.,september,September,,septembr -is,kons.,sept.,sept.,sept.,sept.,sept.,sept.,sept.,sept.,sept.,,,1|2|3|4|5|6|7|8|9|10
+sepult.,sepultura,,,sepultur -e,a,,,sepult.,,,sepult.,,,,,,3|6
+serv.,servire,,"6,7,8 (+serviens)","serv, serviv, servit",i-Konj.,serv.,serv.,serv.,serv.,serv.,serv.,serv.,serv.,serv.,[weird],,1|2|3|4|5|6|7|8|9|10
 serv.,servitium,"Dienst; Servitium (Zahlung an Papst, Kardinäle und Kuriale",,serviti -i,o (n.),serv.,serv.,serv.,serv.,serv.,serv.,serv.,serv.,serv.,,,1|2|3|4|5|6|7|8|9|10
-serv. commun.,servitium commune,allgemeines Servitium,,serviti -i commun -is,o (n.) und konsonantisch (n.),,,,,,,,,serv. commun.,,,9|10
+serv. commun.,servitium commune,allgemeines Servitium,,serviti -i; commun -is,o (n.); i (Adj.) (n.),,,,,,,,,serv. commun.,,,9|10
 servit.,servitium,"Dienst; Servitium (Zahlung an Papst, Kardinäle und Kuriale",,serviti -i,o (n.),,,,,,,,servit.,,,,2|3|8
-sign.,signatura,"Signatur",,signatur -(a)e,a,,,,,,,,sign.,sign.,,,8|9|10
-sign.,sola signatura,"es genügt die päpstl. Signatur (auf der Supplik, keine Ausstellung einer Bulle erforderlich)",,signatur -(a)e,a,,,,,,,,sign.,sign.,,,8|9|10
+sign.,signatura,Signatur,,signatur -e,a,,,,,,,,sign.,sign.,,,8|9|10
+sign.,sola signatura,"es genügt die päpstl. Signatur (auf der Supplik, keine Ausstellung einer Bulle erforderlich)",,sol -e; signatur -e,o/a (Adj.); a,,,,,,,,sign.,sign.,,,8|9|10
 singul.,singuli,,,singul -orum,o,,,singul.,,,,,,,,,3|4
-solemn.,solemnis,,,solemn -is,konsonantisch/gemischt?,,,solemn.,,,,,,,,,3
+solemn.,solemnis,,,solemn -is,kons./gem. ?,,,solemn.,,,,,,,,,3
 solit.,solitus,,,solit -i,o,,,,solit.,,solit.,,,,,,4|6
-solv.,solvere,bezahlen,,"solve, solv, solut",konsonantische Konj.,,solv.,solv.,solv.,solv.,solv.,solv.,solv.,solv.,,,2|3|4|5|6|7|8|9|10
+solv.,solvere,bezahlen,,"solve, solv, solut",kons.-Konj.,,solv.,solv.,solv.,solv.,solv.,solv.,solv.,solv.,,,2|3|4|5|6|7|8|9|10
 spect.,"spectare, spectans",,,"spect, spectav, spectat",a-Konj.,spect.,,spect.,spect.,,spect.,,,,,,1|3|4|6
 SS.,sancti,die heiligen,,sanct -orum,o,SS.,,,,,,,,,,,1|2|4|5|6
 ss.,sancti,die heiligen,,sanct -orum,o,ss.,ss.,ss.,ss.,ss.,ss.,ss.,ss.,ss.,,,1|2|3|4|5|6|7|8|9|10
-statut.,statuta,,,statut -(a)e/-i,a/o,,,statut.,statut.,statut.,,,,statut.,,,3|4|5|9
-statut.,statutum,,,statut -(a)e/-i,a/o,,,statut.,statut.,statut.,,,,statut.,,,3|4|5|9
+statut.,statuta,,,statut -e/-i,a/o,,,statut.,statut.,statut.,,,,statut.,,,3|4|5|9
+statut.,statutum,,,statut -e/-i,a/o,,,statut.,statut.,statut.,,,,statut.,,,3|4|5|9
 sub dat.,sub data,,,,,,,,,,,,,sub dat.,,,9|10
 sub eodem dat.,sub eodem dato,,,,,,,,,,,,,sub eodem dat.,,,9|10
 sub eadem dat.,sub eadem data,,,,,,,,,,,,,,,,10
 sub expect. preb.,sub expectatione prebende,,,,,,,,,sub expect. preb.,,,sub expect. preb.,sub expect. preb.,,,1|2|3|4|5|6|7|8|9
 sub prima dat.,sub prima data,,,,,,,,,,,,,sub prima dat.,,,9
-subcollect.,subcollector,Subkollektor,,subcollector -is,konsonantisch,,,subcollect.,,,subcollect.,subcollect.,subcollect.,subcollect.,,,9|10
+subcollect.,subcollector,Subkollektor,,subcollector -is,kons.,,,subcollect.,,,subcollect.,subcollect.,subcollect.,subcollect.,,,9|10
 subdiac.,subdiaconus,Subdiakon,,subdiacon -i,o,subdiac.,subdiac.,subdiac.,subdiac.,subdiac.,subdiac.,subdiac.,subdiac.,subdiac.,,,1|2|3|4|5|6|7|8|9|10
-subdiacon.,"subdiaconatus, subdiaconia",Weihegrad; Amt des Subdiakons,,subdiaconat -us,u,,,subdiacon.,subdiacon.,subdiacon.,subdiacon.,subdiacon.,subdiacon.,subdiacon.,,,3|4|5|6|7|8|9|10
-subiect.,subiectus,,,subiect -i,o (Adj.),,subiect.,subiect.,,,,,,,,,2|3
+subdiacon.,subdiaconatus,Weihegrad; Amt des Subdiakons,,subdiaconat -us,a,,,subdiacon.,subdiacon.,subdiacon.,subdiacon.,subdiacon.,subdiacon.,subdiacon.,,,3|4|5|6|7|8|9|10
+subdiacon.,subdiaconia,Weihegrad; Amt des Subdiakons,,subdiaconi -e,a,,,subdiacon.,subdiacon.,subdiacon.,subdiacon.,subdiacon.,subdiacon.,subdiacon.,,,3|4|5|6|7|8|9|10
+subiect.,subiectus,,,subiect -i,o/a (Adj.),,subiect.,subiect.,,,,,,,,,2|3
 subsid.,subsidium,,,subsidi -i,o (n.),,subsid.,subsid.,,,,,,,,,2|3
 subsid. car.,subsidium caritatis,,,,,,subsid. car.,,,,,,,,,,2
 subsid. car.,subsidium caritativum,,,,,,subsid. car.,,,,,,,,,,2
 subsid. carit.,subsidium caritatis,,,,,,,subsid. carit.,,,,,,,,,2|3
 subsid. carit.,subsidium caritativum,,,,,,,subsid. carit.,,,,,,,,,2|3
-succoll.,succollector,Subkollektor,,succollector -is,konsonantisch,,,,succoll.,,,,,,,,4
-succollect.,subcollector/succollector,Subkollektor,,subcollector -is/succollector -is,konsonantisch,,succollect.,,succollect.,succollect.,succollect.,succollect.,succollect.,,,,2|3|4|5|6|7|8|9
-succust.,succustos,,,subcustod -is/succustod -is,konsonantisch,,succust.,,succust.,,succust.,,,,,,2|4|6|8
-succustod.,succostodia,,,subcustodi -(a)e/succustodi -(a)e,a,,succustod.,succustod.,,,,,,,,,2|3|4|6
+succoll.,succollector,Subkollektor,,succollector -is,kons.,,,,succoll.,,,,,,,,4
+succollect.,subcollector/succollector,Subkollektor,,subcollector/succollector -is,kons.,,succollect.,,succollect.,succollect.,succollect.,succollect.,succollect.,,,,2|3|4|5|6|7|8|9
+succust.,succustos,,,subcustod/succustod -is,kons.,,succust.,,succust.,,succust.,,,,,,2|4|6|8
+succustod.,succostodia,,,subcustodi/succustodi -e,a,,succustod.,succustod.,,,,,,,,,2|3|4|6
 suffrag.,suffraganeus,"Suffragan, Weihbischof",,suffragane -i,o,suffrag.,suffrag.,,suffrag.,,suffrag.,suffrag.,suffrag.,,,,1|2|4|6|7|8|10
-suplic.,supplicatio,"Bitte, Bittschrift",,supplication -is,konsonantisch,,,,suplic.,,,,,,,,4
+suplic.,supplicatio,"Bitte, Bittschrift",,supplication -is,kons.,,,,suplic.,,,,,,,,4
 supplem.,supplementum,,,supplement -i,o (n.),supplem.,supplem.,supplem.,supplem.,supplem.,,,,,,,1|2|3|4|5
-supplicat.,supplicatio,"Bitte, Bittschrift",,supplication -is,konsonantisch,,,supplicat.,,,,,,,,,7|9|10
-suprad.,supradictus,,,supradict -i,o (Adj.),,,,suprad.,suprad.,,,suprad.,,,,4|5|8
-suspens.,suspensio,,1,suspension -is,konsonantisch,suspens.,,suspens.,,,,,,,,,1|3
+supplicat.,supplicatio,"Bitte, Bittschrift",,supplication -is,kons.,,,supplicat.,,,,,,,,,7|9|10
+suprad.,supradictus,,,supradict -i,o/a (Adj.),,,,suprad.,suprad.,,,suprad.,,,,4|5|8
+suspens.,suspensio,,1,suspension -is,kons.,suspens.,,suspens.,,,,,,,,,1|3
 T.,Turonensis,Turnosen (Münze),,,,,,,,,T.,T.,,T.,"in Bd. 1,2,3 nicht verwendet, ansonsten zu viele Treffer, daher nicht feststellbar, ob T. auch in Bd. 4,5,8 verwendet wird.",,1|2|3|4|5|6|7|8|9|10
 tab.,tabellionatus,Notariat,,tabellionat -us,u,,tab.,,tab.,tab.,tab.,tab.,tab.,tab.,,,1|2|3|4|5|6|7|8|9|10
 temporal.,temporalis,,7,temporal -is,i (Adj.),,,,temporal.,,,,temporal.,,,,4|8
 term.,terminus,"Termin, Zeitpunkt",,termin -i,o,,,term.,,term.,term.,term.,term.,term.,,,3|5|6|7|8|9|10
 testim.,testimonialis,,,testimonial -is,i (Adj.),,testim.,,testim.,testim.,testim.,testim.,testim.,testim.,,,9|10
 testimonialis litt.,testimoniales littere,"Bescheinigung, Zeugnis",,,,,,,,testimonialis litt.,,,,,,,5
-theol.,theologia,Theologie,,theologi -(a)e,a,theol.,theol.,theol.,theol.,theol.,theol.,theol.,theol.,theol.,,,1|2|3|4|5|6|7|8|9|10
+theol.,theologia,Theologie,,theologi -e,a,theol.,theol.,theol.,theol.,theol.,theol.,theol.,theol.,theol.,,,1|2|3|4|5|6|7|8|9|10
 thes.,thesaurarius,"Amt des Thesaurars, Schatzmeisters",,thesaurari -i,o,,thes.,,thes.,thes.,thes.,thes.,thes.,thes.,,,10
-thesaur.,thesauraria,Amt des Thesaurars,,thesaurari -(a)e,a,,thesaur.,thesaur.,thesaur.,thesaur.,thesaur.,thesaur.,thesaur.,thesaur.,,,1|2|3|4|5|6|7|8|9|10
+thesaur.,thesauraria,Amt des Thesaurars,,thesaurari -e,a,,thesaur.,thesaur.,thesaur.,thesaur.,thesaur.,thesaur.,thesaur.,thesaur.,,,1|2|3|4|5|6|7|8|9|10
 thesaur.,thesaurarius,"Amt des Thesaurars, Schatzmeisters",,thesaurari -i,o,,,thesaur.,,,,,,,"nicht auszuschließen, dass nicht auch in anderen Bänden außer 1 und 3 ""thesaur."" oder auch überhaupt ""thesaurar."" als Abk. für ""thesaurarius"" verwendet werden",,1|2|3|4|5|6|7|8|9|10
 transf.,transferre,,,"transfer, transtul, translat",,transf.,,transf.,,,transf.,,,,,,1|2|3|5|6|7|8
 Tur.,Turonensis,Turnosen (Münze),,,,,,,,Tur.,,,Tur.,,,,5
 unac.,unacum,zusammen mit,,,,,unac.,,unac.,unac.,unac.,unac.,unac.,unac.,,,2|5|6|7|8|9|10
 Ung.,Ungaricalis (fl.),ungarischer (Gulden),,,,,,,,,,,,Ung.,,,9|10
-univ.,universitas,"Universität, Gesamtheit (der Bürger)",,universitat -is,konsonantisch,univ.,univ.,univ.,univ.,univ.,univ.,univ.,univ.,univ.,in 8 univ. nur für Universität,,1|2|3|4|5|6|7|8|9|10
-univers.,universitas,"Universität, Gesamtheit (der Bürger)",,universitat -is,konsonantisch,,univers.,,univers.,univers.,,,univers.,,,,5|8
+univ.,universitas,"Universität, Gesamtheit (der Bürger)",,universitat -is,kons.,univ.,univ.,univ.,univ.,univ.,univ.,univ.,univ.,univ.,in 8 univ. nur für Universität,,1|2|3|4|5|6|7|8|9|10
+univers.,universitas,"Universität, Gesamtheit (der Bürger)",,universitat -is,kons.,,univers.,,univers.,univers.,,,univers.,,,,5|8
 ususfruct.,ususfructus,,,,,,,,,,,,ususfruct.,,,,8
-ux.,uxor,(Ehe-)Frau,,uxor -is,konsonantisch,ux.,ux.,,,ux.,ux.,ux.,ux.,ux.,,,1|2|5|6|7|8|9|10
+ux.,uxor,(Ehe-)Frau,,uxor -is,kons.,ux.,ux.,,,ux.,ux.,ux.,ux.,ux.,,,1|2|5|6|7|8|9|10
 vac.,vacare,"frei, vakant sein",,"vac, vacav, vacat",a-Konj.,vac.,vac.,vac.,vac.,vac.,vac.,vac.,vac.,vac.,,,1|2|3|4|5|6|7|8|9|10
-vac.,vacatio,,"5,6,8",vacation -is,konsonantisch,vac.,vac.,vac.,vac.,vac.,vac.,vac.,vac.,vac.,,,1|2|3|4|5|6|7|8|9|10
-vacat.,vacaturus,"künftig frei, vakant",,vacatur -i,o (Adj.),,vacat.,vacat.,vacat.,vacat.,vacat.,vacat.,vacat.,vacat.,,,1|2|3|4|5|6|7|8|9|10
+vac.,vacatio,,"5,6,8",vacation -is,kons.,vac.,vac.,vac.,vac.,vac.,vac.,vac.,vac.,vac.,,,1|2|3|4|5|6|7|8|9|10
+vacat.,vacaturus,"künftig frei, vakant",,vacatur -i,o/a (Adj.),,vacat.,vacat.,vacat.,vacat.,vacat.,vacat.,vacat.,vacat.,,,1|2|3|4|5|6|7|8|9|10
 vic.,vicarius,"Vikar, Stellvertreter",,vicari -i,o,,vic.,vic.,vic.,vic.,vic.,vic.,vic.,vic.,,,2|3|4|5|6|7|8|9|10
-vicar.,vicaria,"Vikarie, Meßpriesterstelle",,vicari -(a)e,a,,vicar.,vicar.,vicar.,vicar.,vicar.,vicar.,vicar.,vicar.,,,2|3|4|5|6|7|8|9|10
-vid.,vidua,,,vidu -(a)e,a,,,,,,vid.,,,,,,6
+vicar.,vicaria,"Vikarie, Meßpriesterstelle",,vicari -e,a,,vicar.,vicar.,vicar.,vicar.,vicar.,vicar.,vicar.,vicar.,,,2|3|4|5|6|7|8|9|10
+vid.,vidua,,,vidu -e,a,,,,,,vid.,,,,,,6
 vig.,vigor,,,,,,,,,,vig.,,vig.,,,,5|6|7|8|9|10
-vig.,vigore,kraft,,vigor -is,konsonantisch,,,,,vig.,,vig.,,vig.,,,5|6|7|8|9|10
-virg.,virgo,Jungfrau,,virgin -is,konsonantisch,virg.,virg.,,virg.,virg.,virg.,virg.,virg.,virg.,,,1|2|4|5|6|7|8|9|10
+vig.,vigore,kraft,,vigor -is,kons.,,,,,vig.,,vig.,,vig.,,,5|6|7|8|9|10
+virg.,virgo,Jungfrau,,virgin -is,kons.,virg.,virg.,,virg.,virg.,virg.,virg.,virg.,virg.,,,1|2|4|5|6|7|8|9|10
 vulg.,vulgariter,"gewöhnlich, sonst; in der Volkssprache",,,,vulg.,vulg.,vulg.,vulg.,vulg.,vulg.,vulg.,vulg.,vulg.,,,1|2|3|4|5|6|7|8|9|10
