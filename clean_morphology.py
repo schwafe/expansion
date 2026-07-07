@@ -140,6 +140,8 @@ MANUAL_BY_WORTSTAMM: dict[str, tuple[str, str | None]] = {
     "pontifical -ium (bereits Pl.)": ("pontifical -ium", "i (Adj.) (Pl.)"),
     # beati: plural of the adjective
     "beat -orum/arum": ("beat -orum/-arum", "o/a (Adj.) (Pl.)"),
+    # a verb stored in noun format
+    "concord -o": ("concord, concordav, concordat", "a-Konj."),
     # bare stems without endings
     "adiudic": ("adiudic, adiudicav, adiudicat", "a-Konj."),
     "coniugat": ("coniugat -i", "o/a (Adj.)"),
@@ -170,6 +172,34 @@ MANUAL_BY_AUFLOESUNG: dict[tuple[str, str], tuple[str, str]] = {
     ("subdiaconatus, subdiaconia", "subdiaconat -us; subdiaconia"): (
         "subdiaconat -us; subdiaconi -e",
         "u; a",
+    ),
+    # alternative expansions: the participle gets its own morphology
+    ("spectare, spectans", "spect, spectav, spectat"): (
+        "spect, spectav, spectat; spectant -is",
+        "a-Konj.; gem.",
+    ),
+    # Latin usage notes in the Auflösung become fixed words
+    ("dispensare (cum aliquo);", "dispens, dispensav, dispensat"): (
+        "dispens, dispensav, dispensat; cum; aliquo",
+        "a-Konj.; -; -",
+    ),
+    ("providere (alicui de aliqua re);", "provide, provid, provis"): (
+        "provide, provid, provis; alicui; de; aliqua; re",
+        "e-Konj.; -; -; -; -",
+    ),
+    ("(perinde) valere;", "vale, valu, -"): ("perinde; vale, valu, -", "-; e-Konj."),
+    # verbs whose Deklination lacked the -Konj. suffix
+    ("instituere;", "institu, institu, institut"): (
+        "institu, institu, institut",
+        "kons.-Konj.",
+    ),
+    ("restituere;", "restitu, restitu, restitut"): (
+        "restitu, restitu, restitut",
+        "kons.-Konj.",
+    ),
+    ("supplicare;", "supplic, supplicav, supplicat"): (
+        "supplic, supplicav, supplicat",
+        "a-Konj.",
     ),
 }
 
@@ -366,7 +396,7 @@ def clean_wortstamm(wortstamm: str, aufloesung: str | None) -> tuple[str | None,
         if part in words or part == "?":  # fixed word or unknown (already clean)
             cleaned_parts.append(part)
             continue
-        cleaned = clean_noun_part(part)
+        cleaned = clean_verb_part(part) if "," in part else clean_noun_part(part)
         if cleaned is None:
             # bare stem: append the ending of the Auflösung word if obvious?
             # no -- too risky, leave for manual review
@@ -382,6 +412,33 @@ def clean_wortstamm(wortstamm: str, aufloesung: str | None) -> tuple[str | None,
         return None, plural  # more stems than words -> needs manual review
 
     return "; ".join(cleaned_parts), plural
+
+
+def infer_conjugation(aufloesung: str | None, wortstamm: str) -> str | None:
+    """
+    Infer the conjugation class of a verb with an empty Deklination from its
+    infinitive (the Auflösung) and its present stem. Irregular infinitives
+    (-rre) are left alone.
+    """
+    words = aufloesung_words(aufloesung)
+    if len(words) != 1 or "," not in wortstamm:
+        return None
+    stems = [s.strip() for s in wortstamm.split(",")]
+    infinitive = words[0].rstrip("?")
+    present = stems[0]
+    if infinitive.endswith("rre"):
+        return None
+    if infinitive.endswith("are"):
+        return "a-Konj."
+    if infinitive.endswith("ire"):
+        return "i-Konj."
+    if infinitive.endswith("ere"):
+        if present.endswith("e"):
+            return "e-Konj."
+        if present.endswith("i"):
+            return "halbkons.-Konj."
+        return "kons.-Konj."
+    return None
 
 
 def clean_deklination(
@@ -472,6 +529,9 @@ def clean_file(path: str) -> tuple[pl.DataFrame, list[dict]]:
                 if new_ws is None:
                     issue = "Wortstamm not automatically cleanable"
                     new_ws = ws
+
+        if new_dk is None and new_ws is not None and issue is None:
+            new_dk = infer_conjugation(aufloesung, new_ws)
 
         if new_dk is not None and issue is None:
             n_parts = len(new_ws.split(";")) if new_ws else 1

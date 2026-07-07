@@ -12,6 +12,21 @@
     - since there is a lot of complexity behind the data and knowledge of Latin helps, using a model that is simply trained to programm, wouldn't have been as helpful, so I decided to use a commercial model for this task, which doesn't need to be reproducible (since the script itself ensures reproducibility)
 - made some manual revisions on data in the glossary (there are a lot of inconsistencies and correcting some makes the extraction simpler)
 
+# Format of the Wortstamm/Deklination columns
+The columns were cleaned by `clean_morphology.py` (re-runnable; rows it cannot clean keep their values and are written to `data/morphology_review.csv`). `paradigm.py` generates the full set of inflected forms per candidate from these columns (`entry_forms(Auflösung, Wortstamm, Deklination)`), e.g. for validating inflected expansions.
+
+**Wortstamm** — one part per word of the Auflösung, separated by `; `:
+- declinable noun/adjective: `stem -ending` (genitive singular; genitive plural for plural-only words, which are marked `(Pl.)` in Deklination). Stem variants: `stem1/stem2 -ending`; alternative endings: `stem -e/-i`. `ae` is written `e` (the RG uses both spellings, treat them as interchangeable).
+- verb: `present, perfect, supine` stems (`-` for a missing stem, variants with `/`)
+- fixed word (not inflected, e.g. `et` or an attribute already in the genitive): the word itself, verbatim
+- `?` = unknown; a trailing ` ?` marks a part as unverified
+
+**Deklination** — one part per Wortstamm part, separated by `; `:
+- nouns: `a`, `o`, `u`, `e`, `i`, `kons.`, `gem.` with optional `(m.)`, `(f.)`, `(n.)`, `(Pl.)` and `/`-alternatives when uncertain
+- adjectives/participles: class plus `(Adj.)`, e.g. `o/a (Adj.)`, `i (Adj.)`
+- verbs: `a-Konj.`, `e-Konj.`, `i-Konj.`, `kons.-Konj.`, `gem.-Konj.`, `halbkons.-Konj.`, optional `(Dep.)`
+- other: `Gerundium`, `Gerundivum`, `Adverb`; `-` = fixed word; `?` = unknown; trailing ` ?` = unverified
+
 # ToDos
 - check that for all aliases the targets actually exist
 - handle stuff (first understand what it means) like
