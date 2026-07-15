@@ -17,8 +17,10 @@ Words that were never abbreviated must not change at all. The expansion
 steps only ever replace abbreviations (tokens ending in a period), so
 every original word reappears unchanged and in order in the expanded
 text; aligning the two texts (inserted_spans) identifies the words the
-pipeline inserted, and only those are marked. Words still followed by a
-period are unexpanded abbreviations and are left alone as well.
+pipeline inserted, and only those are marked (an original word that is
+indistinguishable from an adjacent identical insertion counts as inserted
+too, so it can still be normalized). Words still followed by a period are
+unexpanded abbreviations and are left alone as well.
 """
 
 import json
@@ -42,6 +44,12 @@ def inserted_spans(original: str, expanded: str) -> list[tuple[int, int]] | None
     Returns None if some original word cannot be matched: the expanded
     text then was not produced by pure abbreviation substitution (e.g. by
     an old full-text-rewrite run) and must not be normalized at all.
+
+    An original word that stands next to an identical insertion (with at
+    most other insertions in between) cannot be told apart from it -- the
+    alignment could just as well have matched the other one. Both are
+    included, so the model may normalize either instead of the safeguard
+    protecting the wrong one.
     """
     orig = [(m.group(0), m.start(), m.end()) for m in TOKEN.finditer(original)]
     exp = [(m.group(0), m.start(), m.end()) for m in TOKEN.finditer(expanded)]
@@ -60,13 +68,31 @@ def inserted_spans(original: str, expanded: str) -> list[tuple[int, int]] | None
         if not matched and not token.endswith("."):
             return None
 
-    spans = []
-    for (token, start, end), matched in zip(exp, matched_exp):
-        if not matched:
-            if token.endswith("."):
-                end -= 1  # abbreviations kept in the text: span the word only
-            spans.append((start, end))
-    return spans
+    def word_span(index: int) -> tuple[int, int]:
+        token, start, end = exp[index]
+        if token.endswith("."):
+            end -= 1  # abbreviations kept in the text: span the word only
+        return start, end
+
+    spans = set()
+    for j, matched in enumerate(matched_exp):
+        if matched:
+            continue
+        spans.add(word_span(j))
+        # identical matched neighbours are alignment-ambiguous with the
+        # insertion: include them too (see docstring)
+        token = exp[j][0]
+        for step in (-1, 1):
+            i = j + step
+            while 0 <= i < len(exp):
+                if not matched_exp[i]:
+                    i += step  # another insertion does not anchor the alignment
+                    continue
+                if exp[i][0] != token:
+                    break  # a different matched word is a fixed anchor
+                spans.add(word_span(i))
+                i += step
+    return sorted(spans)
 
 
 def build_lexicon(entries) -> dict[str, set[str]]:

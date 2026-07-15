@@ -128,6 +128,30 @@ class TestInsertedSpans:
 
         assert [expanded[s:e] for s, e in spans] == ["ecclesia", "parochialis"]
 
+    def test_identical_neighbour_is_ambiguous(self, lexicon):
+        # the inserted 'ecclesia' and the original one next to it cannot be
+        # told apart -- both may be normalized
+        original = "in ecclesia eccl. domini"
+        expanded = "in ecclesia ecclesia domini"
+
+        spans = inserted_spans(original, expanded)
+
+        assert [expanded[s:e] for s, e in spans] == ["ecclesia", "ecclesia"]
+        occs = find_lexicon_occurrences(expanded, lexicon, spans)
+        assert [o.matched for o in occs] == ["ecclesia", "ecclesia"]
+
+    def test_distant_duplicate_stays_protected(self, lexicon):
+        # here the alignment is unambiguous: the first 'ecclesia' is anchored
+        # by the matched words around it and stays protected
+        original = "ecclesia sancti Egidii et eccl. domini"
+        expanded = "ecclesia sancti Egidii et ecclesia domini"
+
+        spans = inserted_spans(original, expanded)
+
+        assert [(s, expanded[s:e]) for s, e in spans] == [(26, "ecclesia")]
+        occs = find_lexicon_occurrences(expanded, lexicon, spans)
+        assert [(o.start, o.matched) for o in occs] == [(26, "ecclesia")]
+
     def test_nothing_expanded(self):
         text = "de conservatione 30. iunii 1435"
         assert inserted_spans(text, text) == []

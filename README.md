@@ -13,7 +13,7 @@
 - made some manual revisions on data in the glossary (there are a lot of inconsistencies and correcting some makes the extraction simpler)
 
 # Format of the Wortstamm/Deklination columns
-The columns were cleaned by `clean_morphology.py` (re-runnable; rows it cannot clean keep their values and are written to `data/morphology_review.csv`). `paradigm.py` generates the full set of inflected forms per candidate from these columns (`entry_forms(Auflösung, Wortstamm, Deklination)`), e.g. for validating inflected expansions.
+The columns were cleaned by `clean_morphology.py` (re-runnable; rows it cannot clean keep their values and are written to `data/morphology_review.csv`). `paradigm.py` generates the full set of inflected forms per candidate from these columns (`entry_forms(Auflösung, Wortstamm, Deklination)`), e.g. for validating inflected expansions. Step 4 (`normalize.py` / `normalizing.ipynb`) builds on this: every glossary base form that the expansion steps inserted (identified by aligning the expanded text with the original — words that were never abbreviated are excluded; an original word indistinguishable from an adjacent identical insertion counts as inserted) is offered its full paradigm as a multiple-choice list, so the model can fix the inflection but can never change the word.
 
 **Wortstamm** — one part per word of the Auflösung, separated by `; `:
 - declinable noun/adjective: `stem -ending` (genitive singular; genitive plural for plural-only words, which are marked `(Pl.)` in Deklination). Stem variants: `stem1/stem2 -ending`; alternative endings: `stem -e/-i`. `ae` is written `e` (the RG uses both spellings, treat them as interchangeable).
