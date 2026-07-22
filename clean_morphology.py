@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """
-Clean the Wortstamm/Deklination columns of data/simple.csv and data/complex.csv
-into a strict, machine-parseable format (so that full paradigms can be
-generated from them, e.g. for validating the inflected expansions).
+Clean the Wortstamm/Deklination columns into a strict, machine-parseable
+format (so that full paradigms can be generated from them, e.g. for
+validating the inflected expansions). Used by extract_glossary.py as the
+morphology stage of the glossary extraction (clean_frame); paradigm.py
+imports aufloesung_words from here.
 
 Canonical format
 ================
@@ -34,12 +36,12 @@ Deklination: one part per Wortstamm part, separated by "; ".
   - fixed word: `-`
   - unknown: `?`; a trailing ` ?` marks a part as unverified
 
-Rows the script cannot confidently clean keep their original values and are
-written to data/morphology_review.csv for manual attention.
+Rows that cannot confidently be cleaned keep their original values and are
+returned for manual review (extract_glossary.py writes them to
+data/review/morphology_review.csv).
 """
 
 import re
-import sys
 
 import polars as pl
 
@@ -85,6 +87,8 @@ def valid_deklination_part(part: str) -> bool:
 # --------------------------------------------------------------------------
 
 MANUAL_BY_WORTSTAMM: dict[str, tuple[str, str | None]] = {
+    # stem errors in the glossary
+    "indulgent -e": ("indulgenti -e", "a"),  # gen. indulgentie, the stem keeps the i
     # multi-word entries whose parts need aligning with the Auflösung words
     "abbat -is; convent -us": ("abbat -is; et; convent -us", "kons. (m.); -; u"),
     "commun -is serviti -i": ("commun -is; serviti -i", "i (Adj.) (n.); o (n.)"),
@@ -472,8 +476,12 @@ def clean_deklination(
 # --------------------------------------------------------------------------
 
 
-def clean_file(path: str) -> tuple[pl.DataFrame, list[dict]]:
-    df = pl.read_csv(path)
+def clean_frame(df: pl.DataFrame, source: str) -> tuple[pl.DataFrame, list[dict]]:
+    """
+    Clean the Wortstamm/Deklination/Anmerkungen columns of a glossary
+    DataFrame. Returns the cleaned frame and the rows needing manual
+    review (`source` names the frame in the review records).
+    """
     review = []
     new_ws_col, new_dk_col, new_an_col = [], [], []
 
@@ -567,7 +575,7 @@ def clean_file(path: str) -> tuple[pl.DataFrame, list[dict]]:
         if issue is not None:
             review.append(
                 {
-                    "file": path,
+                    "file": source,
                     "Abkürzung": row["Abkürzung"],
                     "Auflösung": aufloesung,
                     "Wortstamm": ws,
@@ -587,46 +595,3 @@ def clean_file(path: str) -> tuple[pl.DataFrame, list[dict]]:
         pl.Series("Anmerkungen", new_an_col, dtype=pl.String),
     )
     return df, review
-
-
-def main():
-    write = "--write" in sys.argv
-    all_review = []
-
-    for path in ("data/simple.csv", "data/complex.csv"):
-        df, review = clean_file(path)
-        all_review.extend(review)
-
-        changed_ws = df.get_column("Wortstamm")
-        original = pl.read_csv(path)
-        n_ws = (
-            (changed_ws != original.get_column("Wortstamm"))
-            .fill_null(False)
-            .sum()
-        )
-        n_dk = (
-            (df.get_column("Deklination") != original.get_column("Deklination"))
-            .fill_null(False)
-            .sum()
-        )
-        print(f"{path}: {n_ws} Wortstamm and {n_dk} Deklination values cleaned, "
-              f"{len(review)} rows for manual review")
-
-        if write:
-            df.write_csv(path)
-
-    if all_review:
-        review_df = pl.DataFrame(all_review)
-        if write:
-            review_df.write_csv("data/morphology_review.csv")
-        print("\nrows for manual review:")
-        for r in all_review:
-            print(f"  [{r['file']}] {r['Abkürzung']!r} | Aufl={r['Auflösung']!r}")
-            print(f"      WS={r['Wortstamm']!r} | Dekl={r['Deklination']!r} | {r['issue']}")
-
-    if not write:
-        print("\ndry run -- pass --write to update the CSV files")
-
-
-if __name__ == "__main__":
-    main()

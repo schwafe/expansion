@@ -1,3 +1,12 @@
+# Workflow
+
+0. Extract the information from the glossary into a structured format (csv), storing information for systematically - transform.ipynb
+    1. Clean the morphology columns (Wortstamm, Deklination) - clean_morphology.py
+1. Expand abbreviations in the text using the glossary information, where a simple rule suffices - expansion_simple.ipynb
+2. For abbreviations where there are multiple candidates, let an LLM choose the most likely - expanding_candidates.ipynb
+3. For abbreviations where there are no candidates in the glossary, mine candidates from the RG and suggest these, but let an LLM choose freely - expanding_rest.ipynb
+4. Let an LLM normalise the text (e.g. fix inflection, spelling, punctuation, etc.) - normalizing.ipynb
+
 # Progress so far
 - looked at Lotta's file/script, realised that there still is a significant amount of ambiguity and it's not easily usable for my workflow - also, only ca. 50 percent of the entries were covered, the rest was ignored due to complexity
 - explored the Abkürzungsverzeichnis to better understand the complexity
@@ -26,17 +35,3 @@ The columns were cleaned by `clean_morphology.py` (re-runnable; rows it cannot c
 - adjectives/participles: class plus `(Adj.)`, e.g. `o/a (Adj.)`, `i (Adj.)`
 - verbs: `a-Konj.`, `e-Konj.`, `i-Konj.`, `kons.-Konj.`, `gem.-Konj.`, `halbkons.-Konj.`, optional `(Dep.)`
 - other: `Gerundium`, `Gerundivum`, `Adverb`; `-` = fixed word; `?` = unknown; trailing ` ?` = unverified
-
-# ToDos
-- check that for all aliases the targets actually exist
-- handle stuff (first understand what it means) like
-    - `solutus/soluta`
-    - alias of multiple things (siehe cap. und capel)
-        - no alias entry or multiple entries
-        - LLM_CANDIDATE
-    - wieso hat Romanorum Imperator die Notiz "und ausgeschrieben: Romanum imperium; Romanum Imperium"?
-    ```
-    R. I.,Romanorum Imperator,Römischer Kaiser,,,,Romanorum imp.,Rom. imper.; Rom. Imperator,Rom. imp.; Rom. imperium; Roman. imperium,,R. I.,R. I.,R. I.,R. I.,R. I.; Romani imper.,und ausgeschrieben: Romanum imperium; Romanum Imperium,
-    ,Romanum Imperium ?,,,,,,,,,,,,,,,
-    ```
-    - 
