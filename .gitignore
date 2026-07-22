@@ -2,6 +2,10 @@
 transformed
 # rg_header_sublemma_all table from the RG database -- too large to upload it for no good reason
 data/rg.csv
+# extract_glossary.py's cache of the corpus searches (rebuilt automatically)
+data/review/corpus_cache.json
+# one-time comparison of a re-extraction with the CSVs on disk (extract_glossary.py --diff-old)
+data/review/diff_*.csv
 # uv's files (if this becomes a proper project, I'll want to upload them later, but for now that's not necessary or helpful)
 uv.lock
 pyproject.toml

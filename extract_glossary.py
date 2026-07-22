@@ -26,9 +26,14 @@ Stages (each stage is a function of the same name):
                     the complex split), then stripped
                   - an internal ";" separates alternative expansions ->
                     the row is split into one row per alternative
-                  - a trailing " ?" (unverified expansion) moves into the
-                    Anmerkungen; parentheses around the whole Auflösung
-                    are dropped
+                  - a trailing " ?" (unverified expansion) and a
+                    "(dekliniert)" marker (which also forces the complex
+                    split) move into the Anmerkungen
+                  - a parenthesized part is kept as part of the expansion
+                    if the abbreviation has more parts than the words
+                    outside it ('def. nat. s. c.'), otherwise it is one
+                    of the glossary's notes and moves into the
+                    Anmerkungen ('natalis (def.)', 'sancti (Plural)')
  5. rg_columns    the RG1-9 cells list how volume n abbreviates the entry;
                   each cell is reduced to the row's own abbreviation (or
                   emptied). A cell naming a *different* abbreviation (with
@@ -68,10 +73,9 @@ Stages (each stage is a function of the same name):
                   Everything else is simple: step 1 can replace it by
                   plain rules, expanding each volume only when exactly
                   one row claims it.
-10. clean_complex Auflösung values in complex.csv are candidate texts for
-                  the multiple-choice step 2, so parenthesized notes are
-                  stripped there (simple.csv keeps them: they are part of
-                  the text step 1 inserts).
+10. clean_complex moving the notes out of the Auflösung can make two
+                  complex entries identical, so they are merged again
+                  (they are the candidate list of step 2).
 11. morphology    clean the Wortstamm/Deklination columns into the strict
                   format of paradigm.py (clean_morphology.py does the
                   work; rows it cannot clean keep their values and are
@@ -88,11 +92,9 @@ data/review/, so a re-extraction can be reviewed before --write.
 
 import argparse
 import csv
-import hashlib
 import json
 import re
-import sys
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from pathlib import Path
 
 import polars as pl
@@ -299,6 +301,11 @@ CORRECTIONS: list[Correction] = [
         match={"Abkürzung": "vac.", "RG4": "vac ."},
         set={"RG4": "vac."},
     ),
+    Correction(
+        reason="stray space inside the RG7 cell",
+        match={"Abkürzung": "n. o.", "RG7": "n. o ."},
+        set={"RG7": "n. o."},
+    ),
     # ----- alternative expansions the notation of which cannot be split
     # mechanically (a comma that elsewhere separates enumerations, or
     # suffix notation like 'statuta/um'); each alternative becomes its own
@@ -410,6 +417,12 @@ CORRECTIONS: list[Correction] = [
         "expansion -- do not let step 1 insert it into the texts",
         match={"Abkürzung": "id."},
         force_complex=True,
+    ),
+    Correction(
+        reason="the glossary leaves 'cur.' abbreviated inside the "
+        "expansion; an expansion must not contain an abbreviation",
+        match={"Abkürzung": "o. in cur.", "Auflösung": "obitus in cur."},
+        set={"Auflösung": "obitus in curia"},
     ),
 ]
 
@@ -555,10 +568,33 @@ def inherit(rows: list[dict]) -> list[dict]:
     return rows
 
 
+def resolve_parentheses(abbreviation: str, aufloesung: str) -> tuple[str, str]:
+    """
+    A parenthesized part of the Auflösung either belongs to the expansion
+    or is one of the glossary's notes. It belongs to the expansion when
+    the abbreviation has more parts than the Auflösung has words outside
+    the parentheses -- then the abbreviation covers the parenthesized
+    words too ('def. nat. s. c.' -> 'defectus natalium (de soluto et
+    coniugata genitus)'). Otherwise it is a note on the context or the
+    grammar ('nat.' -> 'natalis (def.)', 'ss.' -> 'sancti (Plural)') that
+    must not end up in the text.
+
+    Returns (Auflösung, note): the note is empty when the parentheses
+    belong to the expansion (or there are none).
+    """
+    if "(" not in aufloesung:
+        return aufloesung, ""
+    outside = re.sub(r"\([^)]*\)", " ", aufloesung).split()
+    if len(abbreviation.split(" ")) > len(outside):
+        return re.sub(r"\s+", " ", aufloesung.replace("(", "").replace(")", "")).strip(), ""
+    note = "; ".join(re.findall(r"\(([^)]*)\)", aufloesung))
+    return " ".join(outside), note
+
+
 def normalize(rows: list[dict]) -> tuple[list[dict], dict[str, list]]:
     """Stage 4: whitespace, unusable rows, ";"-alternatives, "?" marker."""
     notes: dict[str, list] = {
-        "dropped": [], "split": [], "unsure": [], "declined": []
+        "dropped": [], "split": [], "unsure": [], "declined": [], "notes": []
     }
     result = []
     for row in rows:
@@ -616,6 +652,19 @@ def normalize(rows: list[dict]) -> tuple[list[dict], dict[str, list]]:
         if whole_parens:
             row["Auflösung"] = whole_parens.group(1).strip()
 
+        aufloesung, note = resolve_parentheses(row["Abkürzung"], row["Auflösung"])
+        if note:
+            row["Auflösung"] = aufloesung
+            row["Anmerkungen"] = (
+                f"{row['Anmerkungen']}; {note}" if row["Anmerkungen"] else note
+            )
+            notes["notes"].append(f"{row['Abkürzung']!r}: {note!r} -> Anmerkungen")
+        elif aufloesung != row["Auflösung"]:
+            notes["notes"].append(
+                f"{row['Abkürzung']!r}: {row['Auflösung']!r} -> {aufloesung!r}"
+            )
+            row["Auflösung"] = aufloesung
+
         alternatives = [
             part.strip() for part in row["Auflösung"].split(";") if part.strip()
         ]
@@ -635,7 +684,7 @@ def normalize(rows: list[dict]) -> tuple[list[dict], dict[str, list]]:
 def rg_columns(rows: list[dict]) -> list[dict]:
     """
     Stage 5: reduce the RG1-9 cells and derive rows for other
-    abbreviations they name (ported from the old process_abbreviations.py).
+    abbreviations they name.
     """
     result = []
     for row in rows:
@@ -935,12 +984,14 @@ def split(rows: list[dict]) -> tuple[list[dict], list[dict]]:
     return simple, complex_
 
 
-def clean_complex(rows: list[dict]) -> list[dict]:
-    """Stage 9: strip notes from complex Auflösungen (candidate texts)."""
-    for row in rows:
-        cleaned = re.sub(r"\([^)]*\)", "", row["Auflösung"])
-        row["Auflösung"] = re.sub(r"\s+", " ", cleaned).strip()
-    return rows
+def clean_complex(rows: list[dict]) -> tuple[list[dict], list[str]]:
+    """
+    Stage 10: the Auflösungen of complex.csv are the candidate texts of
+    step 2. Moving the glossary's notes out of them (see
+    resolve_parentheses) can make two entries identical ('dominus' and
+    'dominus (nur Bd. 1 laut Abk-Verz.)'), so the rows are merged again.
+    """
+    return merge_duplicates(rows)
 
 
 def sort_rows(rows: list[dict]) -> list[dict]:
@@ -1055,9 +1106,7 @@ def validate(
 # ---------------------------------------------------------------------------
 
 
-def diff_old(
-    name: str, new: pl.DataFrame, old_path: str
-) -> tuple[pl.DataFrame, pl.DataFrame]:
+def diff_old(new: pl.DataFrame, old_path: str) -> tuple[pl.DataFrame, pl.DataFrame]:
     """Row-level difference on the columns that identify an entry."""
     keys = ["Abkürzung", "Auflösung", *RG_COLUMNS, "volumes"]
     old = pl.read_csv(old_path, schema_overrides={c: pl.String for c in keys})
@@ -1102,6 +1151,7 @@ def extract(write: bool, diff: bool) -> None:
     section("Unverified expansions ('?' moved to Anmerkungen)",
             notes["unsure"])
     section("Declined abbreviations (forced complex)", notes["declined"])
+    section("Parenthesized parts resolved", notes["notes"])
 
     rows = rg_columns(rows)
     rows, resolve_log = resolve(rows)
@@ -1115,7 +1165,8 @@ def extract(write: bool, diff: bool) -> None:
     section("Abbreviations not found in the corpus (dropped)", dropped)
 
     simple_rows, complex_rows = split(rows)
-    complex_rows = clean_complex(complex_rows)
+    complex_rows, clean_log = clean_complex(complex_rows)
+    section("Complex rows merged after stripping the notes", clean_log)
     simple = to_frame(sort_rows(simple_rows))
     complex_ = to_frame(sort_rows(complex_rows))
     report.append(
@@ -1148,7 +1199,7 @@ def extract(write: bool, diff: bool) -> None:
         for name, frame, path in (
             ("simple", simple, SIMPLE_OUT), ("complex", complex_, COMPLEX_OUT)
         ):
-            added, removed = diff_old(name, frame, path)
+            added, removed = diff_old(frame, path)
             added.write_csv(REVIEW_DIR / f"diff_{name}_added.csv")
             removed.write_csv(REVIEW_DIR / f"diff_{name}_removed.csv")
             print(f"diff vs current {path}: {added.height} rows added, "

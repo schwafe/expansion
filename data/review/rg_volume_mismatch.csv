@@ -1,0 +1,283 @@
+Abkürzung,Auflösung,volume,found_in
+abb. et. conv.,abbas et conventus,2,1|3|5|9|10
+abb. et. conv.,abbas et conventus,4,1|3|5|9|10
+abb. et. conv.,abbas et conventus,6,1|3|5|9|10
+abb. et. conv.,abbas et conventus,8,1|3|5|9|10
+Ap.,Apostolus,1,5|7
+Apost.,Apostolus,3,2
+archid.,archidiaconus,4,2|10
+archid.,archidiaconus,6,2|10
+archid.,archidiaconus,7,2|10
+archid.,archidiaconus,8,2|10
+archid.,archidiaconus,9,2|10
+archidiacon.,archidiaconatus,3,4|5
+archidiacon.,archidiaconatus,6,4|5
+benef. c. c.,beneficium cum cura,5,1|6|7|8|10
+benef. c. c.,beneficium cum cura,9,1|6|7|8|10
+benef. s. c.,beneficium sine cura,5,1|3|6|7|8|10
+benef. s. c.,beneficium sine cura,9,1|3|6|7|8|10
+cur. Rom.,curia Romana,6,3
+curia Rom.,curia Romana,4,1|2
+def. nat. c. c.,defectus natalium de coniugato et coniugata genitus,5,4|6|7|8
+def. nat. c. s.,defectus natalium de coniugato et soluta genitus,5,4|6|7|8
+def. nat. c. s.,defectus natalium de coniugato et soluta genitus,9,4|6|7|8
+def. nat. p. c.,defectus natalium de presbitero et coniugata genitus,5,4|6|7|8|9
+def. nat. p. s.,defectus natalium de presbitero et soluta genitus,5,4|6|7|8
+def. nat. p. s.,defectus natalium de presbitero et soluta genitus,9,4|6|7|8
+def. nat. s. c.,defectus natalium de soluto et coniugata genitus,5,4|6|7|8
+def. nat. s. c.,defectus natalium de soluto et coniugata genitus,9,4|6|7|8
+def. nat. s. s.,defectus natalium de soluto et soluta genitus,5,4|6|7|8
+def. nat. s. s.,defectus natalium de soluto et soluta genitus,9,4|6|7|8
+depend.,dependere,9,2|3|4|5|6|7|8
+dic.,dicere,7,5
+domus hosp.,domus hospitalis,3,1|2|4|5|7|8
+e. m.,extra muros,5,2|3|4|6|7|8|10
+e. m.,extra muros,9,2|3|4|6|7|8|10
+ecc.,ecclesia,5,4|6
+f. gr.,fit gratia,4,1|2|3
+fit gr.,fit gratia,2,1|4
+fruct. etc.,"fructus, proventus et redditus",3,10
+fruct. etc.,"fructus, proventus et redditus",4,10
+fruct. etc.,"fructus, proventus et redditus",5,10
+fruct. etc.,"fructus, proventus et redditus",6,10
+fruct. etc.,"fructus, proventus et redditus",7,10
+fruct. etc.,"fructus, proventus et redditus",8,10
+fruct. etc.,"fructus, proventus et redditus",9,10
+i. m.,intra muros,5,1|4|6|7|8|10
+i. m.,intra muros,9,1|4|6|7|8|10
+inhab.,inhabilitas,2,4|10
+inhab.,inhabilitas,6,4|10
+inhab.,inhabilitas,7,4|10
+inhab.,inhabilitas,9,4|10
+instrum.,instrumentum,3,2|4
+instrum.,instrumentum,6,2|4
+l. b.,lectio bulle,5,6|8
+l. T. p.,libra Turonensium parvorum,9,5|6|7|8|10
+lit.,lite,3,2|4|6|7
+lit.,litis,3,2|4|6|7
+litt. testim.,littere testimoniales,2,9|10
+litt. testim.,littere testimoniales,4,9|10
+litt. testim.,littere testimoniales,5,9|10
+litt. testim.,littere testimoniales,6,9|10
+litt. testim.,littere testimoniales,7,9|10
+marc. arg.,marca argenti,5,4
+nuncup.,nuncupatus,4,3
+o. s. a.,obligatio super annata,5,4
+oblig. sup. ann.,obligatio super annata,5,4|10
+oblig. sup. ann.,obligatio super annata,6,4|10
+oblig. sup. ann.,obligatio super annata,7,4|10
+obt.,obtinere,6,4
+omn. ss.,Omnium sanctorum,2,4
+omn. ss.,Omnium sanctorum,5,4
+omn. ss.,Omnium sanctorum,6,4
+oppid.,op idanus,9,10
+p. m.,per manus,5,2|3|7|8|9|10
+p. o.,per obitum,5,2|4|6|7|8|9|10
+pal.,palatium,1,4|5|10
+pal.,palatium,2,4|5|10
+pal.,palatium,3,4|5|10
+pal.,palatium,6,4|5|10
+pal.,palatium,8,4|5|10
+pal.,palatium,9,4|5|10
+potest.,potestas,3,2|4|5|6|7|8|9|10
+procurat.,procurator,3,10
+procurat.,procurator,4,10
+r. b.,restitutio bulle,5,4
+R. E.,Romana Ecclesia,9,2|5|6|7|8|10
+R. R.,Romanorum Rex,5,4|6|7|8|10
+reservat.,reservatio,3,2|5|10
+resident.,residentia,4,5|10
+restit. bulle,restitutio bulle,5,4|8|9|10
+restit. bulle,restitutio bulle,6,4|8|9|10
+revocat.,revocatio,3,2|4|5
+Rom. rex,Romanorum Rex,3,2
+Roman.,Romanus,4,3|10
+Roman.,Romanus,5,3|10
+Roman.,Romanus,8,3|10
+S. R. E.,Sacrosancta Romana Ecclesia,5,6|7|8
+S. R. E.,Sacrosancta Romana Ecclesia,9,6|7|8
+S. R. I.,Sacrum Romanum Imperium,5,7|8|10
+secret.,secretarius,6,3|4
+subcollect.,subcollector,3,9|10
+subcollect.,subcollector,6,9|10
+subcollect.,subcollector,7,9|10
+subcollect.,subcollector,8,9|10
+supplicat.,supplicatio,3,1|7|9|10
+testim.,testimonialis,2,9|10
+testim.,testimonialis,4,9|10
+testim.,testimonialis,5,9|10
+testim.,testimonialis,6,9|10
+testim.,testimonialis,7,9|10
+testim.,testimonialis,8,9|10
+thes.,thesaurarius,2,10
+thes.,thesaurarius,4,10
+thes.,thesaurarius,5,10
+thes.,thesaurarius,6,10
+thes.,thesaurarius,7,10
+thes.,thesaurarius,8,10
+thes.,thesaurarius,9,10
+Tur.,Turonensis,8,5
+unac.,unacum,4,2|5|6|7|8|9|10
+univers.,universitas,2,5|8
+univers.,universitas,4,5|8
+abol.,abolere,1,3|6|7|8|9|10
+abol.,abolere,4,3|6|7|8|9|10
+abol.,abolere,5,3|6|7|8|9|10
+acc.,accipere,1,2|4|5|6|7|8|9|10
+acc.,accipere,3,2|4|5|6|7|8|9|10
+acol.,acolitus,1,2|4|5|6|7|8|9|10
+acol.,acolitus,3,2|4|5|6|7|8|9|10
+adh.,adherens,2,1
+adh.,adherens,3,1
+adh.,adherens,4,1
+adh.,adherens,5,1
+adh.,adherens,6,1
+adh.,adherens,7,1
+adh.,adherens,8,1
+adh.,adherens,9,1
+adh.,adherentes,2,1
+adh.,adherentes,3,1
+adh.,adherentes,4,1
+adh.,adherentes,5,1
+adh.,adherentes,6,1
+adh.,adherentes,7,1
+adh.,adherentes,8,1
+adh.,adherentes,9,1
+adm.,admittere,1,5|7|8|9|10
+adm.,admittere,2,5|7|8|9|10
+adm.,admittere,3,5|7|8|9|10
+adm.,admittere,4,5|7|8|9|10
+adm.,admittere,6,5|7|8|9|10
+admin.,administrare,1,3|4|5|6|7|8|9|10
+admin.,administrare,2,3|4|5|6|7|8|9|10
+advoc.,advocare,1,4|8
+advoc.,advocare,2,4|8
+advoc.,advocare,3,4|8
+advoc.,advocare,5,4|8
+advoc.,advocare,6,4|8
+advoc.,advocare,7,4|8
+advoc.,advocare,9,4|8
+affin.,affinitas,2,1|3
+affin.,affinitas,4,1|3
+affin.,affinitas,5,1|3
+affin.,affinitas,7,1|3
+affin.,affinitas,8,1|3
+affin.,affinitas,9,1|3
+aggrav.,aggravare,1,2|3|6
+aggrav.,aggravare,4,2|3|6
+aggrav.,aggravare,5,2|3|6
+aggrav.,aggravare,7,2|3|6
+aggrav.,aggravare,8,2|3|6
+aggrav.,aggravare,9,2|3|6
+al.,alius,1,2|3|4|5|6|7|8|9|10
+approb.,approbare,2,3|5|6|7|8|9|10
+approb.,approbare,4,3|5|6|7|8|9|10
+archipresbit.,archipresbiteratus,2,3|4|5|7|8
+archipresbit.,archipresbiteratus,6,3|4|5|7|8
+archipresbit.,archipresbiteratus,9,3|4|5|7|8
+assec.,assecutio,1,3|4|5|6|7|8|9|10
+assec.,assecutio,2,3|4|5|6|7|8|9|10
+assign.,assignare,1,2|3|5|6|7|8|9|10
+assign.,assignare,4,2|3|5|6|7|8|9|10
+aud.,auditor causarum sacri palatii apostolici,1,2|3|4|5|6|7|8|9|10
+bened.,benedicere,5,1|2|3|4|6
+bened.,benedicere,8,1|2|3|4|6
+bened.,benedicere,9,1|2|3|4|6
+benefic.,beneficiatus,1,2|3|4|5|6|7|8|9|10
+canc.,cancellaria,6,5
+canc.,cancellaria,8,5
+canc.,cancellaria,9,5
+capit.,capitulum,1,2|3|4|5|6|7|8|9|10
+commiss.,commissio,1,3|5|6|7|8|9|10
+commiss.,commissio,4,3|5|6|7|8|9|10
+committ.,committere,2,5|7|8|9|10
+committ.,committere,3,5|7|8|9|10
+committ.,committere,4,5|7|8|9|10
+committ.,committere,6,5|7|8|9|10
+commun.,communis,4,1|2|3|5|6|7|8|9|10
+confess.,confessio,1,2|3|4|5|6|7|8|9|10
+consang.,consanguinitas,2,1|3|4|5|6|7|8|9|10
+d. d.,de dato,2,3|7|8
+d. d.,de dato,4,3|7|8
+d. d.,de dato,5,3|7|8
+d. d.,de dato,9,3|7|8
+dat.,data,3,1|2|4|5|6|7|8|9|10
+decl.,declarare,2,5|8|9|10
+decl.,declarare,3,5|8|9|10
+decl.,declarare,4,5|8|9|10
+decl.,declarare,6,5|8|9|10
+decl.,declarare,7,5|8|9|10
+derog.,derogare,2,5|6|7|8|9|10
+derog.,derogare,3,5|6|7|8|9|10
+derog.,derogare,4,5|6|7|8|9|10
+devol.,devolutio,2,4|5|8|9|10
+devol.,devolutio,3,4|5|8|9|10
+devol.,devolutio,7,4|5|8|9|10
+diff.,diffinitivus,1,5|7|8
+diff.,diffinitivus,4,5|7|8
+diff.,diffinitivus,6,5|7|8
+diff.,diffinitivus,9,5|7|8
+dim.,dimittere,1,2|3|4|5|6|7|8|9|10
+div.,diversus,9,1|2|3|4|5|6|7|8
+domic.,domicella,1,2|3|4|5|6|7
+domic.,domicella,8,2|3|4|5|6|7
+domic.,domicella,9,2|3|4|5|6|7
+duc.,ducatus,3,2|4|5|6|7|8|9|10
+ep. et capit.,"episcopus, prepositus, decanus et canonici",2,10
+ep. et capit.,"episcopus, prepositus, decanus et canonici",3,10
+ep. et capit.,"episcopus, prepositus, decanus et canonici",4,10
+ep. et capit.,"episcopus, prepositus, decanus et canonici",5,10
+ep. et capit.,"episcopus, prepositus, decanus et canonici",7,10
+ep. et capit.,"episcopus, prepositus, decanus et canonici",8,10
+ep. et capit.,"episcopus, prepositus, decanus et canonici",9,10
+exec.,executere,1,2|3|4|5|6|7|8|9|10
+express.,expressus,1,5|6|7|8|9|10
+express.,expressus,4,5|6|7|8|9|10
+exten.,extendere,4,2|3|5|6|7|8|9|10
+extin.,extinguere,2,8
+extin.,extinguere,4,8
+extin.,extinguere,5,8
+extin.,extinguere,6,8
+extin.,extinguere,7,8
+famil.,familiaris,4,1
+fil.,filialis,3,2|4|5|6|7|8|9|10
+fr. kalend.,fratres kalendarum,6,2
+fr. kalend.,fratres kalendarum,7,2
+fr. kalend.,fratres kalendarum,8,2
+fr. kalend.,fratres kalendarum,9,2
+man.,manus,2,4|10
+man.,manus,3,4|10
+obl.,obligatio,2,4
+pauper.,pauper,6,1|2|4|7|9|10
+permut.,permutare,2,3
+preceptor.,preceptor,3,1|2|4|5|7|8|9|10
+presbiter.,presbiteratus,4,6
+R. I.,Romanorum Imperator,5,6|7|8|9|10
+redd.,red itus,4,5
+regul.,regula,3,4
+regul.,regula,6,4
+rehabil.,rehabilitatio,8,5
+rel.,relicta,2,4|8|10
+rel.,relicta,5,4|8|10
+rel.,relicta,6,4|8|10
+rel.,relicta,7,4|8|10
+rel.,relicta,9,4|8|10
+resig.,resignare,4,5
+resig.,resignare,9,5
+scriptor.,scriptor,3,1|4|9|10
+serv. min.,servitia minuta,3,1|4|6|9|10
+serv. min.,servitia minuta,5,1|4|6|9|10
+serv. min.,servitia minuta,7,1|4|6|9|10
+serv. min.,servitia minuta,8,1|4|6|9|10
+spir.,spiritualis,1,5|10
+spir.,spiritualis,2,5|10
+spir.,spiritualis,3,5|10
+spir.,spiritualis,4,5|10
+spir.,spiritualis,6,5|10
+spir.,spiritualis,7,5|10
+spir.,spiritualis,8,5|10
+spir.,spiritualis,9,5|10
+suppl.,supplicare,2,1|4|6
+suppl.,supplicatio,2,1|4|6
+t.,tempus,1,2|5|8|9|10
+t.,tempus,4,2|5|8|9|10

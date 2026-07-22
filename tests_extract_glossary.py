@@ -129,6 +129,34 @@ class TestNormalize:
         result, _ = eg.normalize(rows)
         assert result[0]["Auflösung"] == "opidum"
 
+    def test_parenthesized_note_moves_to_anmerkungen(self):
+        rows = [row(Abkürzung="nat.", Auflösung="natalis (def.)"),
+                row(Abkürzung="ss.", Auflösung="sancti (Plural)"),
+                row(Abkürzung="sign.", Auflösung="(sola) signatura"),
+                row(Abkürzung="def. nat.",
+                    Auflösung="defectus natalium (de soluto et coniugata "
+                              "genitus)")]
+
+        result, notes = eg.normalize(rows)
+
+        assert [r["Auflösung"] for r in result] == [
+            "natalis", "sancti", "signatura", "defectus natalium",
+        ]
+        assert result[0]["Anmerkungen"] == "def."
+        assert len(notes["notes"]) == 4
+
+    def test_parentheses_covered_by_the_abbreviation_stay(self):
+        rows = [row(Abkürzung="def. nat. s. c.",
+                    Auflösung="defectus natalium (de soluto et coniugata "
+                              "genitus)")]
+
+        result, _ = eg.normalize(rows)
+
+        assert result[0]["Auflösung"] == (
+            "defectus natalium de soluto et coniugata genitus"
+        )
+        assert result[0]["Anmerkungen"] == ""
+
 
 class TestRgColumns:
     def test_cells_are_reduced_to_own_abbreviation(self):
@@ -296,10 +324,14 @@ class TestSplit:
         simple, complex_ = eg.split(rows)
         assert not simple and len(complex_) == 2
 
-    def test_clean_complex_strips_notes(self):
-        rows = [row(Abkürzung="cam.",
-                    Auflösung="camera (ohne Zusatz: apostolica)")]
-        assert eg.clean_complex(rows)[0]["Auflösung"] == "camera"
+    def test_clean_complex_merges_rows_the_notes_made_identical(self):
+        # both rows come out of normalize() as 'dominus'
+        rows = [row(Abkürzung="d.", Auflösung="dominus", RG1="d."),
+                row(Abkürzung="d.", Auflösung="dominus",
+                    Anmerkungen="nur Bd. 1 laut Abk-Verz.")]
+        cleaned, log = eg.clean_complex(rows)
+        assert len(cleaned) == 1 and cleaned[0]["RG1"] == "d."
+        assert len(log) == 1
 
 
 class TestMorphologyIntegration:

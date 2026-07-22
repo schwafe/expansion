@@ -1,0 +1,564 @@
+# Extraction report
+
+Read 1023 rows from data/RGAbkVerz.csv.
+
+## Corrections applied (75)
+- edited '' / '?': volume reference in an RG cell belongs into the Bemerkungen
+- edited 'abb.' / 'abbas': counting note '1x' is not part of the abbreviation
+- edited 'adc.' / 'auri de camera': the currency qualifier is a note, not part of the expansion
+- edited 'add.' / 'addendo': 'add. (ment.)' bundles two abbreviations; the RG cells show both are used
+- added 'add. ment.': 'add. (ment.)' bundles two abbreviations; the RG cells show both are used
+- edited 'ann.' / 'annuus': 'ann. ?' marks an unverified guess (see Anmerkungen of the row: ann. stands for annata in Bd. 4/5), drop the guess
+- deleted 'Arm.' / '?': unidentified abbreviation (Auflösung '?'), unusable
+- deleted 'cont.' / '?': unidentified abbreviation (Auflösung '?'), unusable
+- deleted 'cruc.' / '': no Auflösung given, unusable
+- edited 'def. nat. (s. c.)' / 'defectus natalium (de soluto et coniugata genitus)': missing closing parenthesis
+- deleted 'e.' / 'extra (in e. m. sowie e. t.)': which abbreviation 'e.' stands for cannot be determined (see its Bemerkungen); the specific combinations have their own entries (e. m., e. t., s. e. d., s. e. p.)
+- deleted '' / 'expectatio (in s. e. p.)': continuation row of the deleted 'e.' entry
+- deleted '' / 'eodem (in s. e. d.)': continuation row of the deleted 'e.' entry
+- edited 'facult.' / 'facultas': missing period after the RG1 variant
+- edited 'hosp. pauperum' / 'hospitale pauperum': the abbreviation 'hosp. pauper.' does not occur; the RG cells show 'hosp. pauperum' (partly written out) is what is used
+- edited 'in cur. defunct.' / 'in curia defunctus': glossary marks 'in cur. defunct.' as inexistent: the phrase is written out (or only cur. is abbreviated) in the volumes
+- added 'in cur. defunctus': glossary marks 'in cur. defunct.' as inexistent: the phrase is written out (or only cur. is abbreviated) in the volumes
+- edited 'iur.' / 'iuris': '(usw.)' is a note: iur. stands for any inflected form, the genitive is just the most frequent
+- deleted 'k.' / 'korrigiert': glossary marks 'k.' as inexistent
+- edited 'lim.' / 'limina': 'lim. (appl.)' bundles 'lim.' and 'lim. appl.'
+- added 'lim. appl.': 'lim. (appl.)' bundles 'lim.' and 'lim. appl.'
+- edited 'limin.' / 'limina': 'limin. (appl.)' bundles 'limin.' and 'limin. appl.'
+- added 'limin. appl.': 'limin. (appl.)' bundles 'limin.' and 'limin. appl.'
+- edited 'lite pend.' / 'lite pendente': duplicated value in the RG3 cell
+- edited 'n.' / 'non': per its Bemerkungen, 'n.' has a different, unknown meaning in Bd. 1
+- edited '' / 'restitutio': the 'retin.' RG cells slipped into the preceding 'restitutio' continuation row
+- edited 'retin.' / 'retinere': the 'retin.' RG cells slipped into the preceding row (see above)
+- edited 'serv. commun.' / 'servitium commune': 'communi(s) serv.' bundles two spellings used in the volumes
+- edited 'vac.' / 'vacare': stray space inside the RG4 cell
+- edited 'n. o.' / 'non obstante/obstantibus (als Ablativus absolutus)': stray space inside the RG7 cell
+- edited 'expect.' / 'expectatio': comma separates two alternative expansions
+- added 'expect.': comma separates two alternative expansions
+- edited 'profes.' / 'professa': comma separates two alternative expansions
+- added 'profes.': comma separates two alternative expansions
+- edited 'spect.' / 'spectare': comma separates two alternative expansions
+- added 'spect.': comma separates two alternative expansions
+- edited 'subdiacon.' / 'subdiaconatus': comma separates two alternative expansions
+- added 'subdiacon.': comma separates two alternative expansions
+- edited 'statut.' / 'statuta': suffix notation 'statuta/um' written out
+- added 'statut.': suffix notation 'statuta/um' written out
+- edited 'subsid. car.' / 'subsidium caritatis': suffix notation 'caritatis/ivum' written out
+- added 'subsid. car.': suffix notation 'caritatis/ivum' written out
+- edited 'subsid. carit.' / 'subsidium caritatis': suffix notation 'caritatis/ivum' written out
+- added 'subsid. carit.': suffix notation 'caritatis/ivum' written out
+- edited '' / 'sine dato;': suffix notation 'dato/a' written out
+- added 'sine data;': suffix notation 'dato/a' written out
+- edited 'd. d.' / 'de dato': suffix notation 'dato/data' written out
+- added 'd. d.': suffix notation 'dato/data' written out
+- edited '' / 'solutus': suffix notation 'solutus/soluta' written out; the German usage note moves into the Anmerkungen
+- added 'soluta': suffix notation 'solutus/soluta' written out; the German usage note moves into the Anmerkungen
+- edited 'n. o.' / 'non obstante/obstantibus': the German grammar note is not part of the expansion
+- edited 'non obst.' / 'non obstante/obstantibus': the German grammar note is not part of the expansion
+- edited 'non obstant.' / 'non obstante/obstantibus': the German grammar note is not part of the expansion
+- edited 'cur.' / 'Romana curia': 'curia' without an addition refers to the Romana curia (the glossary's own note), which is what the RG writes out
+- edited 'id.' / 'identisch': 'identisch' is a German editorial gloss, not a Latin expansion -- do not let step 1 insert it into the texts
+- edited 'o. in cur.' / 'obitus in curia': the glossary leaves 'cur.' abbreviated inside the expansion; an expansion must not contain an abbreviation
+- added 'conf. disp. sup. matrim.': found in the texts, suggested by OpenAI GPT-5.5
+- added 'de disp. sup. matrim.': found in the texts, suggested by OpenAI GPT-5.5
+- added 'de conf. disp. sup. matrim.': found in the texts, suggested by OpenAI GPT-5.5
+- added 'de ref. disp. sup. matrim.': found in the texts, suggested by OpenAI GPT-5.5
+- added 'cler. Magunt. dioc.': combination of glossary entries, frequent in the texts
+- added 'Colon. dioc.': combination of glossary entries, frequent in the texts
+- added 'eccl. Magunt.': combination of glossary entries, frequent in the texts
+- added 'eccl. s.': combination of glossary entries, frequent in the texts
+- added 'Magunt. dioc.': combination of glossary entries, frequent in the texts
+- added 'par. eccl.': combination of glossary entries, frequent in the texts
+- added 'vac. p. o.': combination of glossary entries, frequent in the texts
+- added 'vac. p. res.': combination of glossary entries, frequent in the texts
+- added 'vac. p. resign.': combination of glossary entries, frequent in the texts
+- added 'off.': not in the glossary, but 'off.' is used for officialis in Bd. 1 and possibly other volumes
+- added 'sub eadem dat.': counterpart of 'sub eodem dat.' (the glossary lists only the masculine spelling among the RG variants)
+- added 'restit. bulla': partial expansion: only restit. is expanded, the following inflected form of bulla is kept as it is
+- added 'restit. bullam': partial expansion: only restit. is expanded, the following inflected form of bulla is kept as it is
+- added 'restit. bullarum': partial expansion: only restit. is expanded, the following inflected form of bulla is kept as it is
+- added 'restit. bullas': partial expansion: only restit. is expanded, the following inflected form of bulla is kept as it is
+
+## Rows dropped (no usable Auflösung) (11)
+- 'a.': no usable Auflösung ('?')
+- 'c. c.': cross-reference ('cf.: def. nat. (c. c.)')
+- 'derog.': no usable Auflösung ('')
+- 'exped.': no usable Auflösung ('')
+- 'off. tab.': no usable Auflösung ('')
+- 'off. tabell.': no usable Auflösung ('')
+- 'pend.': no usable Auflösung ('?')
+- 'profes.': no usable Auflösung ('')
+- 's. c.': cross-reference ('cf.: def. nat. (s. c.)')
+- 't.': no usable Auflösung ('?')
+- 't. gr.': no usable Auflösung ('?')
+
+## Rows split (alternative expansions) (2)
+- 'adh.': 'adherens; adherentes' -> ['adherens', 'adherentes']
+- 'adher.': 'adherens; adherentes' -> ['adherens', 'adherentes']
+
+## Unverified expansions ('?' moved to Anmerkungen) (7)
+- 'cath.': 'catholicus'
+- 'ed.': 'ediert'
+- 'elemos.': 'elemosina/elemosinaria'
+- 'except.': 'exceptus'
+- 'R. I.': 'Romanum Imperium'
+- 'tab. off.': 'tabellionatus officium'
+- 'tabell. off.': 'tabellionatus officium'
+
+## Declined abbreviations (forced complex) (5)
+- 'fratr.': 'frater'
+- 'maior.': 'maior'
+- 'milit.': 'miles'
+- 'pauper.': 'pauper'
+- 'scriptor.': 'scriptor'
+
+## Parenthesized parts resolved (37)
+- 'appl.': 'Plural' -> Anmerkungen
+- 'art.': 'v.a. in mort. art.' -> Anmerkungen
+- 'bb.': 'Plural' -> Anmerkungen
+- 'c.': 'nur bei def. nat.:' -> Anmerkungen
+- 'cam.': 'ohne Zusatz: apostolica' -> Anmerkungen
+- 'committ.': 'm. Dativ' -> Anmerkungen
+- 'd.': 'nur Bd. 6 laut Abk-Verz. sowie in Verbindung mit d. d./s. e. d./ s. d.' -> Anmerkungen
+- 'd.': 'nur Bd. 1 laut Abk-Verz.' -> Anmerkungen
+- 'dd.': 'Plural' -> Anmerkungen
+- 'def. nat. (c. c.)': 'defectus natalium (de coniugato et coniugata genitus)' -> 'defectus natalium de coniugato et coniugata genitus'
+- 'def. nat. (c. s.)': 'defectus natalium (de coniugato et soluta genitus)' -> 'defectus natalium de coniugato et soluta genitus'
+- 'def. nat. (p. c.)': 'defectus natalium (de presbitero et coniugata genitus)' -> 'defectus natalium de presbitero et coniugata genitus'
+- 'def. nat. (p. s.)': 'defectus natalium (de presbitero et soluta genitus)' -> 'defectus natalium de presbitero et soluta genitus'
+- 'def. nat. (s. c.)': 'defectus natalium (de soluto et coniugata genitus)' -> 'defectus natalium de soluto et coniugata genitus'
+- 'def. nat. (s. s.)': 'defectus natalium (de soluto et soluta genitus)' -> 'defectus natalium de soluto et soluta genitus'
+- 'disp.': 'cum aliquo' -> Anmerkungen
+- 'expect.': 'gratia ' -> Anmerkungen
+- 'matrim.': 'disp.' -> Anmerkungen
+- 'matrimon.': 'disp.' -> Anmerkungen
+- 'nat.': 'def.' -> Anmerkungen
+- 'op.': 'p' -> Anmerkungen
+- 'oppid.': 'p' -> Anmerkungen
+- 'p.': 'nur bei def. nat.:' -> Anmerkungen
+- 'pred.': 'in o. pred.' -> Anmerkungen
+- 'prothomart.': 'h' -> Anmerkungen
+- 'prothon.': 'h' -> Anmerkungen
+- 'prothonot.': 'h' -> Anmerkungen
+- 'protomart.': 'h' -> Anmerkungen
+- 'protonot.': 'h' -> Anmerkungen
+- 'prov.': 'alicui de aliqua re' -> Anmerkungen
+- 'red.': 'd' -> Anmerkungen
+- 'renen.': 'h; fl.' -> Anmerkungen
+- 'sign.': 'sola' -> Anmerkungen
+- 'SS.': 'Plural' -> Anmerkungen
+- 'ss.': 'Plural' -> Anmerkungen
+- 'Ung.': 'fl.' -> Anmerkungen
+- 'val.': 'perinde' -> Anmerkungen
+
+## Variant notation resolved (40)
+- 'off. divin.': 'divina officia' -> 'officia divina'
+- 'elemos.': 'elemosina/elemosinaria' -> 'elemosina' | 'elemosinaria'
+- 'elemosin.': 'elemosina/elemosinaria' -> 'elemosina' | 'elemosinaria'
+- 'lit.': 'lite/litis' -> 'lite' | 'litis'
+- 'mart.': 'mart[iy]r' -> 'martir'
+- 'martir.': 'mart[iy]r' -> 'martir'
+- 'mort. art.': 'mortis articulus/facultas absolvendi in mortis articulo' -> 'mortis articulus' | 'facultas absolvendi in mortis articulo'
+- 'mort. artic.': 'mortis articulus/facultas absolvendi in mortis articulo' -> 'mortis articulus' | 'facultas absolvendi in mortis articulo'
+- 'mort. artic.': 'mortis articulus/facultas absolvendi in mortis articulo' -> 'mortis articulus' | 'facultas absolvendi in mortis articulo'
+- 'n. o.': 'non obstante/obstantibus' -> 'non obstante' | 'non obstantibus'
+- 'non obst.': 'non obstante/obstantibus' -> 'non obstante' | 'non obstantibus'
+- 'non obstant.': 'non obstante/obstantibus' -> 'non obstante' | 'non obstantibus'
+- 'non obst.': 'non obstante/obstantibus' -> 'non obstante' | 'non obstantibus'
+- 'non obstant.': 'non obstante/obstantibus' -> 'non obstante' | 'non obstantibus'
+- 'o.': 'obstante/obstantibus' -> 'obstante' | 'obstantibus'
+- 'cur. Rom.': 'Romana curia' -> 'curia Romana'
+- 'cur. Roman.': 'Romana curia' -> 'curia Romana'
+- 'cur. Romana': 'Romana curia' -> 'curia Romana'
+- 'curia Rom.': 'Romana curia' -> 'curia Romana'
+- 's. e. d.': 'sub eodem dato/sub eadem data' -> 'sub eodem dato' | 'sub eadem data'
+- 'sub eodem dat.': 'sub eodem dato/sub eadem data' -> 'sub eodem dato' | 'sub eadem data'
+- 's. p. d.': 'sub prima data/sub primo dato' -> 'sub prima data' | 'sub primo dato'
+- 'sub prima dat.': 'sub prima data/sub primo dato' -> 'sub prima data' | 'sub primo dato'
+- 'ap. sed.': 'sedes apostolica' -> 'apostolica sedes'
+- 'apost. sedes': 'sedes apostolica' -> 'apostolica sedes'
+- 'comm. serv.': 'servitium commune' -> 'commune servitium'
+- 'commun. serv.': 'servitium commune' -> 'commune servitium'
+- 'commun. servit.': 'servitium commune' -> 'commune servitium'
+- 'subcollect.': 'subcollector/succollector' -> 'subcollector'
+- 'succoll.': 'subcollector/succollector' -> 'succollector'
+- 'succollect.': 'subcollector/succollector' -> 'succollector'
+- 'subcust.': 'subcustos/succustos' -> 'subcustos'
+- 'subcustod.': 'subcustos/succustos' -> 'subcustos'
+- 'succust.': 'subcustos/succustos' -> 'succustos'
+- 'subcustod.': 'subcustodia/succostodia' -> 'subcustodia'
+- 'succustod.': 'subcustodia/succostodia' -> 'succostodia'
+- 'off. tab.': 'tabellionatus officium' -> 'officium tabellionatus'
+- 'off. tabell': 'tabellionatus officium' -> 'officium tabellionatus'
+- 'off. tabell.': 'tabellionatus officium' -> 'officium tabellionatus'
+- 'litt. testim.': 'testimoniales littere' -> 'littere testimoniales'
+
+## Duplicate rows merged (181)
+- merged duplicate 'abbat.' / 'abbatissa'
+- merged duplicate 'abb. et. conv.' / 'abbas et conventus'
+- merged duplicate 'a.' / 'annus'
+- merged duplicate 'Ap.' / 'apostolus'
+- merged duplicate 'Apost.' / 'apostolus'
+- merged duplicate 'april.' / 'aprilis'
+- merged duplicate 'archidiac.' / 'archidiaconus'
+- merged duplicate 'archidiacon.' / 'archidiaconatus'
+- merged duplicate 'archiep.' / 'archiepiscopus'
+- merged duplicate 'arg.' / 'argentum'
+- merged duplicate 'ben. c. c.' / 'beneficium cum cura'
+- merged duplicate 'ben. c. v. s. c.' / 'beneficium cum vel sine cura'
+- merged duplicate 'ben. s. c.' / 'beneficium sine cura'
+- merged duplicate 'c. r. p.' / 'cum reservatione prebende'
+- merged duplicate 'camerar.' / 'camerarius'
+- merged duplicate 'capell.' / 'capellanus'
+- merged duplicate 'capell.' / 'capella'
+- merged duplicate 'capellan.' / 'capellanus'
+- merged duplicate 'capellan.' / 'capellania'
+- merged duplicate 'cathedral.' / 'cathedralis'
+- merged duplicate 'civ.' / 'civitas'
+- merged duplicate 'comp.' / 'competenter'
+- merged duplicate 'cum res. preb.' / 'cum reservatione prebende'
+- merged duplicate 'cum reserv. preb.' / 'cum reservatione prebende'
+- merged duplicate 'decan.' / 'decanus'
+- merged duplicate 'dec.' / 'december'
+- merged duplicate 'defect.' / 'defectus'
+- merged duplicate 'dict.' / 'dictus'
+- merged duplicate 'd.' / 'dominus'
+- merged duplicate 'domus hosp.' / 'domus hospitalis'
+- merged duplicate 'duc.' / 'ducatus'
+- merged duplicate 'ducat.' / 'ducatus'
+- merged duplicate 'ducat.' / 'ducatus'
+- merged duplicate 'el.' / 'electio'
+- merged duplicate 'el.' / 'eligere'
+- merged duplicate 'episcop.' / 'episcopalis'
+- merged duplicate 'evang.' / 'evangelista'
+- merged duplicate 'fac.' / 'facultas'
+- merged duplicate 'famil.' / 'familiaris'
+- merged duplicate 'filial.' / 'filialis'
+- merged duplicate 'flor.' / 'florenus'
+- merged duplicate 'fratr.' / 'frater'
+- merged duplicate 'fundat.' / 'fundatio'
+- merged duplicate 'gen.' / 'generalis'
+- merged duplicate 'general.' / 'generalis'
+- merged duplicate 'hosp. paup.' / 'hospitale pauperum'
+- merged duplicate 'hospit.' / 'hospitale'
+- merged duplicate 'hospit. paup.' / 'hospitale pauperum'
+- merged duplicate 'imp.' / 'imperator'
+- merged duplicate 'infer.' / 'inferior'
+- merged duplicate 'ingred.' / 'ingredi'
+- merged duplicate 'ingress.' / 'ingressus'
+- merged duplicate 'inhabil.' / 'inhabilitas'
+- merged duplicate 'instrum.' / 'instrumentum'
+- merged duplicate 'irr.' / 'irregularitas'
+- merged duplicate 'irregul.' / 'irregularitas'
+- merged duplicate 'l. Tur. p.' / 'libra turonensium parvorum'
+- merged duplicate 'laical.' / 'laicalis'
+- merged duplicate 'lic.' / 'licentiatus'
+- merged duplicate 'limin.' / 'limina'
+- merged duplicate 'lit. pend.' / 'lite pendente'
+- merged duplicate 'm. a. p.' / 'marca argenti puri'
+- merged duplicate 'mai.' / 'maior'
+- merged duplicate 'man.' / 'manus'
+- merged duplicate 'mand.' / 'mandare'
+- merged duplicate 'mand.' / 'mandatum'
+- merged duplicate 'marc.' / 'marca'
+- merged duplicate 'marc. arg.' / 'marca argenti'
+- merged duplicate 'matrimon.' / 'matrimonium'
+- merged duplicate 'milit.' / 'miles'
+- merged duplicate 'mon.' / 'monachus'
+- merged duplicate 'monast.' / 'monasterium'
+- merged duplicate 'mort. artic.' / 'mortis articulus'
+- merged duplicate 'mort. artic.' / 'facultas absolvendi in mortis articulo'
+- merged duplicate 'nomin.' / 'nominare'
+- merged duplicate 'non obst.' / 'non obstante'
+- merged duplicate 'non obst.' / 'non obstantibus'
+- merged duplicate 'non obstant.' / 'non obstante'
+- merged duplicate 'non obstant.' / 'non obstantibus'
+- merged duplicate 'notar.' / 'notarius'
+- merged duplicate 'nuncup.' / 'nuncupatus'
+- merged duplicate 'ob.' / 'obitus'
+- merged duplicate 'obl.' / 'obligatio'
+- merged duplicate 'obs.' / 'observantia'
+- merged duplicate 'obt.' / 'obtinere'
+- merged duplicate 'occ.' / 'occupare'
+- merged duplicate 'offic.' / 'officium'
+- merged duplicate 'official.' / 'officialis'
+- merged duplicate 'omn. SS.' / 'omnium sanctorum'
+- merged duplicate 'ordin.' / 'ordinaria'
+- merged duplicate 'oblig. sup. ann.' / 'obligatio super annata'
+- merged duplicate 'oblig. sup. annat.' / 'obligatio super annata'
+- merged duplicate 'palat.' / 'palatium'
+- merged duplicate 'parochial.' / 'parochialis'
+- merged duplicate 'patr.' / 'patronatus'
+- merged duplicate 'pauper.' / 'pauper'
+- merged duplicate 'pecun.' / 'pecunia'
+- merged duplicate 'penitent.' / 'penitentiaria'
+- merged duplicate 'perc.' / 'percipere'
+- merged duplicate 'permut.' / 'permutare'
+- merged duplicate 'perpet.' / 'perpetuus'
+- merged duplicate 'personat.' / 'personatus'
+- merged duplicate 'pleban.' / 'plebanus'
+- merged duplicate 'plebanat.' / 'plebanatus'
+- merged duplicate 'poss.' / 'possessio'
+- merged duplicate 'potest.' / 'potestas'
+- merged duplicate 'preb.' / 'prebendatus'
+- merged duplicate 'preceptor.' / 'preceptor'
+- merged duplicate 'presbiter.' / 'presbiteratus'
+- merged duplicate 'primar.' / 'primarius'
+- merged duplicate 'privat.' / 'privatio'
+- merged duplicate 'proced.' / 'procedere'
+- merged duplicate 'proc.' / 'procurator'
+- merged duplicate 'procurat.' / 'procurator'
+- merged duplicate 'prof.' / 'professa'
+- merged duplicate 'profess.' / 'professor'
+- merged duplicate 'prothon.' / 'prot onotarius'
+- merged duplicate 'protomart.' / 'prot omartir'
+- merged duplicate 'protonot.' / 'prot onotarius'
+- merged duplicate 'prov.' / 'provincia'
+- merged duplicate 'provinc.' / 'provincia'
+- merged duplicate 'public.' / 'publicus'
+- merged duplicate 'R. e.' / 'romana ecclesia'
+- merged duplicate 'rec.' / 'recipere'
+- merged duplicate 'referend.' / 'referendarius'
+- merged duplicate 'reform.' / 'reformare'
+- merged duplicate 'regul.' / 'regula'
+- merged duplicate 'rehabil.' / 'rehabilitatio'
+- merged duplicate 'relict.' / 'relicta'
+- merged duplicate 'rel.' / 'religio'
+- merged duplicate 'remiss.' / 'remissio'
+- merged duplicate 'res.' / 'reservare'
+- merged duplicate 'res.' / 'reservatio'
+- merged duplicate 'reservat.' / 'reservatio'
+- merged duplicate 'resident.' / 'residentia'
+- merged duplicate 'res.' / 'resignare'
+- merged duplicate 'resig.' / 'resignare'
+- merged duplicate 'revalid.' / 'revalidatio'
+- merged duplicate 'revocat.' / 'revocatio'
+- merged duplicate 'cur. Rom.' / 'curia romana'
+- merged duplicate 'Roman.' / 'romanus'
+- merged duplicate 'sac.' / 'sacerdos'
+- merged duplicate 'sacerdotal.' / 'sacerdotalis'
+- merged duplicate 'salv. conduct.' / 'salvus conductus'
+- merged duplicate 'scolar.' / 'scolaris'
+- merged duplicate 'scr.' / 'scriptus'
+- merged duplicate 'scriptor.' / 'scriptor'
+- merged duplicate 'secret.' / 'secretarius'
+- merged duplicate 'secul.' / 'secularis'
+- merged duplicate 'secular.' / 'secularis'
+- merged duplicate 'ap. sed.' / 'apostolica sedes'
+- merged duplicate 'sentent.' / 'sententia'
+- merged duplicate 'sepultur.' / 'sepultura'
+- merged duplicate 'comm. serv.' / 'commune servitium'
+- merged duplicate 'commun. serv.' / 'commune servitium'
+- merged duplicate 'commun. servit.' / 'commune servitium'
+- merged duplicate 'servit.' / 'servitium'
+- merged duplicate 'singul.' / 'singuli'
+- merged duplicate 'sol.' / 'solutio'
+- merged duplicate 'spirit.' / 'spiritualis'
+- merged duplicate 'SS.' / 'sancti'
+- merged duplicate 'subsid. carit.' / 'subsidium caritatis'
+- merged duplicate 'succollect.' / 'succollector'
+- merged duplicate 'succust.' / 'succustos'
+- merged duplicate 'suppl.' / 'supplicare'
+- merged duplicate 'suppl.' / 'supplicatio'
+- merged duplicate 'supplicat.' / 'supplicatio'
+- merged duplicate 'tabell.' / 'tabellionatus'
+- merged duplicate 'tabell. off.' / 'tabellionatus officium'
+- merged duplicate 't.' / 'tempus'
+- merged duplicate 'test.' / 'testimonialis'
+- merged duplicate 'litt. testim.' / 'littere testimoniales'
+- merged duplicate 'thesaur.' / 'thesaurarius'
+- merged duplicate 'thesaurar.' / 'thesaurarius'
+- merged duplicate 'thesaurar.' / 'thesauraria'
+- merged duplicate 'translat.' / 'translatio'
+- merged duplicate 'transfer.' / 'transferre'
+- merged duplicate 'Tur.' / 'turonensis'
+- merged duplicate 'univers.' / 'universitas'
+- merged duplicate 'universit.' / 'universitas'
+- merged duplicate 'v.' / 'virgo'
+
+## Abbreviations not found in the corpus (dropped) (173)
+- 'accip.' ('accipere'): not found in the corpus
+- 'archiep.' ('archiepiscopus'): not found in the corpus
+- 'apost.' ('apostolus'): not found in the corpus
+- 'apost.' ('apostolicus'): not found in the corpus
+- 'april.' ('aprilis'): not found in the corpus
+- 'archiprebyt.' ('archipresbyteratus'): not found in the corpus
+- 'bacal.' ('bacalaureus'): not found in the corpus
+- 'bacall.' ('bacallaureus'): not found in the corpus
+- 'baccal.' ('baccalaureus'): not found in the corpus
+- 'ben. c. c.' ('beneficium cum cura'): not found in the corpus
+- 'ben. s. c.' ('beneficium sine cura'): not found in the corpus
+- 'benedict.' ('benedictio'): not found in the corpus
+- 'cum res. preb.' ('cum reservatione prebende'): not found in the corpus
+- 'camerar.' ('camerarius'): not found in the corpus
+- 'cathedral.' ('cathedralis'): not found in the corpus
+- 'comm.' ('communis'): not found in the corpus
+- 'comm.' ('communitas'): not found in the corpus
+- 'comm. serv.' ('commune servitium'): not found in the corpus
+- 'commun. servit.' ('commune servitium'): not found in the corpus
+- 'comp.' ('competenter'): not found in the corpus
+- 'conced.' ('concedere'): not found in the corpus
+- 'concess.' ('concessio'): not found in the corpus
+- 'consangu.' ('consanguinitas'): not found in the corpus
+- 'consangu.' ('consanguineus'): not found in the corpus
+- 'const.' ('constituere'): not found in the corpus
+- 'const.' ('constitutio'): not found in the corpus
+- 'dict.' ('dictus'): not found in the corpus
+- 'defect.' ('defectus'): not found in the corpus
+- 'divin. off.' ('divina officia'): not found in the corpus
+- 'off. divin.' ('officia divina'): not found in the corpus
+- 'divers.' ('diversus'): not found in the corpus
+- 'divin.' ('divinus'): not found in the corpus
+- 'e. t.' ('extra tempora'): not found in the corpus
+- 'episcop.' ('episcopalis'): not found in the corpus
+- 'evang.' ('evangelista'): not found in the corpus
+- 'execut.' ('executere'): not found in the corpus
+- 'execut.' ('executio'): not found in the corpus
+- 'execut.' ('executor'): not found in the corpus
+- 'fit. Gr.' ('fit gratia'): not found in the corpus
+- 'flor.' ('florenus'): not found in the corpus
+- 'fundat.' ('fundatio'): not found in the corpus
+- 'fundat.' ('fundator'): not found in the corpus
+- 'general.' ('generalis'): not found in the corpus
+- 'hospit.' ('hospitale'): not found in the corpus
+- 'hosp. pauper.' ('hospitale pauperum'): not found in the corpus
+- 'hospit. paup.' ('hospitale pauperum'): not found in the corpus
+- 'hospit.' ('hospitium'): not found in the corpus
+- 'imp.' ('imperator'): not found in the corpus
+- 'imp.' ('imperium'): not found in the corpus
+- 'imp.' ('imperialis'): not found in the corpus
+- 'imperial.' ('imperator'): not found in the corpus
+- 'imperial.' ('imperialis'): not found in the corpus
+- 'incomp.' ('incompatibilitas'): not found in the corpus
+- 'incomp.' ('incompatibilis'): not found in the corpus
+- 'inf.' ('inferior'): not found in the corpus
+- 'ingred.' ('ingredi'): not found in the corpus
+- 'ingress.' ('ingressus'): not found in the corpus
+- 'ingress.' ('ingressio'): not found in the corpus
+- 'in man.' ('in manibus'): not found in the corpus
+- 'insign. pontif.' ('insignia pontificalia'): not found in the corpus
+- 'insignia pontif.' ('insignia pontificalia'): not found in the corpus
+- 'insignia pontifical.' ('insignia pontificalia'): not found in the corpus
+- 'irr.' ('irregularitas'): not found in the corpus
+- 'irr.' ('irregularis'): not found in the corpus
+- 'irregul.' ('irregularitas'): not found in the corpus
+- 'irregul.' ('irregularis'): not found in the corpus
+- 'l. Tur. p.' ('libra Turonensium parvorum'): not found in the corpus
+- 'laci.' ('laicus'): not found in the corpus
+- 'laical.' ('laicalis'): not found in the corpus
+- 'limin. appl.' ('limina apostolorum'): not found in the corpus
+- 'lit. pend.' ('lite pendente'): not found in the corpus
+- 'matrimon.' ('matrimonium'): not found in the corpus
+- 'matrimon.' ('matrimonialis'): not found in the corpus
+- 'min. servit.' ('minuta servitia'): not found in the corpus
+- 'monast.' ('monasterium'): not found in the corpus
+- 'non obst.' ('non obstante'): not found in the corpus
+- 'non obst.' ('non obstantibus'): not found in the corpus
+- 'non obstant.' ('non obstante'): not found in the corpus
+- 'non obstant.' ('non obstantibus'): not found in the corpus
+- 'nom., nomin.' ('nominare'): not found in the corpus
+- 'nomin.' ('nominare'): not found in the corpus
+- 'nomin.' ('nominatio'): not found in the corpus
+- 'nomin.' ('nominatus'): not found in the corpus
+- 'notar.' ('notarius'): not found in the corpus
+- 'o. fr.min.' ('ordo fratrum minorum'): not found in the corpus
+- 'obs.' ('observantia'): not found in the corpus
+- 'occ.' ('occupare'): not found in the corpus
+- 'opidan.' ('opidanus'): not found in the corpus
+- 'opidan.' ('op idanus'): not found in the corpus
+- 'obl. sup. ann.' ('obligatio super annata'): not found in the corpus
+- 'obligatio sup. ann.' ('obligatio super annata'): not found in the corpus
+- 'parochial.' ('parochialis'): not found in the corpus
+- 'pecun.' ('pecunia'): not found in the corpus
+- 'penitent.' ('penitentiaria'): not found in the corpus
+- 'penitent.' ('penitentiarius'): not found in the corpus
+- 'perc.' ('percipere'): not found in the corpus
+- 'perpet.' ('perpetuus'): not found in the corpus
+- 'personat.' ('personatus'): not found in the corpus
+- 'plebanat.' ('plebanatus'): not found in the corpus
+- 'pontif.' ('pontificalis'): not found in the corpus
+- 'pontif.' ('pontificalia'): not found in the corpus
+- 'poss.' ('possessio'): not found in the corpus
+- 'poss.' ('possessor'): not found in the corpus
+- 'predict.' ('predictum'): not found in the corpus
+- 'prep., dec. et canonici(s)' ('prepositus, decanus et canonici'): not found in the corpus
+- 'presbyt.' ('presbiteratus'): not found in the corpus
+- 'presbyter.' ('presbiteratus'): not found in the corpus
+- 'presbyt.' ('presbyteratus'): not found in the corpus
+- 'presbyt.' ('presbyteralis'): not found in the corpus
+- 'presbyter.' ('presbyteratus'): not found in the corpus
+- 'presbyter.' ('presbyteralis'): not found in the corpus
+- 'primar.' ('primarius'): not found in the corpus
+- 'privat.' ('privatio'): not found in the corpus
+- 'privil., privileg.' ('privilegium'): not found in the corpus
+- 'privileg.' ('privilegium'): not found in the corpus
+- 'proced.' ('procedere'): not found in the corpus
+- 'profess.' ('professor'): not found in the corpus
+- 'protomart.' ('prot omartir'): not found in the corpus
+- 'protonot.' ('prot onotarius'): not found in the corpus
+- 'provinc.' ('provincia'): not found in the corpus
+- 'public.' ('publicus'): not found in the corpus
+- 'public.' ('publicare'): not found in the corpus
+- 'public.' ('publicatio'): not found in the corpus
+- 'rest. bulla' ('restitutio bulle'): not found in the corpus
+- 'Rom. Imperator' ('Romanorum Imperator'): not found in the corpus
+- 'Rom. imp.' ('Romanorum Imperator'): not found in the corpus
+- 'Roman. imperium' ('Romanorum Imperator'): not found in the corpus
+- 'Romanorum imp.' ('Romanorum Imperator'): not found in the corpus
+- 'rec.' ('recipere'): not found in the corpus
+- 'reform.' ('reformare'): not found in the corpus
+- 'referend.' ('referendarius'): not found in the corpus
+- 'reform.' ('reformatio'): not found in the corpus
+- 'remiss.' ('remissio'): not found in the corpus
+- 'rest.' ('restitutio'): not found in the corpus
+- 'rest.' ('restituere'): not found in the corpus
+- 'Rom. cur.' ('Romana curia'): not found in the corpus
+- 'Roman. cur.' ('Romana curia'): not found in the corpus
+- 'cur. Roman.' ('curia Romana'): not found in the corpus
+- 's. p. d.' ('sub prima data'): not found in the corpus
+- 's. p. d.' ('sub primo dato'): not found in the corpus
+- 'sac.' ('sacerdos'): not found in the corpus
+- 'sac.' ('sacerdotalis'): not found in the corpus
+- 'sacerdotal.' ('sacerdotalis'): not found in the corpus
+- 'salv. conduct.' ('salvus conductus'): not found in the corpus
+- 'scolar.' ('scolaris'): not found in the corpus
+- 'secul.' ('secularis'): not found in the corpus
+- 'secular.' ('secularis'): not found in the corpus
+- 'apost. sedes' ('apostolica sedes'): not found in the corpus
+- 'sedes apost.' ('sedes apostolica'): not found in the corpus
+- 'sentent.' ('sententia'): not found in the corpus
+- 'sepultur.' ('sepultura'): not found in the corpus
+- 'sing.' ('singuli'): not found in the corpus
+- 's. Rom. imperium' ('Sacrum Romanum Imperium'): not found in the corpus
+- 'subcust.' ('subcustos'): not found in the corpus
+- 'subcustod.' ('subcustos'): not found in the corpus
+- 'subcustod.' ('subcustodia'): not found in the corpus
+- 'supprim.' ('supprimere'): not found in the corpus
+- 'tabell.' ('tabellionatus'): not found in the corpus
+- 'off. tabell' ('officium tabellionatus'): not found in the corpus
+- 'off. tabell.' ('officium tabellionatus'): not found in the corpus
+- 'tabell. off.' ('tabellionatus officium'): not found in the corpus
+- 'testim. litt.' ('testimoniales littere'): not found in the corpus
+- 'litt. ap. testim.' ('testimoniales littere'): not found in the corpus
+- 'litteris testim.' ('testimoniales littere'): not found in the corpus
+- 'testim. litter. testimonialibus litt.' ('testimoniales littere'): not found in the corpus
+- 'testim. litteris' ('testimoniales littere'): not found in the corpus
+- 'thesaurar.' ('thesaurarius'): not found in the corpus
+- 'thesaurar.' ('thesauraria'): not found in the corpus
+- 'translat.' ('translatio'): not found in the corpus
+- 'translat.' ('translaturus'): not found in the corpus
+- 'translat.' ('translatus'): not found in the corpus
+- 'transfer.' ('transferre'): not found in the corpus
+- 'universit.' ('universitas'): not found in the corpus
+
+## Complex rows merged after stripping the notes (0)
+
+Split: 493 simple rows (467 abbreviations), 518 complex rows (242 abbreviations).
+
+## Morphology not automatically cleanable (kept as-is) (2)
+- [simple] 'dec.' / 'december': Deklination not automatically cleanable
+- [simple] 'prothomart.' / 'prot omartir': Wortstamm not automatically cleanable
+
+Validation `morphology_unattested`: 14 rows -> data/review/morphology_unattested.csv
+Validation `aufloesung_unattested`: 136 rows -> data/review/aufloesung_unattested.csv
+Validation `rg_volume_mismatch`: 282 rows -> data/review/rg_volume_mismatch.csv
