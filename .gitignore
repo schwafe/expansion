@@ -1,6 +1,7 @@
 # output folder (might want to upload it later, but not for now)
 transformed
-# rg_header_sublemma_all table from the RG database -- too large to upload it for no good reason
+# table from the RG database -- too large to upload it for no good reason
+data/RG_header_sublemma_all.csv
 data/rg.csv
 # extract_glossary.py's cache of the corpus searches (rebuilt automatically)
 data/review/corpus_cache.json
