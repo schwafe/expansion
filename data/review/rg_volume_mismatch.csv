@@ -70,7 +70,7 @@ obt.,obtinere,6,4
 omn. ss.,Omnium sanctorum,2,4
 omn. ss.,Omnium sanctorum,5,4
 omn. ss.,Omnium sanctorum,6,4
-oppid.,op idanus,9,10
+oppid.,oppidanus,9,10
 p. m.,per manus,5,2|3|7|8|9|10
 p. o.,per obitum,5,2|4|6|7|8|9|10
 pal.,palatium,1,4|5|10
@@ -85,6 +85,7 @@ procurat.,procurator,4,10
 r. b.,restitutio bulle,5,4
 R. E.,Romana Ecclesia,9,2|5|6|7|8|10
 R. R.,Romanorum Rex,5,4|6|7|8|10
+redd.,redditus,4,5
 reservat.,reservatio,3,2|5|10
 resident.,residentia,4,5|10
 restit. bulle,restitutio bulle,5,4|8|9|10
@@ -253,7 +254,6 @@ permut.,permutare,2,3
 preceptor.,preceptor,3,1|2|4|5|7|8|9|10
 presbiter.,presbiteratus,4,6
 R. I.,Romanorum Imperator,5,6|7|8|9|10
-redd.,red itus,4,5
 regul.,regula,3,4
 regul.,regula,6,4
 rehabil.,rehabilitatio,8,5

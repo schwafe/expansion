@@ -29,11 +29,13 @@ Stages (each stage is a function of the same name):
                   - a trailing " ?" (unverified expansion) and a
                     "(dekliniert)" marker (which also forces the complex
                     split) move into the Anmerkungen
-                  - a parenthesized part is kept as part of the expansion
-                    if the abbreviation has more parts than the words
-                    outside it ('def. nat. s. c.'), otherwise it is one
-                    of the glossary's notes and moves into the
-                    Anmerkungen ('natalis (def.)', 'sancti (Plural)')
+                  - a free-standing parenthesized part is kept as part of
+                    the expansion if the abbreviation has more parts than
+                    the words outside it ('def. nat. s. c.'), otherwise
+                    it is one of the glossary's notes and moves into the
+                    Anmerkungen ('natalis (def.)', 'sancti (Plural)').
+                    A parenthesis attached to a word ('op(p)idum') is
+                    variant notation, not a note -> left to stage 6
  5. rg_columns    the RG1-9 cells list how volume n abbreviates the entry;
                   each cell is reduced to the row's own abbreviation (or
                   emptied). A cell naming a *different* abbreviation (with
@@ -45,8 +47,10 @@ Stages (each stage is a function of the same name):
                   the row's own abbreviation:
                   - spelling variants inside a word, `op(p)idum` or
                     `mart[iy]r`: the variant sharing the longest prefix
-                    with the abbreviation wins (ties -> the plain variant,
-                    i.e. the notation's first reading)
+                    with the abbreviation wins ('renen.' -> 'renensis');
+                    if the abbreviation fits several of them ('op.' fits
+                    'opidum' and 'oppidum'), the spelling the RG uses
+                    more often wins
                   - `/` between phrases (a side contains a space) or
                     between full words: alternative expansions; if the
                     abbreviation's letters single out one, it wins,
@@ -568,26 +572,35 @@ def inherit(rows: list[dict]) -> list[dict]:
     return rows
 
 
+# a parenthesized group that stands on its own (delimited by spaces or the
+# ends of the string). One that is attached to a word -- 'op(p)idum',
+# 'r(h)enensis', 'communi(s)' -- is spelling-variant notation, not a note,
+# and belongs to the word: it is left alone here and resolved in stage 6.
+FREE_PARENS = re.compile(r"(?<![A-Za-z])\([^()]*\)(?![A-Za-z])")
+
+
 def resolve_parentheses(abbreviation: str, aufloesung: str) -> tuple[str, str]:
     """
-    A parenthesized part of the Auflösung either belongs to the expansion
-    or is one of the glossary's notes. It belongs to the expansion when
-    the abbreviation has more parts than the Auflösung has words outside
-    the parentheses -- then the abbreviation covers the parenthesized
-    words too ('def. nat. s. c.' -> 'defectus natalium (de soluto et
-    coniugata genitus)'). Otherwise it is a note on the context or the
-    grammar ('nat.' -> 'natalis (def.)', 'ss.' -> 'sancti (Plural)') that
-    must not end up in the text.
+    A free-standing parenthesized part of the Auflösung either belongs to
+    the expansion or is one of the glossary's notes. It belongs to the
+    expansion when the abbreviation has more parts than the Auflösung has
+    words outside the parentheses -- then the abbreviation covers the
+    parenthesized words too ('def. nat. s. c.' -> 'defectus natalium (de
+    soluto et coniugata genitus)'). Otherwise it is a note on the context
+    or the grammar ('nat.' -> 'natalis (def.)', 'ss.' -> 'sancti
+    (Plural)') that must not end up in the text.
 
     Returns (Auflösung, note): the note is empty when the parentheses
     belong to the expansion (or there are none).
     """
-    if "(" not in aufloesung:
+    groups = FREE_PARENS.findall(aufloesung)
+    if not groups:
         return aufloesung, ""
-    outside = re.sub(r"\([^)]*\)", " ", aufloesung).split()
+    outside = FREE_PARENS.sub(" ", aufloesung).split()
     if len(abbreviation.split(" ")) > len(outside):
-        return re.sub(r"\s+", " ", aufloesung.replace("(", "").replace(")", "")).strip(), ""
-    note = "; ".join(re.findall(r"\(([^)]*)\)", aufloesung))
+        kept = FREE_PARENS.sub(lambda m: m.group(0)[1:-1], aufloesung)
+        return re.sub(r"\s+", " ", kept).strip(), ""
+    note = "; ".join(group[1:-1] for group in groups)
     return " ".join(outside), note
 
 
@@ -726,7 +739,7 @@ def rg_columns(rows: list[dict]) -> list[dict]:
     return result
 
 
-WORD_VARIANT = re.compile(r"[A-Za-z]+[(\[][a-z/]+[)\]][A-Za-z]*[a-z]")
+WORD_VARIANT = re.compile(r"[A-Za-z]+[(\[][a-z/]+[)\]][A-Za-z]*")
 
 
 def prefix_length(abbreviation: str, text: str) -> int:
@@ -740,11 +753,55 @@ def prefix_length(abbreviation: str, text: str) -> int:
     return n
 
 
-def resolve_row(row: dict) -> list[str]:
+def common_prefix_length(words: list[str]) -> int:
+    n = 0
+    for letters in zip(*words):
+        if len(set(letters)) > 1:
+            break
+        n += 1
+    return n
+
+
+def choose_by_corpus(
+    variants: list[str], search: "CorpusSearch | None"
+) -> tuple[str, str]:
+    """
+    Pick the spelling of a word the RG actually uses more often, for the
+    cases where the abbreviation does not tell the variants apart
+    ('op.' fits both 'opidum' and 'oppidum').
+
+    The variants are base forms, so they are searched as prefixes and the
+    inflected forms count too. If none of them occurs, the search backs
+    off one letter at a time -- but never past the letter where the
+    variants start to differ, so what is compared stays the spelling.
+    Returns (variant, reason) for the report.
+    """
+    if search is None:
+        return variants[0], "no corpus search"
+    floor = common_prefix_length(variants) + 1
+    for cut in range(max(len(v) for v in variants), floor - 1, -1):
+        counts = [search.count(rf"(?i)\b{re.escape(v[:cut])}") for v in variants]
+        if not any(counts):
+            continue
+        best = max(counts)
+        found = [v for v, c in zip(variants, counts) if c == best]
+        reason = "corpus: " + ", ".join(
+            f"{v[:cut]}* {c}x" for v, c in zip(variants, counts)
+        )
+        return found[0], reason
+    return variants[0], "none of the variants occurs in the corpus"
+
+
+def resolve_row(
+    row: dict,
+    search: "CorpusSearch | None" = None,
+    reasons: list[str] | None = None,
+) -> list[str]:
     """
     Stage 6 for one row: resolve the variant notation in the Auflösung
     against the row's abbreviation. Returns the list of Auflösung
-    alternatives the row resolves to (usually one).
+    alternatives the row resolves to (usually one); `reasons` collects
+    the spelling decisions the corpus had to make, for the report.
     """
     abbreviation = row["Abkürzung"]
     aufloesung = row["Auflösung"]
@@ -764,9 +821,20 @@ def resolve_row(row: dict) -> list[str]:
         if WORD_VARIANT.fullmatch(word):
             variants = clean_morphology.expand_stem_variants(word).split("/")
             best = max(prefix_length(abbreviation, v) for v in variants)
-            words[i] = next(
+            fitting = [
                 v for v in variants if prefix_length(abbreviation, v) == best
-            )
+            ]
+            # the abbreviation decides if its letters single out one
+            # variant ('renen.' -> 'renensis', not 'rhenensis'); if it
+            # fits several ('op.'), the corpus decides
+            if len(fitting) == 1:
+                words[i] = fitting[0]
+            else:
+                words[i], reason = choose_by_corpus(fitting, search)
+                if reasons is not None:
+                    reasons.append(
+                        f"{abbreviation!r}: {word!r} -> {words[i]!r} ({reason})"
+                    )
     resolved = " ".join(words)
 
     # `/` between full words: one alternative if the abbreviation singles
@@ -811,12 +879,15 @@ def reorder_words(abbreviation: str, aufloesung: str) -> str:
     return " ".join(reordered)
 
 
-def resolve(rows: list[dict]) -> tuple[list[dict], list[str]]:
+def resolve(
+    rows: list[dict], search: "CorpusSearch | None" = None
+) -> tuple[list[dict], list[str], list[str]]:
     """Stage 6: resolve variant notation (see resolve_row)."""
     result = []
-    log = []
+    log: list[str] = []
+    reasons: list[str] = []
     for row in rows:
-        alternatives = resolve_row(row)
+        alternatives = resolve_row(row, search, reasons)
         if alternatives != [row["Auflösung"]]:
             log.append(
                 f"{row['Abkürzung']!r}: {row['Auflösung']!r} -> "
@@ -826,7 +897,7 @@ def resolve(rows: list[dict]) -> tuple[list[dict], list[str]]:
             new = dict(row)
             new["Auflösung"] = alternative
             result.append(new)
-    return result, log
+    return result, log, reasons
 
 
 def merge_duplicates(rows: list[dict]) -> tuple[list[dict], list[str]]:
@@ -889,12 +960,14 @@ class CorpusSearch:
         self.corpus_path = corpus_path
         self.cache_path = cache_path or REVIEW_DIR / "corpus_cache.json"
         self.cache: dict[str, list[int]] = {}
+        self.counts: dict[str, int] = {}
         self.text: pl.DataFrame | None = None
         if self.cache_path.exists():
             with open(self.cache_path, encoding="utf-8") as file:
                 stored = json.load(file)
             if stored.get("corpus") == self._corpus_signature():
                 self.cache = stored["queries"]
+                self.counts = stored.get("counts", {})
 
     def _corpus_signature(self) -> str:
         stat = Path(self.corpus_path).stat()
@@ -926,11 +999,24 @@ class CorpusSearch:
             self.cache[query] = found
         return self.cache[query]
 
+    def count(self, query: str) -> int:
+        """Number of corpus entries the pattern occurs in."""
+        if query not in self.counts:
+            text = self._load_corpus()
+            self.counts[query] = int(
+                text.get_column("text").str.contains(query).sum()
+            )
+        return self.counts[query]
+
     def save_cache(self) -> None:
         self.cache_path.parent.mkdir(parents=True, exist_ok=True)
         with open(self.cache_path, "w", encoding="utf-8") as file:
             json.dump(
-                {"corpus": self._corpus_signature(), "queries": self.cache},
+                {
+                    "corpus": self._corpus_signature(),
+                    "queries": self.cache,
+                    "counts": self.counts,
+                },
                 file,
             )
 
@@ -1153,13 +1239,15 @@ def extract(write: bool, diff: bool) -> None:
     section("Declined abbreviations (forced complex)", notes["declined"])
     section("Parenthesized parts resolved", notes["notes"])
 
+    search = CorpusSearch()
+
     rows = rg_columns(rows)
-    rows, resolve_log = resolve(rows)
+    rows, resolve_log, spelling_log = resolve(rows, search)
     section("Variant notation resolved", resolve_log)
+    section("Spelling decided by the corpus", spelling_log)
     rows, merge_log = merge_duplicates(rows)
     section("Duplicate rows merged", merge_log)
 
-    search = CorpusSearch()
     rows, dropped = corpus_check(rows, search)
     search.save_cache()
     section("Abbreviations not found in the corpus (dropped)", dropped)

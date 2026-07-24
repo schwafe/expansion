@@ -290,11 +290,8 @@ occup.,occupatio,,,occupation -is,kons.,,,,,,,,,,,,2|3|4|5|6|7|8
 occup.,occupator,,,occupator -is,kons.,,,,,,,,,,,,2|3|4|5|6|7|8
 off.,officialis,Offizial,,official -is,i ?,,,,,,,,,,,,1|2|3|5|6|7|8|9|10
 off.,officium,Amt; (Gottes-)Dienst,,offici -i,o (n.),off.,off.,off.,,off.,off.,off.,off.,off.,"vermutlich in Bd. 4 und möglicherweise auch in anderen Bänden Abk. ""offic."" verwendet",,1|2|3|5|6|7|8|9|10
-opid.,op idanus,Stadtbewohner,p,opidan/oppidan -i; idanus,o; -,,opid.,opid.,opid.,opid.,opid.,opid.,opid.,,"möglicherweise auch ""op."" in der Bedeutung ""opidanus"" verwendet",,2|3|4|5|6|7|8|9
-opid.,opidanus,Stadtbewohner,siehe oppid.,,,,,,,,,,,,,,2|3|4|5|6|7|8|9
+opid.,opidanus,Stadtbewohner,siehe oppid.,opidan/oppidan -i,o,,opid.,opid.,opid.,opid.,opid.,opid.,opid.,,"möglicherweise auch ""op."" in der Bedeutung ""opidanus"" verwendet",,2|3|4|5|6|7|8|9
 opid.,opidum,(Stadt),"vielleicht, nicht sicher, ob wirklich verwendet",,,,,,,,,,,,,,2|3|4|5|6|7|8|9
-opp.,op idum,Stadt,p,opid/oppid -i; idum,o (n.); -,,,,,opp.,,,,,"möglicherweise auch ""opid."" in der Bedeutung ""opidum"" verwendet",,5
-opp.,oppidum,Stadt,siehe op.,,,,,,,,,,,,,,5
 ord.,ordinaria,,"2 nicht ordo, sondern ordinaria/us",,,ord.,ord.,ord.,ord.,ord.,ord.,ord.,ord.,ord.,,,1|2|3|4|5|6|7|8|9|10
 ord.,ordinarius,"Ordinarius, zuständige kirchliche Obere (meist: Bischof)",ord. 2,ordinari -i,o,ord.,ord.,ord.,ord.,ord.,ord.,ord.,ord.,ord.,"nicht zu entscheiden, ob ""ord."" auch in anderen Bänden außer 2 für ""ordinarius/a"" steht, sicherheitshalber bei allen Bänden mit aufgeführt",,1|2|3|4|5|6|7|8|9|10
 ord.,ordo,Weihegrad; Orden,,ordin -is,kons.,ord.,ord.,ord.,ord.,ord.,ord.,ord.,ord.,ord.,"Als Abk. für Orden meist ""o."" in Abk.-Kombinationen verwendet",,1|2|3|4|5|6|7|8|9|10
@@ -389,8 +386,6 @@ recept.,receptus,"empfangen, aufgenommen;",,recept -i,o/a (Adj.),,,recept.,recep
 recogn.,recognitio,,1.2,recognition -is,kons.,recogn.,recogn.,recogn.,,,,,,,,,1|2|3
 recogn.,recognitus,,3,recognit -i,o/a (Adj.),,,,,,,,,,,,1|2|3
 recogn.,recognoscere,,1.2,"recognosc, recognov, recognit",kons.-Konj.,,,,,,,,,,,,1|2|3
-redd.,red itus,Einkünfte,d,redit/reddit -us; itus,u; -,,,,redd.,redd.,,,,,ausgeschrieben: redditus; reditus,,5
-redd.,redditus,Einkünfte,siehe red.,,,,,,,,,,,,,,5
 ref.,reformare,"verbessern, reformieren;",,"reform, reformav, reformat",a-Konj.,,,,ref.,ref.,ref.,ref.,ref.,ref.,,,2|3|4|5|6|7|8|9|10
 ref.,reformatio,"Abänderung, Nachbesserung (einer päpstlichen Gnade); Reform",,reformation -is,kons.,,,,,,,,,,,,2|3|4|5|6|7|8|9|10
 reg.,regula,(Ordens-)Regel;,,regul -e,a,reg.,reg.,reg.,reg.,reg.,reg.,reg.,reg.,reg.,,,1|2|3|4|5|6|7|8|9|10

@@ -145,6 +145,20 @@ class TestNormalize:
         assert result[0]["Anmerkungen"] == "def."
         assert len(notes["notes"]) == 4
 
+    def test_parentheses_inside_a_word_are_not_a_note(self):
+        # 'op(p)idum' is spelling-variant notation and stays intact for
+        # the resolve stage -- only the free-standing '(fl.)' is a note
+        rows = [row(Abkürzung="op.", Auflösung="op(p)idum"),
+                row(Abkürzung="renen.", Auflösung="r(h)enensis (fl.)"),
+                row(Abkürzung="red.", Auflösung="red(d)itus")]
+
+        result, _ = eg.normalize(rows)
+
+        assert [r["Auflösung"] for r in result] == [
+            "op(p)idum", "r(h)enensis", "red(d)itus",
+        ]
+        assert [r["Anmerkungen"] for r in result] == ["", "fl.", ""]
+
     def test_parentheses_covered_by_the_abbreviation_stay(self):
         rows = [row(Abkürzung="def. nat. s. c.",
                     Auflösung="defectus natalium (de soluto et coniugata "
@@ -190,14 +204,50 @@ class TestRgColumns:
         )
 
 
+class CountingSearch:
+    """Stand-in for CorpusSearch with fixed counts per pattern."""
+
+    def __init__(self, counts: dict):
+        self.counts = counts
+
+    def count(self, query: str) -> int:
+        return self.counts.get(query, 0)
+
+
 class TestResolve:
     def test_bracket_variants_follow_the_abbreviation(self):
         assert eg.resolve_row(row(Abkürzung="opp.", Auflösung="op(p)idum")) \
             == ["oppidum"]
-        assert eg.resolve_row(row(Abkürzung="op.", Auflösung="op(p)idum")) \
-            == ["opidum"]  # tie -> the plain variant
         assert eg.resolve_row(row(Abkürzung="mart.", Auflösung="mart[iy]r")) \
             == ["martir"]
+        # 'renen.' cannot stand for 'rhenensis', so no corpus is needed
+        assert eg.resolve_row(row(Abkürzung="renen.", Auflösung="r(h)enensis"),
+                              search=None) == ["renensis"]
+
+    def test_tie_is_decided_by_the_corpus(self):
+        # 'op.' fits both spellings -> the more frequent one wins
+        search = CountingSearch({r"(?i)\bopidum": 8, r"(?i)\boppidum": 3})
+        assert eg.resolve_row(row(Abkürzung="op.", Auflösung="op(p)idum"),
+                              search) == ["opidum"]
+        search = CountingSearch({r"(?i)\bopidum": 3, r"(?i)\boppidum": 8})
+        assert eg.resolve_row(row(Abkürzung="op.", Auflösung="op(p)idum"),
+                              search) == ["oppidum"]
+
+    def test_corpus_backs_off_to_the_stem(self):
+        # the base forms do not occur, only inflected ones -> shorter
+        # prefixes are tried, but never past the differing letter
+        search = CountingSearch({r"(?i)\bopid": 5, r"(?i)\boppid": 40,
+                                 r"(?i)\bopi": 999})
+        assert eg.resolve_row(row(Abkürzung="op.", Auflösung="op(p)idum"),
+                              search) == ["oppidum"]
+
+    def test_unattested_variants_keep_the_first_reading(self):
+        assert eg.resolve_row(row(Abkürzung="op.", Auflösung="op(p)idum"),
+                              CountingSearch({})) == ["opidum"]
+
+    def test_variant_at_the_end_of_the_word(self):
+        assert eg.resolve_row(row(Abkürzung="communis", Auflösung="communi(s)"),
+                              search=None) == ["communis"]
 
     def test_word_alternatives(self):
         # the abbreviation singles out one variant

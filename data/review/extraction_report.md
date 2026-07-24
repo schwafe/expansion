@@ -112,7 +112,7 @@ Read 1023 rows from data/RGAbkVerz.csv.
 - 'pauper.': 'pauper'
 - 'scriptor.': 'scriptor'
 
-## Parenthesized parts resolved (37)
+## Parenthesized parts resolved (29)
 - 'appl.': 'Plural' -> Anmerkungen
 - 'art.': 'v.a. in mort. art.' -> Anmerkungen
 - 'bb.': 'Plural' -> Anmerkungen
@@ -133,25 +133,17 @@ Read 1023 rows from data/RGAbkVerz.csv.
 - 'matrim.': 'disp.' -> Anmerkungen
 - 'matrimon.': 'disp.' -> Anmerkungen
 - 'nat.': 'def.' -> Anmerkungen
-- 'op.': 'p' -> Anmerkungen
-- 'oppid.': 'p' -> Anmerkungen
 - 'p.': 'nur bei def. nat.:' -> Anmerkungen
 - 'pred.': 'in o. pred.' -> Anmerkungen
-- 'prothomart.': 'h' -> Anmerkungen
-- 'prothon.': 'h' -> Anmerkungen
-- 'prothonot.': 'h' -> Anmerkungen
-- 'protomart.': 'h' -> Anmerkungen
-- 'protonot.': 'h' -> Anmerkungen
 - 'prov.': 'alicui de aliqua re' -> Anmerkungen
-- 'red.': 'd' -> Anmerkungen
-- 'renen.': 'h; fl.' -> Anmerkungen
+- 'renen.': 'fl.' -> Anmerkungen
 - 'sign.': 'sola' -> Anmerkungen
 - 'SS.': 'Plural' -> Anmerkungen
 - 'ss.': 'Plural' -> Anmerkungen
 - 'Ung.': 'fl.' -> Anmerkungen
 - 'val.': 'perinde' -> Anmerkungen
 
-## Variant notation resolved (40)
+## Variant notation resolved (57)
 - 'off. divin.': 'divina officia' -> 'officia divina'
 - 'elemos.': 'elemosina/elemosinaria' -> 'elemosina' | 'elemosinaria'
 - 'elemosin.': 'elemosina/elemosinaria' -> 'elemosina' | 'elemosinaria'
@@ -167,6 +159,23 @@ Read 1023 rows from data/RGAbkVerz.csv.
 - 'non obst.': 'non obstante/obstantibus' -> 'non obstante' | 'non obstantibus'
 - 'non obstant.': 'non obstante/obstantibus' -> 'non obstante' | 'non obstantibus'
 - 'o.': 'obstante/obstantibus' -> 'obstante' | 'obstantibus'
+- 'op.': 'op(p)idum' -> 'opidum'
+- 'opp.': 'op(p)idum' -> 'oppidum'
+- 'oppid.': 'op(p)idanus' -> 'oppidanus'
+- 'opid.': 'op(p)idanus' -> 'opidanus'
+- 'opidan.': 'op(p)idanus' -> 'opidanus'
+- 'prothomart.': 'prot(h)omartir' -> 'prothomartir'
+- 'protomart.': 'prot(h)omartir' -> 'protomartir'
+- 'prothon.': 'prot(h)onotarius' -> 'prothonotarius'
+- 'prothonot.': 'prot(h)onotarius' -> 'prothonotarius'
+- 'prothon.': 'prot(h)onotarius' -> 'prothonotarius'
+- 'protonot.': 'prot(h)onotarius' -> 'protonotarius'
+- 'protomart.': 'prot(h)omartir' -> 'protomartir'
+- 'protonot.': 'prot(h)onotarius' -> 'protonotarius'
+- 'red.': 'red(d)itus' -> 'redditus'
+- 'redd.': 'red(d)itus' -> 'redditus'
+- 'reddit.': 'red(d)itus' -> 'redditus'
+- 'renen.': 'r(h)enensis' -> 'renensis'
 - 'cur. Rom.': 'Romana curia' -> 'curia Romana'
 - 'cur. Roman.': 'Romana curia' -> 'curia Romana'
 - 'cur. Romana': 'Romana curia' -> 'curia Romana'
@@ -193,7 +202,12 @@ Read 1023 rows from data/RGAbkVerz.csv.
 - 'off. tabell.': 'tabellionatus officium' -> 'officium tabellionatus'
 - 'litt. testim.': 'testimoniales littere' -> 'littere testimoniales'
 
-## Duplicate rows merged (181)
+## Spelling decided by the corpus (3)
+- 'mart.': 'mart[iy]r' -> 'martir' (corpus: martir* 164x, martyr* 1x)
+- 'op.': 'op(p)idum' -> 'opidum' (corpus: opidum* 8x, oppidum* 3x)
+- 'red.': 'red(d)itus' -> 'redditus' (corpus: reditus* 7x, redditus* 53x)
+
+## Duplicate rows merged (185)
 - merged duplicate 'abbat.' / 'abbatissa'
 - merged duplicate 'abb. et. conv.' / 'abbas et conventus'
 - merged duplicate 'a.' / 'annus'
@@ -283,6 +297,9 @@ Read 1023 rows from data/RGAbkVerz.csv.
 - merged duplicate 'offic.' / 'officium'
 - merged duplicate 'official.' / 'officialis'
 - merged duplicate 'omn. SS.' / 'omnium sanctorum'
+- merged duplicate 'opp.' / 'oppidum'
+- merged duplicate 'opid.' / 'opidanus'
+- merged duplicate 'opidan.' / 'opidanus'
 - merged duplicate 'ordin.' / 'ordinaria'
 - merged duplicate 'oblig. sup. ann.' / 'obligatio super annata'
 - merged duplicate 'oblig. sup. annat.' / 'obligatio super annata'
@@ -310,14 +327,15 @@ Read 1023 rows from data/RGAbkVerz.csv.
 - merged duplicate 'procurat.' / 'procurator'
 - merged duplicate 'prof.' / 'professa'
 - merged duplicate 'profess.' / 'professor'
-- merged duplicate 'prothon.' / 'prot onotarius'
-- merged duplicate 'protomart.' / 'prot omartir'
-- merged duplicate 'protonot.' / 'prot onotarius'
+- merged duplicate 'prothon.' / 'prothonotarius'
+- merged duplicate 'protomart.' / 'protomartir'
+- merged duplicate 'protonot.' / 'protonotarius'
 - merged duplicate 'prov.' / 'provincia'
 - merged duplicate 'provinc.' / 'provincia'
 - merged duplicate 'public.' / 'publicus'
 - merged duplicate 'R. e.' / 'romana ecclesia'
 - merged duplicate 'rec.' / 'recipere'
+- merged duplicate 'redd.' / 'redditus'
 - merged duplicate 'referend.' / 'referendarius'
 - merged duplicate 'reform.' / 'reformare'
 - merged duplicate 'regul.' / 'regula'
@@ -376,7 +394,7 @@ Read 1023 rows from data/RGAbkVerz.csv.
 - merged duplicate 'universit.' / 'universitas'
 - merged duplicate 'v.' / 'virgo'
 
-## Abbreviations not found in the corpus (dropped) (173)
+## Abbreviations not found in the corpus (dropped) (172)
 - 'accip.' ('accipere'): not found in the corpus
 - 'archiep.' ('archiepiscopus'): not found in the corpus
 - 'apost.' ('apostolus'): not found in the corpus
@@ -465,7 +483,6 @@ Read 1023 rows from data/RGAbkVerz.csv.
 - 'obs.' ('observantia'): not found in the corpus
 - 'occ.' ('occupare'): not found in the corpus
 - 'opidan.' ('opidanus'): not found in the corpus
-- 'opidan.' ('op idanus'): not found in the corpus
 - 'obl. sup. ann.' ('obligatio super annata'): not found in the corpus
 - 'obligatio sup. ann.' ('obligatio super annata'): not found in the corpus
 - 'parochial.' ('parochialis'): not found in the corpus
@@ -494,8 +511,8 @@ Read 1023 rows from data/RGAbkVerz.csv.
 - 'privileg.' ('privilegium'): not found in the corpus
 - 'proced.' ('procedere'): not found in the corpus
 - 'profess.' ('professor'): not found in the corpus
-- 'protomart.' ('prot omartir'): not found in the corpus
-- 'protonot.' ('prot onotarius'): not found in the corpus
+- 'protomart.' ('protomartir'): not found in the corpus
+- 'protonot.' ('protonotarius'): not found in the corpus
 - 'provinc.' ('provincia'): not found in the corpus
 - 'public.' ('publicus'): not found in the corpus
 - 'public.' ('publicare'): not found in the corpus
@@ -553,12 +570,12 @@ Read 1023 rows from data/RGAbkVerz.csv.
 
 ## Complex rows merged after stripping the notes (0)
 
-Split: 493 simple rows (467 abbreviations), 518 complex rows (242 abbreviations).
+Split: 495 simple rows (469 abbreviations), 513 complex rows (240 abbreviations).
 
 ## Morphology not automatically cleanable (kept as-is) (2)
 - [simple] 'dec.' / 'december': Deklination not automatically cleanable
-- [simple] 'prothomart.' / 'prot omartir': Wortstamm not automatically cleanable
+- [simple] 'prothomart.' / 'prothomartir': Wortstamm not automatically cleanable
 
 Validation `morphology_unattested`: 14 rows -> data/review/morphology_unattested.csv
-Validation `aufloesung_unattested`: 136 rows -> data/review/aufloesung_unattested.csv
+Validation `aufloesung_unattested`: 129 rows -> data/review/aufloesung_unattested.csv
 Validation `rg_volume_mismatch`: 282 rows -> data/review/rg_volume_mismatch.csv

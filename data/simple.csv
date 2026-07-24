@@ -326,8 +326,9 @@ official.,officialis,Offizial,siehe offic.,official -is,i ?,,official.,,,,,,,,"v
 omn.,omnes,,,omn -ium,kons. ?,omn.,omn.,,omn.,omn.,omn.,omn.,,,,,1|2|4|5|6|7
 omn. SS.,Omnium Sanctorum,Allerheiligen,siehe omn. ss.,,,omn. SS.,,,,,,,,,,,1|2|4|5|6
 omn. ss.,Omnium sanctorum,Allerheiligen,,,,,omn. ss.,,omn. ss.,omn. ss.,omn. ss.,,,,,,4
-op.,op idum,Stadt,p,opid/oppid -i; idum,o (n.); -,op.,op.,op.,op.,op.,op.,op.,op.,op.,"möglicherweise auch ""opid."" in der Bedeutung ""opidum"" verwendet",,1|2|3|4|5|6|7|8|9|10
-oppid.,op idanus,Stadtbewohner,p,opidan/oppidan -i; idanus,o; -,,,,,,,,,oppid.,"möglicherweise auch ""op."" in der Bedeutung ""opidanus"" verwendet",,10
+op.,opidum,Stadt,,opid/oppid -i,o (n.),op.,op.,op.,op.,op.,op.,op.,op.,op.,"möglicherweise auch ""opid."" in der Bedeutung ""opidum"" verwendet",,1|2|3|4|5|6|7|8|9|10
+opp.,oppidum,Stadt,siehe op.,opid/oppid -i,o (n.),,,,,opp.,,,,,"möglicherweise auch ""opid."" in der Bedeutung ""opidum"" verwendet",,5
+oppid.,oppidanus,Stadtbewohner,,opidan/oppidan -i,o,,,,,,,,,oppid.,"möglicherweise auch ""op."" in der Bedeutung ""opidanus"" verwendet",,10
 p. m.,per manus,,,,,,p. m.,p. m.,,p. m.,,p. m.,p. m.,p. m.,,,2|3|7|8|9|10
 p. o.,per obitum,durch Tod,,,,,p. o.,,p. o.,p. o.,p. o.,p. o.,p. o.,p. o.,,,2|4|6|7|8|9|10
 p.m.,per manus,,,,,,,,,,,,,,,,5
@@ -368,9 +369,9 @@ prim.,primarius,"der erste, vorrangige",,primari -i,o/a (Adj.),,,prim.,prim.,pri
 privil.,privilegium,Privileg,,privilegi -i,o (n.),,privil.,privil.,,privil.,privil.,privil.,privil.,privil.,,,2|3|4|5|6|7|8|9|10
 procur.,procurator,Prokurator,proc. in 2,procurator -is,kons.,,,procur.,procur.,procur.,procur.,procur.,procur.,procur.,"möglicherweise auch in anderen Bänden außer 2 Abk. ""proc."" für ""procurator"" verwendet",,3|4|5|6|7|8|9|10
 procurat.,procurator,Prokurator,proc. in 2,procurator -is,kons.,,,procurat.,procurat.,,,,,,"möglicherweise auch in anderen Bänden außer 2 Abk. ""proc."" für ""procurator"" verwendet",,10
-prothomart.,prot omartir,Erzmärtyrer,h,prot(h)martir -,,,,,prothomart.,,,prothomart.,,prothomart.,,,4|7|9|10
-prothon.,prot onotarius,"Protonotar, Notar in der päpstlichen Kanzlei",siehe prothonot.; h,protonotari/prothonotari -i; onotarius,o; -,,,,prothon.,,,prothon.,prothon.,,,,4|7|8
-prothonot.,prot onotarius,"Protonotar, Notar in der päpstlichen Kanzlei",h,protonotari/prothonotari -i; onotarius,o; -,,prothonot.,prothonot.,prothonot.,prothonot.,prothonot.,prothonot.,,prothonot.,,,2|3|4|5|6|7|9|10
+prothomart.,prothomartir,Erzmärtyrer,,prot(h)martir -,,,,,prothomart.,,,prothomart.,,prothomart.,,,4|7|9|10
+prothon.,prothonotarius,"Protonotar, Notar in der päpstlichen Kanzlei",siehe prothonot.,protonotari/prothonotari -i,o,,,,prothon.,,,prothon.,prothon.,,,,4|7|8
+prothonot.,prothonotarius,"Protonotar, Notar in der päpstlichen Kanzlei",,protonotari/prothonotari -i,o,,prothonot.,prothonot.,prothonot.,prothonot.,prothonot.,prothonot.,,prothonot.,,,2|3|4|5|6|7|9|10
 provin.,provincia,,"1,5,8; prov. in 2,4,7 laut Abk-Verz.",provinci -e,a,provin.,,,,provin.,,,provin.,,"und, möglicherweise in allen Bänden, Abk. ""prov."" für ""provincia"" verwendet",,1|3|4|5|8
 quib.,quibus,welchen,,,,,quib.,,quib.,quib.,quib.,quib.,quib.,quib.,,,2|4|5|6|7|8|9|10
 quond.,quondam,"früher, verstorben",,,,,quond.,,quond.,quond.,quond.,quond.,quond.,quond.,,,2|4|5|6|7|8|9|10
@@ -381,13 +382,14 @@ R. e.,Romana Ecclesia,Römische Kirche,siehe R. E.,,,,R. e.,,,,,,,,,,2
 R. R.,Romanorum Rex,Römischer König,,,,,,,,R. R.,R. R.,R. R.,R. R.,,ausgeschrieben: Romanorum Rex,,4|6|7|8|10
 recip.,recipere,"empfangen, aufnehmen",rec. in 4 laut Abk-Verz,"recipi, recep, recept",gem.-Konj.,,recip.,recip.,recip.,recip.,recip.,recip.,recip.,recip.,,,2|3|4|5|6|7|8|9|10
 rect.,rector,"Rektor, Pfarrer; (Schul-)Meister; Meister (eines Hospitals)",,rector -is,kons.,,rect.,rect.,rect.,rect.,rect.,rect.,rect.,rect.,,,2|3|4|5|6|7|8|9|10
-red.,red itus,Einkünfte,d,redit/reddit -us; itus,u; -,,red.,,red.,,red.,red.,,red.,ausgeschrieben: redditus; reditus,,2|4|5|6|7|9|10
-reddit.,red itus,Einkünfte,d,redit/reddit -us; itus,u; -,,,reddit.,reddit.,,,,,,ausgeschrieben: redditus; reditus,,3|4|5|10
+red.,redditus,Einkünfte,,redit/reddit -us,u,,red.,,red.,,red.,red.,,red.,ausgeschrieben: redditus; reditus,,2|4|5|6|7|9|10
+redd.,redditus,Einkünfte,siehe red.,redit/reddit -us,u,,,,redd.,redd.,,,,,ausgeschrieben: redditus; reditus,,5
+reddit.,redditus,Einkünfte,,redit/reddit -us,u,,,reddit.,reddit.,,,,,,ausgeschrieben: redditus; reditus,,3|4|5|10
 refer.,referendarius,Referendar (des Papstes),,referendari -i,o,,refer.,refer.,refer.,refer.,refer.,refer.,refer.,refer.,,,2|3|4|5|6|7|8|9|10
 rem.,remissio,Vergebung (der Sünden),,remission -is,kons.,rem.,,,rem.,rem.,rem.,rem.,rem.,rem.,,,1|3|4|5|6|7|8|9|10
 reman.,remanere,,"3,6 (+remanens)","remane, remans, remans",e-Konj.,,,reman.,,,,,,,,,3
 remitt.,remittere,,"angeblich in 5, aber inexistent als Abk.","remitt, remis, remiss",kons.-Konj.,,,,,,,,,,,,5
-renen.,r enensis,rheinischer (Gulden),kommt ausgeschrieben nicht vor; h; fl.,,,,,,,,,renen.,renen.,renen.,,,7|8|9|10
+renen.,renensis,rheinischer (Gulden),kommt ausgeschrieben nicht vor; fl.,,,,,,,,,renen.,renen.,renen.,,,7|8|9|10
 reservat.,reservatio,Reservation,siehe reserv.,reservation -is,kons.,,,reservat.,,,,,,,,,2|5|10
 resident.,residentia,Residenz(pflicht),siehe resid.,residenti -e,a,,,,resident.,,,,,,,,5|10
 resp.,respective,,,,,resp.,,resp.,,,,,,,,,1|3
