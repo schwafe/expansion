@@ -11,6 +11,7 @@ data/review/diff_*.csv
 data/ablaesse.csv
 data/ablaesse_texts.csv
 data/rg_text.csv
+data/normalized_texts.csv
 # intermediate results that aren't that interesting yet (but which I might upload later)
 data/gemma4
 # uv's files (if this becomes a proper project, I'll want to upload them later, but for now that's not necessary or helpful)

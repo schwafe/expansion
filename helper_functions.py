@@ -155,10 +155,14 @@ def determine_candidates(vita: pl.DataFrame, simple: pl.DataFrame, complex: pl.D
     return {row["Abkürzung"]: row["Auflösung"] for row in candidates.iter_rows(named=True)}
 
 
-def vita_df_to_text(vita:pl.DataFrame):
+def vita_df_to_text(vita:pl.DataFrame) -> str:
     header = vita.get_column("header_no_tags").drop_nulls().item() # implicit assertion that there is just one header
     regests = vita.sort(by=["volume", "nr_RG", "nr_suffix"]).get_column("regest_no_tags").drop_nulls().implode().item().to_list()
     return f"{header}\n{'\n'.join(regests)}"
+
+def vita_dfs_to_vita_texts(df:pl.DataFrame) -> pl.DataFrame:
+    texts = df.group_by(["volume", "nr_RG"]).map_groups(lambda group: pl.concat((group.select(["volume", "nr_RG"]).unique(), pl.DataFrame({"text": vita_df_to_text(group)})), how="horizontal", strict=True))
+    return df.group_by(["volume", "nr_RG"]).first().select(["volume", "nr_RG"]).join(texts, on=["volume", "nr_RG"])
 
 def text_to_vita_df(text: str, volume: int, nr: int):
     pieces = text.split('\n')
