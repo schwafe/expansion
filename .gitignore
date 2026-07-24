@@ -6,6 +6,12 @@ data/rg.csv
 data/review/corpus_cache.json
 # one-time comparison of a re-extraction with the CSVs on disk (extract_glossary.py --diff-old)
 data/review/diff_*.csv
+# different forms of the same data (for more easily comparing text etc.)
+data/ablaesse.csv
+data/ablaesse_texts.csv
+data/rg_text.csv
+# intermediate results that aren't that interesting yet (but which I might upload later)
+data/gemma4
 # uv's files (if this becomes a proper project, I'll want to upload them later, but for now that's not necessary or helpful)
 uv.lock
 pyproject.toml
