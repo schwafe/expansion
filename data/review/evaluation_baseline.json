@@ -1,0 +1,29 @@
+{
+  "gold": "data/to_compare_with/fable_expanded.csv",
+  "stages": {
+    "once": {
+      "word_accuracy": 0.590095,
+      "form_accuracy": 0.326958,
+      "expanded": 0.604792,
+      "scoreable": 4967
+    },
+    "twice": {
+      "word_accuracy": 0.879203,
+      "form_accuracy": 0.434266,
+      "expanded": 0.936179,
+      "scoreable": 4967
+    },
+    "thrice": {
+      "word_accuracy": 0.92873,
+      "form_accuracy": 0.46366,
+      "expanded": 0.99235,
+      "scoreable": 4967
+    },
+    "normalized": {
+      "word_accuracy": 0.928528,
+      "form_accuracy": 0.648279,
+      "expanded": 0.99235,
+      "scoreable": 4967
+    }
+  }
+}

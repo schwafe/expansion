@@ -1,0 +1,826 @@
+#!/usr/bin/env python3
+"""
+Step 5: measuring the quality of the expansion against the gold labels.
+
+`data/to_compare_with/fable_expanded.csv` holds a hand-checked expansion for
+part of the vitae the workflow has processed. This script compares the output of
+every pipeline stage with it, so a change to a prompt, a model or a glossary
+entry can be judged by a number instead of by reading the texts.
+
+The unit of measurement is the single abbreviation, not the text: a text-level
+diff mixes one expansion error with twenty inflection differences and tells you
+nothing actionable. The abbreviated source text is the anchor -- for each vita
+the source is aligned with the gold and with the stage output at word level, so
+every abbreviation of the source gets a gold expansion and a system expansion
+that are compared directly.
+
+The alignment works because the expansion steps only ever replace abbreviations:
+every word that was not abbreviated reappears unchanged and in order in both
+texts and thus anchors the alignment (the same property `normalize.py` relies
+on). Inside a changed block the abbreviations are re-anchored on the expansion
+that continues their stem (`eccl.` -> `ecclesiam`), which resolves runs such as
+`o. s. Ben. Terdon. dioc.` -> `ordinis sancti Benedicti Terdonensis diocesis`.
+Occurrences that cannot be anchored are reported as `unaligned` and left out of
+every rate rather than silently scored.
+
+Two rates are reported per stage, because a single exact-match number would
+score `thrice_expanded` (deliberately base forms) as broken:
+
+- word accuracy -- was the right word chosen? This is what steps 1-3 do.
+- form accuracy -- is the text right as it stands? This is what step 4 moves.
+
+Usage:
+    python evaluate.py                  # print the summary
+    python evaluate.py --write          # also write data/review/evaluation_*
+    python evaluate.py --save-baseline  # store the run as the baseline
+    python evaluate.py --baseline       # print the deltas to the baseline
+"""
+
+import argparse
+import json
+import re
+from collections import Counter, defaultdict
+from dataclasses import dataclass, field
+from difflib import SequenceMatcher
+from pathlib import Path
+
+import polars as pl
+
+from helper_functions import vita_dfs_to_vita_texts
+from normalize import diocese_entries
+from paradigm import ADJ_ENDINGS, NOUN_ENDINGS, entry_forms
+
+DATA_DIR = Path("data")
+REVIEW_DIR = DATA_DIR / "review"
+GOLD_DEFAULT = DATA_DIR / "to_compare_with" / "fable_expanded.csv"
+SOURCE = DATA_DIR / "ablaesse_texts.csv"
+BASELINE = REVIEW_DIR / "evaluation_baseline.json"
+
+# the pipeline stages, in order; the label is what the report calls them
+STAGES: list[tuple[str, str, Path]] = [
+    ("source", "abbreviated text", SOURCE),
+    ("once", "step 1 (rule)", DATA_DIR / "once_expanded.csv"),
+    ("twice", "step 2 (candidates)", DATA_DIR / "twice_expanded.csv"),
+    ("thrice", "step 3 (mined)", DATA_DIR / "thrice_expanded.csv"),
+    ("normalized", "step 4 (normalized)", DATA_DIR / "normalized.csv"),
+]
+
+# the step each stage attributes an expansion to (the source expands nothing)
+STEP_OF_STAGE = {
+    "once": "step 1 (rule)",
+    "twice": "step 2 (candidates)",
+    "thrice": "step 3 (mined)",
+    "normalized": "step 4 (normalized)",
+}
+
+# same token notion as normalize.py, plus numbers so dates stay anchors
+TOKEN = re.compile(r"[A-Za-z]+\.?|\d+")
+
+# shortest glossary expansion that may anchor an abbreviation (build_anchor_index)
+MIN_ANCHOR = 4
+
+# shortest stem the `inflectional_variants` fallback accepts
+MIN_STEM = 3
+
+# Mismatches that are errors of the gold, not of the pipeline. Following the
+# CORRECTIONS convention of extract_glossary.py every entry carries its reason,
+# and an entry that no longer matches any occurrence aborts the run, so the
+# table cannot go stale. Grows as data/review/evaluation_mismatches.csv is
+# reviewed, so the review effort accumulates instead of being repeated.
+# (volume, nr_RG, abbreviation, gold_text, reason)
+KNOWN_GOLD_ERRORS: list[tuple[int, int, str, str, str]] = []
+
+
+# --------------------------------------------------------------------------
+# orthography and lemmas
+# --------------------------------------------------------------------------
+
+def orthographic_key(word: str) -> str:
+    """
+    The spelling-insensitive key of a word. The RG (and the gold) use the
+    medieval spellings interchangeably, so `opidum`/`oppidum`,
+    `parochialis`/`parrochialis` and `ecclesiae`/`ecclesie` must not count as
+    different expansions.
+    """
+    key = word.lower().strip(".,;:?!()[]")
+    key = key.replace("ae", "e").replace("oe", "e")
+    key = key.replace("j", "i").replace("v", "u").replace("y", "i")
+    key = re.sub(r"(.)\1+", r"\1", key)  # opidum == oppidum
+    return key
+
+
+def phrase_key(phrase: str) -> str:
+    """The orthographic key of a whole expansion (which may be several words)."""
+    return " ".join(orthographic_key(word) for word in phrase.split() if word)
+
+
+# the case endings of paradigm.py, in orthographic-key form; "" lets a bare
+# stem count as a form (used by `inflectional_variants`)
+CASE_ENDINGS: set[str] = {""} | {
+    orthographic_key(ending)
+    for table in (NOUN_ENDINGS, ADJ_ENDINGS)
+    for singular, plural in table.values()
+    for ending in singular | plural
+}
+
+
+def glossary_entries(*paths: Path) -> list[tuple[str, str, str]]:
+    """(Auflösung, Wortstamm, Deklination) triples from the glossary CSVs."""
+    entries = []
+    for path in paths:
+        table = pl.read_csv(path).select(["Auflösung", "Wortstamm", "Deklination"])
+        entries.extend(table.iter_rows())
+    return entries
+
+
+def build_anchor_index(*paths: Path) -> dict[str, set[str]]:
+    """
+    abbreviation -> the orthographic keys an expansion of it may start with.
+
+    Most expansions continue the abbreviation (`eccl.` -> `ecclesiam`), which
+    the stem rule in `anchor` covers on its own. The glossary supplies the ones
+    that do not: `aep.` -> `archiepiscopus`, `d.` -> `quondam`. The inflected
+    forms are included, so an anchor is found in the normalized text as well.
+
+    Words shorter than `MIN_ANCHOR` are left out: they are the function words
+    (`et` for `etc.`) that occur all over the expansion of the *neighbouring*
+    abbreviation and would anchor there instead.
+    """
+    index: dict[str, set[str]] = defaultdict(set)
+    for path in paths:
+        table = pl.read_csv(path).select(
+            ["Abkürzung", "Auflösung", "Wortstamm", "Deklination"]
+        )
+        for abbreviation, aufloesung, wortstamm, deklination in table.iter_rows():
+            if not abbreviation or not aufloesung:
+                continue
+            first = aufloesung.split()[0]
+            keys = {orthographic_key(first)}
+            for word, forms in entry_forms(aufloesung, wortstamm, deklination) or []:
+                if word != first:
+                    continue  # only the first word can start the expansion
+                keys.update(orthographic_key(form) for form in forms or ())
+            index[abbreviation].update(key for key in keys if len(key) >= MIN_ANCHOR)
+    return dict(index)
+
+
+def build_lemma_index(entries) -> dict[str, set[str]]:
+    """
+    orthographic key of a form -> the base forms it can belong to.
+
+    Built from the same paradigms the normalisation step offers the model
+    (`paradigm.entry_forms`), so "the right word in the wrong form" is judged by
+    exactly the forms step 4 is allowed to choose from.
+    """
+    index: dict[str, set[str]] = defaultdict(set)
+    for aufloesung, wortstamm, deklination in entries:
+        for word, forms in entry_forms(aufloesung, wortstamm, deklination) or []:
+            index[orthographic_key(word)].add(word)
+            for form in forms or ():
+                index[orthographic_key(form)].add(word)
+    return dict(index)
+
+
+def shared_prefix(a: str, b: str) -> int:
+    common = 0
+    for x, y in zip(a, b):
+        if x != y:
+            break
+        common += 1
+    return common
+
+
+def inflectional_variants(a: str, b: str) -> bool:
+    """
+    Whether two orthographic keys look like two forms of one word: a shared
+    stem of at least MIN_STEM letters, and on both sides nothing but a case
+    ending (the endings `paradigm.py` attaches to a stem).
+
+    This is the fallback for expansions the glossary knows no morphology for
+    (step 3 mines them from the corpus). Requiring real endings is what keeps
+    it from accepting a derivation: `nunti|o` / `nunti|us` passes, but
+    `assigna|tio` / `assigna|ndi` and `Terdon|is` / `Terdon|ensis` do not.
+    """
+    for stem in range(shared_prefix(a, b), MIN_STEM - 1, -1):
+        if a[stem:] in CASE_ENDINGS and b[stem:] in CASE_ENDINGS:
+            return True
+    return False
+
+
+def same_lemma(gold: str, system: str, lemma_index: dict[str, set[str]]) -> str | None:
+    """
+    "wrong_form" if the two expansions are forms of the same word, "wrong_form?"
+    if only the prefix heuristic says so (for expansions outside the glossary:
+    step 3's corpus-mined words and the diocese adjectives), None if they are
+    different words.
+
+    Multi-word expansions are compared word by word: they are the same lemma
+    only if they have the same length and every word matches.
+    """
+    gold_words, system_words = gold.split(), system.split()
+    if not gold_words or len(gold_words) != len(system_words):
+        return None
+
+    verdicts = set()
+    for gold_word, system_word in zip(gold_words, system_words):
+        gold_key, system_key = orthographic_key(gold_word), orthographic_key(system_word)
+        if gold_key == system_key:
+            continue
+        lemmas = lemma_index.get(gold_key, set()) & lemma_index.get(system_key, set())
+        if lemmas:
+            verdicts.add("wrong_form")
+            continue
+        if inflectional_variants(gold_key, system_key):
+            verdicts.add("wrong_form?")
+            continue
+        return None
+    if not verdicts:
+        return None  # every word matched: not a lemma difference at all
+    return "wrong_form?" if "wrong_form?" in verdicts else "wrong_form"
+
+
+# --------------------------------------------------------------------------
+# alignment
+# --------------------------------------------------------------------------
+
+def tokenize(text: str) -> list[str]:
+    return TOKEN.findall(text)
+
+
+def is_abbreviation(token: str) -> bool:
+    return token.endswith(".")
+
+
+def align(
+    source: list[str], target: list[str], anchors: dict[str, set[str]] | None = None
+) -> list[tuple[int, int] | None]:
+    """
+    For every source token the span of target tokens it corresponds to, or None
+    where no span could be determined.
+
+    Unchanged tokens map one to one; a changed block is sub-aligned with
+    `subalign` so that each abbreviation of the block gets its own expansion.
+    """
+    matcher = SequenceMatcher(a=source, b=target, autojunk=False)
+    spans: list[tuple[int, int] | None] = [None] * len(source)
+    for op, i1, i2, j1, j2 in matcher.get_opcodes():
+        if op == "equal":
+            for k in range(i2 - i1):
+                spans[i1 + k] = (j1 + k, j1 + k + 1)
+        elif op == "delete":
+            for k in range(i1, i2):
+                spans[k] = (j1, j1)  # dropped by the target: empty span
+        elif op == "replace":
+            for k, span in enumerate(subalign(source[i1:i2], target[j1:j2], anchors)):
+                spans[i1 + k] = None if span is None else (j1 + span[0], j1 + span[1])
+        # "insert" adds target tokens that belong to no source token
+    return spans
+
+
+def anchor(
+    source_token: str,
+    target_tokens: list[str],
+    start: int,
+    anchors: dict[str, set[str]] | None = None,
+) -> int | None:
+    """
+    Index of the first target token at or after `start` that can be the
+    beginning of the source token's expansion: normally one whose orthographic
+    key continues the abbreviation's stem (`eccl.` anchors on `ecclesiam`,
+    `s.` on `sancti`), otherwise one the glossary lists as an expansion of it
+    (`aep.` -> `archiepiscopus`, see `build_anchor_index`).
+    """
+    stem = orthographic_key(source_token)
+    if not stem:
+        return None
+    known = (anchors or {}).get(source_token, set())
+    for index in range(start, len(target_tokens)):
+        key = orthographic_key(target_tokens[index])
+        if key.startswith(stem) or key in known:
+            return index
+    return None
+
+
+def subalign(
+    source: list[str], target: list[str], anchors: dict[str, set[str]] | None = None
+) -> list[tuple[int, int] | None]:
+    """
+    Distribute a changed block's target tokens over its source tokens.
+
+    Each source token is anchored on the target token that begins its
+    expansion; its span then reaches to the start of the next source token's
+    span, so both a one-to-many expansion (`m. evoc.` -> `mandatum evocandi`)
+    and a many-to-one one are covered without two source tokens ever claiming
+    the same target token.
+
+    A single source token between two anchored ones gets exactly what lies
+    between them -- that is how `aep. etc.` -> `archiepiscopus, prepositus,
+    decanus et canonici` is split, where `etc.` cannot be anchored. A run of
+    several unanchored tokens is genuinely ambiguous: its tokens are given a
+    proportional share so the block's boundaries stay consistent, but they are
+    reported as `unaligned` instead of being scored.
+    """
+    if len(source) == len(target) == 1:
+        return [(0, 1)]
+
+    found: dict[int, int] = {}
+    position = 0
+    for index, token in enumerate(source):
+        at = anchor(token, target, position, anchors)
+        if at is not None:
+            found[index] = at
+            position = at + 1
+
+    starts: list[int] = [0] * len(source)
+    aligned: list[bool] = [False] * len(source)
+    index = 0
+    while index < len(source):
+        if index in found:
+            starts[index], aligned[index] = found[index], True
+            index += 1
+            continue
+        end = index
+        while end < len(source) and end not in found:
+            end += 1
+        low = 0 if index == 0 else starts[index - 1] + (1 if index - 1 in found else 0)
+        high = found[end] if end < len(source) else len(target)
+        high = max(high, low)
+        if end - index == 1:
+            starts[index], aligned[index] = low, True
+        else:
+            width = (high - low) / (end - index)
+            for k in range(index, end):
+                starts[k] = low + round(width * (k - index))
+        index = end
+
+    spans: list[tuple[int, int] | None] = []
+    for index in range(len(source)):
+        stop = starts[index + 1] if index + 1 < len(source) else len(target)
+        spans.append((starts[index], max(stop, starts[index])) if aligned[index] else None)
+    return spans
+
+
+# --------------------------------------------------------------------------
+# scoring
+# --------------------------------------------------------------------------
+
+@dataclass
+class Occurrence:
+    """One abbreviation of one vita, with what the gold and a stage made of it."""
+
+    volume: int
+    nr_RG: int
+    abbreviation: str
+    gold: str
+    context: str
+    stage_expansions: dict[str, str | None] = field(default_factory=dict)
+    verdicts: dict[str, str] = field(default_factory=dict)
+    step: str | None = None  # the stage that expanded it (in the last stage)
+
+
+def verdict(gold: str, system: str | None, lemma_index) -> str:
+    """The verdict for one abbreviation in one stage (see the module docstring)."""
+    if system is None:
+        return "unaligned"
+    if not system.strip():
+        return "not_expanded"
+    if any(is_abbreviation(token) for token in system.split()):
+        return "not_expanded"
+    if gold == system:
+        return "exact"
+    if phrase_key(gold) == phrase_key(system):
+        return "orthographic"
+    return same_lemma(gold, system, lemma_index) or "wrong_word"
+
+
+def span_text(tokens: list[str], span: tuple[int, int] | None) -> str | None:
+    if span is None:
+        return None
+    return " ".join(tokens[span[0]:span[1]])
+
+
+def evaluate_vita(
+    volume: int,
+    nr_RG: int,
+    source_text: str,
+    gold_text: str,
+    stage_texts: dict[str, str],
+    lemma_index: dict[str, set[str]],
+    anchors: dict[str, set[str]] | None = None,
+) -> list[Occurrence]:
+    """Every abbreviation of one vita, scored in every stage."""
+    source = tokenize(source_text)
+    gold_tokens = tokenize(gold_text)
+    gold_spans = align(source, gold_tokens, anchors)
+
+    stage_tokens = {name: tokenize(text) for name, text in stage_texts.items()}
+    stage_spans = {
+        name: align(source, tokens, anchors) for name, tokens in stage_tokens.items()
+    }
+
+    occurrences = []
+    for index, token in enumerate(source):
+        if not is_abbreviation(token):
+            continue
+        gold = span_text(gold_tokens, gold_spans[index])
+        occurrence = Occurrence(
+            volume=volume,
+            nr_RG=nr_RG,
+            abbreviation=token,
+            gold=gold if gold is not None else "",
+            context=" ".join(source[max(0, index - 4):index + 5]),
+        )
+        for name in stage_texts:
+            occurrence.stage_expansions[name] = span_text(
+                stage_tokens[name], stage_spans[name][index]
+            )
+
+        if gold is None:
+            occurrence.verdicts = {name: "unaligned" for name in stage_texts}
+        elif not gold.strip() or any(is_abbreviation(w) for w in gold.split()):
+            # the gold left the abbreviation standing (etc., apr., initials) or
+            # dropped the passage: there is nothing to compare against
+            occurrence.verdicts = {name: "no_gold_label" for name in stage_texts}
+        else:
+            occurrence.verdicts = {
+                name: verdict(gold, occurrence.stage_expansions[name], lemma_index)
+                for name in stage_texts
+            }
+        occurrence.step = attribute(occurrence, source[index])
+        occurrences.append(occurrence)
+    return occurrences
+
+
+def attribute(occurrence: Occurrence, abbreviation: str) -> str | None:
+    """
+    The step that produced the final expansion: the first stage whose expansion
+    differs from the abbreviation, refined to step 4 if the normalisation
+    changed the form again.
+    """
+    step = None
+    previous = abbreviation
+    for name in STEP_OF_STAGE:
+        current = occurrence.stage_expansions.get(name)
+        if current is None:
+            continue
+        if step is None and not any(is_abbreviation(w) for w in current.split()):
+            step = STEP_OF_STAGE[name]
+        elif step is not None and current != previous:
+            step = STEP_OF_STAGE[name]  # a later step changed it again
+        previous = current
+    return step
+
+
+# --------------------------------------------------------------------------
+# loading
+# --------------------------------------------------------------------------
+
+def load_texts(path: Path, keys: pl.DataFrame) -> dict[tuple[int, int], str]:
+    """
+    One text per vita, restricted to `keys`. Files that are already one row per
+    vita (a `text` column) are used as they are; the per-regest stage outputs
+    are collapsed with the same helper the pipeline itself uses.
+    """
+    table = pl.read_csv(path)
+    table = table.join(keys, on=["volume", "nr_RG"], how="inner")
+    if "text" not in table.columns:
+        table = vita_dfs_to_vita_texts(table)
+    return {(row["volume"], row["nr_RG"]): row["text"] for row in table.iter_rows(named=True)}
+
+
+def collect(gold_path: Path) -> tuple[list[Occurrence], list[str], dict]:
+    """Score every vita that has a gold label. Returns (occurrences, stages, info)."""
+    gold_table = pl.read_csv(gold_path)
+    keys = gold_table.select(["volume", "nr_RG"]).unique()
+    gold = {(row["volume"], row["nr_RG"]): row["text"] for row in gold_table.iter_rows(named=True)}
+
+    texts = {name: load_texts(path, keys) for name, _, path in STAGES}
+    source = texts.pop("source")
+    stage_names = [name for name, _, _ in STAGES if name != "source"]
+
+    scored = sorted(set(gold) & set(source) & set.intersection(*(set(texts[n]) for n in stage_names)))
+    occurrences = []
+    lemma_index = build_lemma_index(
+        glossary_entries(DATA_DIR / "simple.csv", DATA_DIR / "complex.csv")
+        + diocese_entries(pl.read_csv(DATA_DIR / "dioceses.csv")["expansion"].to_list())
+    )
+    anchors = build_anchor_index(DATA_DIR / "simple.csv", DATA_DIR / "complex.csv")
+    for key in scored:
+        occurrences.extend(
+            evaluate_vita(
+                key[0], key[1], source[key], gold[key],
+                {name: texts[name][key] for name in stage_names}, lemma_index, anchors,
+            )
+        )
+
+    info = {
+        "gold": str(gold_path),
+        "vitae_with_gold": len(gold),
+        "vitae_scored": len(scored),
+        "vitae_missing": sorted(set(gold) - set(scored)),
+    }
+    return occurrences, stage_names, info
+
+
+def drop_known_gold_errors(occurrences: list[Occurrence]) -> list[Occurrence]:
+    """
+    Remove the documented gold errors and abort on entries that no longer match
+    (the table must not go stale, cf. extract_glossary.CORRECTIONS).
+    """
+    if not KNOWN_GOLD_ERRORS:
+        return occurrences
+    wanted = {(v, n, a, g) for v, n, a, g, _ in KNOWN_GOLD_ERRORS}
+    kept, matched = [], set()
+    for occurrence in occurrences:
+        key = (occurrence.volume, occurrence.nr_RG, occurrence.abbreviation, occurrence.gold)
+        if key in wanted:
+            matched.add(key)
+            continue
+        kept.append(occurrence)
+    stale = wanted - matched
+    if stale:
+        raise SystemExit(
+            "KNOWN_GOLD_ERRORS entries match nothing any more:\n"
+            + "\n".join(f"  {entry}" for entry in sorted(stale))
+        )
+    return kept
+
+
+# --------------------------------------------------------------------------
+# summary and report
+# --------------------------------------------------------------------------
+
+CORRECT_WORD = {"exact", "orthographic", "wrong_form", "wrong_form?"}
+CORRECT_FORM = {"exact", "orthographic"}
+SCOREABLE = CORRECT_WORD | {"wrong_word", "not_expanded"}
+
+
+def rates(counts: Counter) -> dict:
+    scoreable = sum(counts[v] for v in SCOREABLE)
+    return {
+        "occurrences": sum(counts.values()),
+        "scoreable": scoreable,
+        "word_accuracy": sum(counts[v] for v in CORRECT_WORD) / scoreable if scoreable else 0.0,
+        "form_accuracy": sum(counts[v] for v in CORRECT_FORM) / scoreable if scoreable else 0.0,
+        "expanded": (scoreable - counts["not_expanded"]) / scoreable if scoreable else 0.0,
+        "counts": dict(counts),
+    }
+
+
+def summarize(occurrences: list[Occurrence], stages: list[str], info: dict) -> dict:
+    per_stage = {}
+    for name in stages:
+        per_stage[name] = rates(Counter(o.verdicts[name] for o in occurrences))
+
+    final = stages[-1]
+    by_abbreviation = {}
+    for abbreviation in {o.abbreviation for o in occurrences}:
+        subset = [o for o in occurrences if o.abbreviation == abbreviation]
+        counts = Counter(o.verdicts[final] for o in subset)
+        wrong = Counter(
+            o.stage_expansions[final]
+            for o in subset
+            if o.verdicts[final] in {"wrong_word", "wrong_form", "wrong_form?"}
+        )
+        entry = rates(counts)
+        entry["most_frequent_error"] = wrong.most_common(1)[0][0] if wrong else ""
+        entry["gold_variants"] = ", ".join(sorted({o.gold for o in subset})[:5])
+        by_abbreviation[abbreviation] = entry
+
+    by_step = {}
+    for step in sorted({o.step for o in occurrences if o.step}):
+        subset = [o for o in occurrences if o.step == step]
+        by_step[step] = rates(Counter(o.verdicts[final] for o in subset))
+
+    return {"info": info, "stages": per_stage, "by_abbreviation": by_abbreviation,
+            "by_step": by_step, "final_stage": final}
+
+
+def headline(summary: dict) -> dict:
+    """The numbers that --baseline compares (everything else is detail)."""
+    return {
+        name: {key: round(stage[key], 6) for key in
+               ("word_accuracy", "form_accuracy", "expanded")}
+        | {"scoreable": stage["scoreable"]}
+        for name, stage in summary["stages"].items()
+    }
+
+
+def percent(value: float) -> str:
+    return f"{value * 100:5.1f}%"
+
+
+def render_report(summary: dict, occurrences: list[Occurrence]) -> str:
+    info, stages = summary["info"], summary["stages"]
+    final = summary["final_stage"]
+    labels = {name: label for name, label, _ in STAGES}
+
+    lines = [
+        "# Evaluation against the gold labels",
+        "",
+        f"Gold: `{info['gold']}` -- {info['vitae_scored']} of {info['vitae_with_gold']} "
+        "vitae scored (the rest are missing from a pipeline stage).",
+        "",
+        "## Accuracy per stage",
+        "",
+        "Word accuracy asks whether the right word was chosen (steps 1-3), form "
+        "accuracy whether the text is right as it stands (step 4).",
+        "",
+        "| stage | scoreable | expanded | word accuracy | form accuracy | exact | "
+        "orthographic | wrong form | wrong form? | wrong word | not expanded |",
+        "| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
+    ]
+    for name, stage in stages.items():
+        counts = stage["counts"]
+        lines.append(
+            f"| {labels[name]} | {stage['scoreable']} | {percent(stage['expanded'])} | "
+            f"{percent(stage['word_accuracy'])} | {percent(stage['form_accuracy'])} | "
+            f"{counts.get('exact', 0)} | {counts.get('orthographic', 0)} | "
+            f"{counts.get('wrong_form', 0)} | {counts.get('wrong_form?', 0)} | "
+            f"{counts.get('wrong_word', 0)} | {counts.get('not_expanded', 0)} |"
+        )
+
+    total = stages[final]["occurrences"]
+    no_label = stages[final]["counts"].get("no_gold_label", 0)
+    unaligned = stages[final]["counts"].get("unaligned", 0)
+    lines += [
+        "",
+        "## Reliability",
+        "",
+        f"- {total} abbreviation occurrences in the source of the scored vitae.",
+        f"- {no_label} ({no_label / total:.1%}) have no gold label: the gold left the "
+        "abbreviation standing (`etc.`, month names, place initials) or dropped the "
+        "passage. They are excluded from every rate -- the pipeline may well have "
+        "expanded them correctly.",
+        f"- {unaligned} ({unaligned / total:.1%}) could not be aligned and are excluded "
+        "as well. A rising number here means the metric, not the pipeline, is degrading.",
+        f"- {stages[final]['counts'].get('wrong_form?', 0)} `wrong form?` verdicts rest on "
+        "the stem-and-ending check that stands in for the paradigm where the glossary "
+        "knows no morphology (step 3 mines those words from the corpus). They count as "
+        "the right word, so word accuracy carries that much uncertainty. Step 4 cannot "
+        "change a word, only its form -- a small dip in word accuracy there is this "
+        "check reacting to the new ending, not the pipeline losing a word.",
+    ]
+    if KNOWN_GOLD_ERRORS:
+        lines += ["", f"- {len(KNOWN_GOLD_ERRORS)} documented gold errors were excluded "
+                  "(see `KNOWN_GOLD_ERRORS` in evaluate.py)."]
+
+    lines += ["", "## Errors by step", "",
+              "Which step produced the expansion that is finally in the text.", "",
+              "| step | expansions | word accuracy | form accuracy |",
+              "| --- | ---: | ---: | ---: |"]
+    for step, stage in summary["by_step"].items():
+        lines.append(f"| {step} | {stage['scoreable']} | "
+                     f"{percent(stage['word_accuracy'])} | {percent(stage['form_accuracy'])} |")
+
+    lines += ["", "## Worst abbreviations", "",
+              "Sorted by how many occurrences fixing them would gain.", "",
+              "| abbreviation | occurrences | word accuracy | form accuracy | "
+              "most frequent wrong expansion | gold |",
+              "| --- | ---: | ---: | ---: | --- | --- |"]
+    ranked = sorted(
+        summary["by_abbreviation"].items(),
+        key=lambda item: -item[1]["scoreable"] * (1 - item[1]["form_accuracy"]),
+    )
+    for abbreviation, stage in ranked[:25]:
+        if stage["scoreable"] == 0 or stage["form_accuracy"] == 1.0:
+            continue
+        lines.append(
+            f"| `{abbreviation}` | {stage['scoreable']} | {percent(stage['word_accuracy'])} | "
+            f"{percent(stage['form_accuracy'])} | {stage['most_frequent_error']} | "
+            f"{stage['gold_variants']} |"
+        )
+
+    lines += ["", "## Sample mismatches", "",
+              "The full list is in `evaluation_mismatches.csv`.", ""]
+    for occurrence in occurrences:
+        if occurrence.verdicts[final] not in {"wrong_word", "not_expanded"}:
+            continue
+        lines.append(
+            f"- {occurrence.volume}/{occurrence.nr_RG} `{occurrence.abbreviation}`: "
+            f"gold **{occurrence.gold}**, system **{occurrence.stage_expansions[final]}** "
+            f"({occurrence.step}) -- _{occurrence.context}_"
+        )
+        if len(lines) > 120 + len(stages):
+            lines.append("- ...")
+            break
+    return "\n".join(lines) + "\n"
+
+
+def mismatch_table(occurrences: list[Occurrence], stages: list[str]) -> pl.DataFrame:
+    final = stages[-1]
+    rows = [
+        {
+            "volume": o.volume,
+            "nr_RG": o.nr_RG,
+            "abbreviation": o.abbreviation,
+            "gold": o.gold,
+            "system": o.stage_expansions[final] or "",
+            "verdict": o.verdicts[final],
+            "step": o.step or "",
+            **{f"verdict_{name}": o.verdicts[name] for name in stages[:-1]},
+            **{f"expansion_{name}": o.stage_expansions[name] or "" for name in stages[:-1]},
+            "context": o.context,
+        }
+        for o in occurrences
+        if o.verdicts[final] != "exact"
+    ]
+    if not rows:
+        return pl.DataFrame()
+    return pl.DataFrame(rows).sort(["verdict", "abbreviation", "volume", "nr_RG"])
+
+
+def abbreviation_table(summary: dict) -> pl.DataFrame:
+    rows = [
+        {
+            "abbreviation": abbreviation,
+            "occurrences": stage["scoreable"],
+            "word_accuracy": round(stage["word_accuracy"], 4),
+            "form_accuracy": round(stage["form_accuracy"], 4),
+            "no_gold_label": stage["counts"].get("no_gold_label", 0),
+            "most_frequent_error": stage["most_frequent_error"],
+            "gold_variants": stage["gold_variants"],
+        }
+        for abbreviation, stage in summary["by_abbreviation"].items()
+    ]
+    return pl.DataFrame(rows).with_columns(
+        (pl.col("occurrences") * (1 - pl.col("form_accuracy"))).alias("potential_gain")
+    ).sort("potential_gain", descending=True)
+
+
+def render_baseline_diff(current: dict, previous: dict) -> str:
+    labels = {name: label for name, label, _ in STAGES}
+    lines = ["", "Change against the baseline:", ""]
+    for name, stage in current.items():
+        old = previous.get(name)
+        if old is None:
+            lines.append(f"  {labels.get(name, name):24} (new stage)")
+            continue
+        parts = []
+        for key in ("word_accuracy", "form_accuracy", "expanded"):
+            delta = (stage[key] - old[key]) * 100
+            parts.append(f"{key.replace('_', ' ')} {delta:+.2f}pp")
+        if stage["scoreable"] != old["scoreable"]:
+            parts.append(f"scoreable {stage['scoreable'] - old['scoreable']:+d}")
+        lines.append(f"  {labels.get(name, name):24} " + ", ".join(parts))
+    return "\n".join(lines)
+
+
+# --------------------------------------------------------------------------
+# CLI
+# --------------------------------------------------------------------------
+
+def evaluate(gold_path: Path, write: bool, baseline: bool, save_baseline: bool) -> dict:
+    occurrences, stages, info = collect(gold_path)
+    occurrences = drop_known_gold_errors(occurrences)
+    summary = summarize(occurrences, stages, info)
+    report = render_report(summary, occurrences)
+
+    print(report)
+
+    if baseline:
+        if BASELINE.exists():
+            with open(BASELINE, encoding="utf-8") as file:
+                print(render_baseline_diff(headline(summary), json.load(file)["stages"]))
+        else:
+            print(f"\nno baseline yet -- run with --save-baseline to create {BASELINE}")
+
+    if write:
+        REVIEW_DIR.mkdir(parents=True, exist_ok=True)
+        with open(REVIEW_DIR / "evaluation_report.md", "w", encoding="utf-8") as file:
+            file.write(report)
+        mismatches = mismatch_table(occurrences, stages)
+        if not mismatches.is_empty():
+            mismatches.write_csv(REVIEW_DIR / "evaluation_mismatches.csv")
+        abbreviation_table(summary).write_csv(REVIEW_DIR / "evaluation_by_abbreviation.csv")
+        print(f"Wrote {REVIEW_DIR}/evaluation_*.")
+    else:
+        print("\ndry run -- pass --write to update data/review/evaluation_*")
+
+    if save_baseline:
+        REVIEW_DIR.mkdir(parents=True, exist_ok=True)
+        with open(BASELINE, "w", encoding="utf-8") as file:
+            json.dump({"gold": str(gold_path), "stages": headline(summary)}, file, indent=2)
+        print(f"Saved the current numbers as the baseline in {BASELINE}.")
+
+    return summary
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(
+        description="Score the expansion pipeline against the gold labels."
+    )
+    parser.add_argument("--gold", type=Path, default=GOLD_DEFAULT,
+                        help=f"the gold CSV (default: {GOLD_DEFAULT})")
+    parser.add_argument("--write", action="store_true",
+                        help="write data/review/evaluation_* (default: dry run)")
+    parser.add_argument("--baseline", action="store_true",
+                        help="print the change against the saved baseline")
+    parser.add_argument("--save-baseline", action="store_true",
+                        help="store the current numbers as the baseline")
+    arguments = parser.parse_args()
+    evaluate(arguments.gold, arguments.write, arguments.baseline, arguments.save_baseline)
+
+
+if __name__ == "__main__":
+    main()

@@ -5,6 +5,7 @@
 2. For abbreviations where there are multiple candidates, let an LLM choose the most likely - expanding_candidates.ipynb
 3. For abbreviations where there are no candidates in the glossary, mine candidates from the RG and suggest these, but let an LLM choose freely - expanding_rest.ipynb
 4. Let an LLM normalise the text (e.g. fix inflection, spelling, punctuation, etc.) - normalizing.ipynb
+5. Measure the result against the gold labels, so a change to the workflow can be judged by a number - evaluate.py
 
 # Step 0: extracting the glossary
 `extract_glossary.py` builds `data/simple.csv` and `data/complex.csv` from `data/RGAbkVerz.csv` (the raw export of the Abkürzungsverzeichnis, the source of truth — it is never hand-edited).
@@ -25,6 +26,33 @@ Every run writes `data/review/`:
 - `rg_volume_mismatch.csv` — rows claiming a volume in which the abbreviation is not actually found.
 
 The last three are quality checks against the corpus, not errors: they are the list of entries worth a manual look.
+
+# Step 5: quality control
+`evaluate.py` scores the output of every stage against the gold expansions in `data/to_compare_with/fable_expanded.csv`.
+
+```bash
+python evaluate.py                  # print the summary
+python evaluate.py --write          # also write data/review/evaluation_*
+python evaluate.py --save-baseline  # store the current numbers as the baseline
+python evaluate.py --baseline       # print the change against the baseline
+```
+
+The unit of measurement is the single abbreviation, not the text: a text-level diff mixes one expansion error with twenty inflection differences and tells you nothing actionable. The abbreviated source text is the anchor — for each vita it is aligned with the gold and with each stage output at word level, so every abbreviation gets a gold expansion and a system expansion that are compared directly. The alignment works because the expansion steps only ever replace abbreviations, so every word that was not abbreviated reappears unchanged and anchors the alignment (the property `normalize.py` already relies on); inside a changed passage each abbreviation is re-anchored on the expansion that continues it (`eccl.` → `ecclesiam`, or via the glossary where it does not, `aep.` → `archiepiscopus`). What cannot be anchored is reported as `unaligned` and left out of every rate rather than scored — that number is the reliability check on the metric itself.
+
+Two rates are reported per stage, because a single exact-match number would score `thrice_expanded` (deliberately base forms) as broken:
+- **word accuracy** — was the right word chosen? This is what steps 1–3 do; it should rise from step 1 to step 3 and stay flat at step 4, which cannot change a word.
+- **form accuracy** — is the text right as it stands? This is what step 4 has to move.
+
+Two expansions count as the same form when their spelling variants agree (`ecclesiae`/`ecclesie`, `opidum`/`oppidum`, `parochialis`/`parrochialis`), and as the same word when the glossary paradigms say so (`paradigm.entry_forms`, the same forms step 4 may choose from); for words the glossary has no morphology for (step 3 mines them from the corpus) a shared stem plus a real case ending stands in, reported as `wrong form?` so the uncertainty stays visible. Abbreviations the gold itself leaves standing (`etc.`, month names, place initials) get `no_gold_label` and are excluded — the pipeline may well have expanded them correctly, there is just nothing to compare against.
+
+Every occurrence is also attributed to the step that produced its expansion, by comparing the four stage texts, so a wrong word can be traced to a wrong rule (step 1), a bad candidate choice (step 2) or a bad corpus suggestion (step 3).
+
+`--write` produces `data/review/`:
+- `evaluation_report.md` — the accuracy table per stage, the reliability figures, the errors per step, and the abbreviations ranked by how much fixing them would gain.
+- `evaluation_mismatches.csv` — every occurrence that is not exactly right, with the gold, the expansion of each stage and the source context. This is the file to read when improving a prompt or a glossary entry.
+- `evaluation_by_abbreviation.csv` — the same numbers per abbreviation.
+
+Since the gold is model-produced, mismatches that turn out to be errors of the gold go into the `KNOWN_GOLD_ERRORS` table of `evaluate.py` — like the `CORRECTIONS` table of `extract_glossary.py`, each entry carries its reason and a stale one aborts the run, so reviewing `evaluation_mismatches.csv` accumulates instead of being repeated every run.
 
 # Progress so far
 - looked at Lotta's file/script, realised that there still is a significant amount of ambiguity and it's not easily usable for my workflow - also, only ca. 50 percent of the entries were covered, the rest was ignored due to complexity
