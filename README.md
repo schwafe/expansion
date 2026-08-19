@@ -6,6 +6,7 @@
 3. For abbreviations where there are no candidates in the glossary, mine candidates from the RG and suggest these, but let an LLM choose freely - expanding_rest.ipynb
 4. Let an LLM normalise the text (e.g. fix inflection, spelling, punctuation, etc.) - normalizing.ipynb
 5. Measure the result against the gold labels, so a change to the workflow can be judged by a number - evaluate.py
+6. Write the result as a TEI document that holds both the text of the RG and the expansion - to_tei.py
 
 # Step 0: extracting the glossary
 `extract_glossary.py` builds `data/simple.csv` and `data/complex.csv` from `data/RGAbkVerz.csv` (the raw export of the Abkürzungsverzeichnis, the source of truth — it is never hand-edited).
@@ -53,6 +54,29 @@ Every occurrence is also attributed to the step that produced its expansion, by 
 - `evaluation_by_abbreviation.csv` — the same numbers per abbreviation.
 
 Since the gold is model-produced, mismatches that turn out to be errors of the gold go into the `KNOWN_GOLD_ERRORS` table of `evaluate.py` — like the `CORRECTIONS` table of `extract_glossary.py`, each entry carries its reason and a stale one aborts the run, so reviewing `evaluation_mismatches.csv` accumulates instead of being repeated every run.
+
+# Step 6: the TEI output
+`to_tei.py` writes `data/rg_expanded.xml`, the final output: one TEI P5 document that holds both readings of the text.
+
+```bash
+python to_tei.py            # dry run, prints the report
+python to_tei.py --write    # write data/rg_expanded.xml
+```
+
+Every stage of the workflow produces a text in which the abbreviations have been replaced, which loses the reading of the RG: once `eccl.` has become `ecclesiae` there is no way back. The TEI document keeps both, so either can be read automatically:
+
+```xml
+<choice><abbr>eccl.</abbr><expan resp="#step1 #step4">ecclesiae</expan></choice>
+```
+
+- the text of the RG — drop the `<expan>` of every `<choice>`
+- the expanded text — drop the `<abbr>` of every `<choice>`
+
+An `<abbr>` that stands outside a `<choice>` is an abbreviation the workflow did not resolve; it belongs to both readings, which is why the rule names `<choice>` rather than the elements alone. `to_tei.readings()` implements both and is what the round-trip check uses. `@resp` names the step that decided the expansion (declared in the teiHeader with the model that ran it), so the expansions made by rule can be told from the ones a model chose without re-running anything. The structure follows the existing keys: `<div type="volume">` and `<div type="vita">` from volume/nr_RG, one `<head>` or `<p>` per regest with the `xml:id` taken from `id_RG_all`.
+
+The pairing of abbreviation and expansion reuses the alignment of `evaluate.py`. Three things it does not settle have to be decided here, because the markup has to reproduce the source character for character rather than token for token: material *between* two words that only one reading has (`aep.` → `archiepiscopus,` adds a comma) is folded into the neighbouring `<choice>`; a word ending in a period is not necessarily an abbreviation (`fecerunt.` at the end of a sentence, `236v.` as a folio mark), so a token only becomes an `<abbr>` if the glossary lists it; and several abbreviations sharing one expansion (`s.p.d.` → `sineperdatum`) become a single `<choice>`.
+
+Every regest is round-tripped before it is written — the two readings are parsed back out of the markup and compared with the inputs — and a regest that does not reproduce its source exactly is refused and reported in `data/review/tei_report.md` instead of being written wrong. Currently all 528 regests of the 156 vitae round-trip, with 5168 expansions and 17 abbreviations left standing.
 
 # Progress so far
 - looked at Lotta's file/script, realised that there still is a significant amount of ambiguity and it's not easily usable for my workflow - also, only ca. 50 percent of the entries were covered, the rest was ignored due to complexity
