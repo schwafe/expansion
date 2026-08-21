@@ -506,23 +506,14 @@ def run_batch(run: Run, done: dict, checkpoint: Path, every: int, limit: int | N
 
 
 def assemble(run: Run, done: dict) -> tuple[pl.DataFrame, list[dict]]:
-    """
-    The output CSV and the dump, in the order of the vitae.
-
-    Each frame is cast to the schema of the input, because a vita that consists
-    of a header alone gives `text_to_vita_df` a column of nothing but nulls,
-    which polars would otherwise refuse to stack on a column of strings.
-    """
-    schema = dict(run.source.schema)
+    """The output CSV and the dump, in the order of the vitae."""
     frames, results = [], []
     for volume, nr_RG in run.keys():
         entry = done[(volume, nr_RG)]
         if entry["text"] is None:  # nothing to do: the vita passes through unchanged
-            frame = run.vita(volume, nr_RG)
+            frames.append(run.vita(volume, nr_RG))
         else:
-            frame = text_to_vita_df(entry["text"], volume, nr_RG)
-        frames.append(frame.cast({name: dtype for name, dtype in schema.items()
-                                  if name in frame.columns}))
+            frames.append(text_to_vita_df(entry["text"], volume, nr_RG))
         if entry["record"] is not None:
             results.append(entry["record"])
     return pl.concat(frames), results

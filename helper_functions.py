@@ -140,6 +140,18 @@ def vita_dfs_to_vita_texts(df:pl.DataFrame) -> pl.DataFrame:
     texts = df.group_by(["volume", "nr_RG"]).map_groups(lambda group: pl.concat((group.select(["volume", "nr_RG"]).unique(), pl.DataFrame({"text": vita_df_to_text(group)})), how="horizontal", strict=True))
     return df.group_by(["volume", "nr_RG"]).first().select(["volume", "nr_RG"]).join(texts, on=["volume", "nr_RG"])
 
+# the schema of the per-regest tables, spelled out because a vita of a header
+# and nothing else leaves the regest column with nothing but nulls, which polars
+# would type as Null and then refuse to stack on a column of strings
+VITA_SCHEMA = {
+    "volume": pl.Int64,
+    "nr_RG": pl.Int64,
+    "nr_suffix": pl.Int64,
+    "header_no_tags": pl.String,
+    "regest_no_tags": pl.String,
+    "id_RG_all": pl.String,
+}
+
 def text_to_vita_df(text: str, volume: int, nr: int):
     pieces = text.split('\n')
 
@@ -155,8 +167,25 @@ def text_to_vita_df(text: str, volume: int, nr: int):
         "nr_suffix": range(len(pieces)),
         "header_no_tags": header,
         "regest_no_tags": regests,
-        "id_RG_all": [f"1{volume:02d}{nr:05d}-{i}" for i in range(len(pieces))]})
+        "id_RG_all": [f"1{volume:02d}{nr:05d}-{i}" for i in range(len(pieces))]},
+        schema=VITA_SCHEMA)
     return vita
+
+def vita_texts_to_vita_dfs(df:pl.DataFrame, column:str="text") -> pl.DataFrame:
+    """
+    The other direction of vita_dfs_to_vita_texts: one row per vita (volume,
+    nr_RG and the text) back to one row per regest, the vitae in the order they
+    come in. The first line of a text is the header, every further one a regest.
+
+    `nr_suffix` and `id_RG_all` are rebuilt from the position of the line, so a
+    text that has been through this and back carries the same values as one
+    straight out of the RG -- but only as long as no line was added or dropped
+    in between, since nothing else records what the numbering used to be.
+    """
+    return pl.concat(
+        text_to_vita_df(row[column], row["volume"], row["nr_RG"])
+        for row in df.iter_rows(named=True)
+    )
 
 @sleep_and_retry
 @limits(calls=15, period=ONE_MINUTE)
