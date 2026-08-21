@@ -193,6 +193,16 @@ The dates have a gold label in the source table — the `date_sublemma` column �
     - the chain of intermediate CSVs is gone as well: one script does all of it in memory, which also made it possible to state the rules explicitly (when is an abbreviation "complex"? when is a slash an alternative expansion?) instead of having them spread over notebook cells
     - since I'm not great at Latin, the script now also checks its own output against the RG and lists what looks suspicious (see above) rather than leaving me to trust it
 
+# Tests
+`tests/` holds one file per module, named after it. They need no data and no network:
+
+```bash
+pytest                     # all of them
+pytest tests/test_evaluate.py
+```
+
+The project root is on the path via the `conftest.py` next to this file, which exists for that alone.
+
 # Format of the Wortstamm/Deklination columns
 The columns are cleaned by `clean_morphology.py`, which runs as the morphology stage of `extract_glossary.py` (rows it cannot clean keep their values and are written to `data/review/morphology_review.csv`). `paradigm.py` generates the full set of inflected forms per candidate from these columns (`entry_forms(Auflösung, Wortstamm, Deklination)`), e.g. for validating inflected expansions. Step 4 (`normalize.py`, run by `run_step.py 4`) builds on this: every glossary base form that the expansion steps inserted (identified by aligning the expanded text with the original — words that were never abbreviated are excluded; an original word indistinguishable from an adjacent identical insertion counts as inserted) is offered its full paradigm as a multiple-choice list, so the model can fix the inflection but can never change the word.
 
