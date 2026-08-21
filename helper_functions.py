@@ -1,44 +1,11 @@
 import re
 import time
-import pandas as pd
 import polars as pl
-from IPython.display import HTML
 
 from openai import InternalServerError, OpenAI
 from ratelimit import limits, sleep_and_retry
 
 ONE_MINUTE = 60
-
-# NOTE: copied from https://ai.plainenglish.io/displaying-dataframes-side-by-side-in-jupyter-notebook-871e1a6fc692 and then adjusted slightly
-def side_by_side(*dfs):
-    # This is the div element that we will use to display at the end
-    # display:flex makes the div's children stack sideways
-    html = '<div style="display:flex">'
-
-    # Iterating through DataFrames
-    for df in dfs:
-        # convert to pandas if it's a polars dataframe
-        df = df.to_pandas() if isinstance(df, pl.DataFrame) else df
-
-        # If None is passed, add extra spacing
-        if df is None:
-            html += '<div style="margin-right: 8em"></div>'
-            continue
-
-        # Putting each table in a div and setting a small margin
-        html += '<div style="margin-right: 2em">'
-
-        # The actual table HTML string
-        html += df.to_html()
-
-        # Closing the div
-        html += "</div>"
-
-    # Closing the root div
-    html += "</div>"
-
-    # returning the html with the side-by-side tables
-    return HTML(html)
 
 
 def construct_query(abbreviation):

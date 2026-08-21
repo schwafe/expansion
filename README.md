@@ -158,25 +158,6 @@ The pairing of abbreviation and expansion reuses the alignment of `evaluate.py`.
 
 Every regest is round-tripped before it is written — the two readings are parsed back out of the markup and compared with the inputs — and a regest that does not reproduce its source exactly is refused and reported in `data/review/tei_report.md` instead of being written wrong. Currently all 528 regests of the 156 vitae round-trip, with 5168 expansions and 17 abbreviations left standing.
 
-# Dates and references in the text
-`extract_dates_refs.py` marks the two parts of a text that are not Latin prose: the date of the entry and the reference to the register it was taken from.
-
-```bash
-python extract_dates_refs.py            # print the report
-python extract_dates_refs.py --write    # also write data/dates_refs.csv and data/review/dates_refs_*
-```
-
-A regest normally ends with both of them — `... n. o. par. eccl. de Kalkar Colon. dioc., 21 mart. 1392 L 23 21v.` — but not always: a second register may be cited after an intervening remark, and the date of an earlier grant can stand in the middle of the sentence. So both are looked for everywhere in the text and reported as spans (`find_spans(text)` gives them in order, with their offsets); `main_date`/`main_reference` pick the pair that belongs to the entry itself.
-
-The rules are deliberately small:
-- a **date** is a day/month/year group written with one of the RG's month abbreviations (`21 mart. 1392`, `6. sept. 80`, `mai. 1450`, `4. iul. [1452]`), or one of the formulas standing in for a missing one (`s. d.`, `sine dat.`, `sub priori dato`). The month is what is looked for, day and year are the numbers to its left and right. The one ambiguity this creates is settled by a rule of its own: a number between two months (`... eccl. mai. 22 iun. 1396`) is the day of the second, not the year of the first, unless it is written out as a full year.
-- a **reference** is a citation `SIGLUM VOLUME FOLIO` (`L 23 21v.`), the siglum taken from a closed list, the volume allowed a few tokens for the funds cited by name (`Arm. XXXIV 4 91.`, `Florenz, Magl. Classe XXXI, 63 14v.`) and the folio allowed lists and ranges (`S 174 89,92.`, `V 420 122r-123v.`). Citations following each other are one reference. The closed siglum list is what keeps an ordinary capitalised word followed by a number from being read as a citation; dates are matched first and their stretches are not searched again, so `s. A. 30 mai. 1421` cannot lose its day to a citation `A. 30`.
-- of two dates the entry's own is the last one that does not stand behind an `exped.` (the date of despatch, which the RG adds to the date of the grant).
-
-The dates have a gold label in the source table — the `date_sublemma` column — and the extraction is measured against it; the references have none and are checked structurally instead (a reference ends its regest, so whatever follows one is a piece of reference that was missed). Currently the date of 96.6% of the 155,675 dated regests is found exactly, 99.0% of all regests get a reference and in 98.5% it reaches the end of the text. `data/review/dates_refs_report.md` holds the numbers, `data/review/dates_refs_mismatches.csv` every regest whose date differs from the gold, labelled by *how* it differs.
-
-`data/dates_refs.csv` is one row per text (join key `id_RG_all`, `part` tells a header from a regest) with the date and the reference, their offsets, how many of each the text has, and `rest` — the text with both cut out. It is not in the repository for the same reason the source table is not: it is 74 MB and rebuilt in twenty seconds.
-
 # Progress so far
 - looked at Lotta's file/script, realised that there still is a significant amount of ambiguity and it's not easily usable for my workflow - also, only ca. 50 percent of the entries were covered, the rest was ignored due to complexity
 - explored the Abkürzungsverzeichnis to better understand the complexity
@@ -203,7 +184,7 @@ pytest                     # all of them
 pytest tests/test_evaluate.py
 ```
 
-The project root is on the path via the `conftest.py` next to this file, which exists for that alone.
+The modules under test live at the top level, so `pyproject.toml` puts the project root on the path (`[tool.pytest.ini_options]`).
 
 # Format of the Wortstamm/Deklination columns
 The columns are cleaned by `clean_morphology.py`, which runs as the morphology stage of `extract_glossary.py` (rows it cannot clean keep their values and are written to `data/review/morphology_review.csv`). `paradigm.py` generates the full set of inflected forms per candidate from these columns (`entry_forms(Auflösung, Wortstamm, Deklination)`), e.g. for validating inflected expansions. Step 4 (`normalize.py`, run by `run_step.py 4`) builds on this: every glossary base form that the expansion steps inserted (identified by aligning the expanded text with the original — words that were never abbreviated are excluded; an original word indistinguishable from an adjacent identical insertion counts as inserted) is offered its full paradigm as a multiple-choice list, so the model can fix the inflection but can never change the word.

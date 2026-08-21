@@ -1,0 +1,20 @@
+[project]
+name = "expansion"
+version = "0.1.0"
+description = "Expanding the abbreviations of the Repertorium Germanicum"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "ipykernel>=7.2.0",
+    "openai>=2.41.0",
+    "polars>=1.40.1",
+    "pytest>=9.1.1",
+    "python-dotenv>=1.2.3",
+    "ratelimit>=2.2.1",
+]
+
+[tool.pytest.ini_options]
+# the modules under test live at the top level, so pytest has to import them
+# from there while the tests themselves are in tests/
+pythonpath = ["."]
+testpaths = ["tests"]
