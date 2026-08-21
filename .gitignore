@@ -16,6 +16,8 @@ data/normalized_texts.csv
 data/to_compare_with/opus_expanded.csv
 # intermediate results that aren't that interesting yet (but which I might upload later)
 data/gemma4
+# run_step.py's per-vita checkpoints; deletable once a run has written its output
+data/checkpoints
 # uv's files (if this becomes a proper project, I'll want to upload them later, but for now that's not necessary or helpful)
 uv.lock
 pyproject.toml
