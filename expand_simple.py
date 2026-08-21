@@ -2,7 +2,7 @@
 """
 Step 1: expanding the abbreviations that have exactly one reading.
 
-The Abkürzungsverzeichnis (`data/simple.csv`, written by step 0) lists for every
+The Abkürzungsverzeichnis (`data/glossary.csv`, written by step 0) lists for every
 volume of the RG which abbreviations it uses and how they are resolved. Where a
 volume knows exactly one Auflösung for an abbreviation, no judgement is needed
 and the expansion is a plain substitution -- that is what this step does, for
@@ -42,8 +42,7 @@ from multiple_choice import occurrence_pattern
 
 DATA_DIR = Path("data")
 REVIEW_DIR = DATA_DIR / "review"
-SIMPLE = DATA_DIR / "simple.csv"
-COMPLEX = DATA_DIR / "complex.csv"
+GLOSSARY = DATA_DIR / "glossary.csv"
 DIOCESES = DATA_DIR / "dioceses.csv"
 RG = DATA_DIR / "RG_header_sublemma_all.csv"
 OUTPUT = DATA_DIR / "once_expanded.csv"
@@ -66,17 +65,20 @@ MULTIWORD = [r"\b(" + r"\ ?".join([r"\w+\."] * parts) + ")" for parts in range(2
 # the rules
 # --------------------------------------------------------------------------
 
-def load_rules(simple: Path = SIMPLE, dioceses: Path = DIOCESES) -> pl.DataFrame:
+def load_rules(glossary: Path = GLOSSARY, dioceses: Path = DIOCESES) -> pl.DataFrame:
     """
-    The glossary plus the diocese adjectives, longest abbreviation first.
+    The rules of the glossary plus the diocese adjectives, longest first.
 
-    `dioceses.csv` has only the two columns; the diagonal concat fills the rest
-    with null, which is what `apply_to_every_volume` then reads as "every
-    volume" -- the diocese abbreviations are unique and have no volume columns.
+    Only the entries the glossary marks as simple can become a rule; a complex
+    one lists several readings by definition and belongs to step 2. They are
+    dropped before the concat, because `dioceses.csv` has only the two columns
+    and would be null in that one as in every other -- the diagonal concat
+    fills the rest with null, which is what `apply_to_every_volume` then reads
+    as "every volume" (the diocese abbreviations are unique and name no volume).
     """
     rules = pl.concat(
         [
-            pl.read_csv(simple),
+            pl.read_csv(glossary).filter(~pl.col("komplex")).drop("komplex"),
             pl.read_csv(dioceses).rename({"abbreviation": "Abkürzung", "expansion": "Auflösung"}),
         ],
         how="diagonal",
@@ -255,7 +257,7 @@ def render_report(rules: pl.DataFrame, before: pl.DataFrame, after: pl.DataFrame
         ", ".join(f"`{row['abbreviation']}` ({row['count']})" for row in multiword.iter_rows(named=True)),
     ]
 
-    potential = unrealised_potential(left_over, SIMPLE, COMPLEX)
+    potential = unrealised_potential(left_over, GLOSSARY)
     lines += [
         "",
         "## What a clearer glossary entry would gain",

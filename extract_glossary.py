@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """
-Step 0: extract the abbreviation glossary into data/simple.csv and
-data/complex.csv.
+Step 0: extract the abbreviation glossary into data/glossary.csv.
 
 Source of truth is data/RGAbkVerz.csv (the raw export of the RG
 Abkürzungsverzeichnis) -- it is never hand-edited. Every manual decision
@@ -68,18 +67,19 @@ Stages (each stage is a function of the same name):
                   text). Abbreviations that never occur are dropped (and
                   reported); the matching volumes go into the `volumes`
                   column. Rows from ADDITIONS are kept regardless.
- 9. split         an abbreviation is *complex* -- all of its rows go to
-                  complex.csv -- if any of its rows has several meanings
-                  (";" flag), an RG cell that could not be reduced, or was
-                  forced by a correction; likewise if it has several
-                  meanings and one claims no volume at all (the others'
-                  claims then cannot be trusted to be exclusive).
-                  Everything else is simple: step 1 can replace it by
-                  plain rules, expanding each volume only when exactly
-                  one row claims it.
+ 9. split         an abbreviation is *complex* -- all of its rows are
+                  marked `komplex` -- if any of its rows has several
+                  meanings (";" flag), an RG cell that could not be
+                  reduced, or was forced by a correction; likewise if it
+                  has several meanings and one claims no volume at all
+                  (the others' claims then cannot be trusted to be
+                  exclusive). Everything else is simple: step 1 can
+                  replace it by plain rules, expanding each volume only
+                  when exactly one row claims it. An abbreviation is
+                  always wholly simple or wholly complex.
 10. clean_complex moving the notes out of the Auflösung can make two
-                  complex entries identical, so they are merged again
-                  (they are the candidate list of step 2).
+                  complex entries identical, so the complex rows are
+                  merged again (they are the candidate list of step 2).
 11. morphology    clean the Wortstamm/Deklination columns into the strict
                   format of paradigm.py (clean_morphology.py does the
                   work; rows it cannot clean keep their values and are
@@ -89,9 +89,9 @@ Stages (each stage is a function of the same name):
 13. report        data/review/extraction_report.md documents every count,
                   correction and flagged row of the run.
 
---diff-old additionally compares the produced tables with the simple.csv/
-complex.csv currently on disk and writes the row-level differences to
-data/review/, so a re-extraction can be reviewed before --write.
+--diff-old additionally compares the produced table with the glossary.csv
+currently on disk and writes the row-level differences to data/review/, so a
+re-extraction can be reviewed before --write.
 """
 
 import argparse
@@ -108,8 +108,7 @@ from clean_morphology import aufloesung_words
 
 GLOSSARY = "data/RGAbkVerz.csv"
 CORPUS = "data/RG_header_sublemma_all.csv"
-SIMPLE_OUT = "data/simple.csv"
-COMPLEX_OUT = "data/complex.csv"
+GLOSSARY_OUT = "data/glossary.csv"
 REVIEW_DIR = Path("data/review")
 
 RG_COLUMNS = [f"RG{i}" for i in range(1, 10)]
@@ -117,6 +116,9 @@ COLUMNS = [
     "Abkürzung", "Auflösung", "Übersetzung", "Anmerkungen",
     "Wortstamm", "Deklination", *RG_COLUMNS, "Bemerkungen_1", "Bemerkungen_2",
 ]
+# the flag that tells the two kinds of entry apart in the output (stage 9)
+KOMPLEX = "komplex"
+
 # internal row keys (not written to the outputs)
 MULTI = "_multi"            # Auflösung carried a ";": several meanings
 RG_MISMATCH = "_rg_mismatch"  # an RG cell could not be reduced
@@ -138,7 +140,7 @@ class Correction:
     set: dict[str, str] | None = None     # replace these cells
     delete: bool = False                  # remove the matched row
     add: list[dict] | None = None         # insert these rows after it
-    force_complex: bool = False           # send the abbreviation to complex.csv
+    force_complex: bool = False           # mark the abbreviation komplex
     count: int = 1                        # expected number of matched rows
 
 
@@ -1080,14 +1082,18 @@ def corpus_check(
 
 def split(rows: list[dict]) -> tuple[list[dict], list[dict]]:
     """
-    Stage 9: partition into simple and complex abbreviations. An
+    Stage 9: separate the simple from the complex abbreviations. An
     abbreviation is complex if any of its rows has several meanings
     (";" flag), an unreducible RG cell, or was forced by a correction --
     or if it has several meanings and one of them claims no volume at
     all: without volume information the other rows' claims cannot be
     trusted to be exclusive, so step 1 must not expand any of them.
-    (Several meanings with volume claims are fine in simple.csv: step 1
-    expands each volume only when exactly one row claims it.)
+    (Several meanings with volume claims are fine for a simple entry:
+    step 1 expands each volume only when exactly one row claims it.)
+
+    Both lists go into the same output file; `komplex` is what tells them
+    apart there. They are kept apart here because only the complex rows go
+    through clean_complex.
     """
     complex_abbreviations = {
         row["Abkürzung"]
@@ -1111,7 +1117,7 @@ def split(rows: list[dict]) -> tuple[list[dict], list[dict]]:
 
 def clean_complex(rows: list[dict]) -> tuple[list[dict], list[str]]:
     """
-    Stage 10: the Auflösungen of complex.csv are the candidate texts of
+    Stage 10: the Auflösungen of the complex rows are the candidate texts of
     step 2. Moving the glossary's notes out of them (see
     resolve_parentheses) can make two entries identical ('dominus' and
     'dominus (nur Bd. 1 laut Abk-Verz.)'), so the rows are merged again.
@@ -1130,7 +1136,11 @@ def to_frame(rows: list[dict]) -> pl.DataFrame:
         column: [row.get(column, "") or None for row in rows]
         for column in columns
     }
-    return pl.DataFrame(data, schema={c: pl.String for c in columns})
+    frame = pl.DataFrame(data, schema={c: pl.String for c in columns})
+    return frame.with_columns(
+        pl.Series(KOMPLEX, [bool(row.get(KOMPLEX)) for row in rows],
+                  dtype=pl.Boolean)
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -1139,7 +1149,7 @@ def to_frame(rows: list[dict]) -> pl.DataFrame:
 
 
 def validate(
-    simple: pl.DataFrame, complex_: pl.DataFrame, search: CorpusSearch
+    glossary: pl.DataFrame, search: CorpusSearch
 ) -> dict[str, pl.DataFrame]:
     """
     Quality checks, each returned as a review table:
@@ -1160,18 +1170,19 @@ def validate(
         corpus.get_column("header_no_tags").drop_nulls().to_list()
         + corpus.get_column("regest_no_tags").drop_nulls().to_list()
     )
-    both = pl.concat([simple, complex_], how="vertical")
-
     morphology_rows = []
     aufloesung_rows = []
     seen_morphology = set()
     seen_words = set()
-    for abbreviation, aufloesung, wortstamm, deklination in both.select(
+    for abbreviation, aufloesung, wortstamm, deklination in glossary.select(
         "Abkürzung", "Auflösung", "Wortstamm", "Deklination"
     ).iter_rows():
         for word in aufloesung_words(aufloesung):
-            if word.lower() not in seen_words:
-                seen_words.add(word.lower())
+            # keyed by the exact word, because the lookup below is
+            # case-sensitive: deduplicating case-insensitively made the
+            # result depend on which spelling the iteration met first
+            if word not in seen_words:
+                seen_words.add(word)
                 if not vocabulary.counts[word]:
                     aufloesung_rows.append(
                         {"Abkürzung": abbreviation, "Auflösung": aufloesung,
@@ -1196,7 +1207,7 @@ def validate(
                 )
 
     mismatch_rows = []
-    for row in both.iter_rows(named=True):
+    for row in glossary.iter_rows(named=True):
         for i in range(1, 10):
             cell = row[f"RG{i}"]
             if cell and str(i) not in (row["volumes"] or "").split("|"):
@@ -1294,26 +1305,29 @@ def extract(write: bool, diff: bool) -> None:
     simple_rows, complex_rows = split(rows)
     complex_rows, clean_log = clean_complex(complex_rows)
     section("Complex rows merged after stripping the notes", clean_log)
-    simple = to_frame(sort_rows(simple_rows))
-    complex_ = to_frame(sort_rows(complex_rows))
+    for row in simple_rows:
+        row[KOMPLEX] = False
+    for row in complex_rows:
+        row[KOMPLEX] = True
+    glossary = to_frame(sort_rows(simple_rows + complex_rows))
     report.append(
-        f"Split: {simple.height} simple rows "
-        f"({simple.get_column('Abkürzung').n_unique()} abbreviations), "
-        f"{complex_.height} complex rows "
-        f"({complex_.get_column('Abkürzung').n_unique()} abbreviations)."
+        f"Split: {len(simple_rows)} simple rows "
+        f"({len({r['Abkürzung'] for r in simple_rows})} abbreviations), "
+        f"{len(complex_rows)} complex rows "
+        f"({len({r['Abkürzung'] for r in complex_rows})} abbreviations)."
     )
     report.append("")
 
-    simple, simple_review = clean_morphology.clean_frame(simple, "simple")
-    complex_, complex_review = clean_morphology.clean_frame(complex_, "complex")
-    morphology_review = simple_review + complex_review
+    glossary, morphology_review = clean_morphology.clean_frame(
+        glossary, "glossary"
+    )
     section(
         "Morphology not automatically cleanable (kept as-is)",
-        [f"[{r['file']}] {r['Abkürzung']!r} / {r['Auflösung']!r}: {r['issue']}"
+        [f"{r['Abkürzung']!r} / {r['Auflösung']!r}: {r['issue']}"
          for r in morphology_review],
     )
 
-    reviews = validate(simple, complex_, search)
+    reviews = validate(glossary, search)
     REVIEW_DIR.mkdir(parents=True, exist_ok=True)
     for name, frame in reviews.items():
         report.append(f"Validation `{name}`: {frame.height} rows "
@@ -1323,19 +1337,14 @@ def extract(write: bool, diff: bool) -> None:
     report.append("")
 
     if diff:
-        for name, frame, path in (
-            ("simple", simple, SIMPLE_OUT), ("complex", complex_, COMPLEX_OUT)
-        ):
-            added, removed = diff_old(frame, path)
-            added.write_csv(REVIEW_DIR / f"diff_{name}_added.csv")
-            removed.write_csv(REVIEW_DIR / f"diff_{name}_removed.csv")
-            print(f"diff vs current {path}: {added.height} rows added, "
-                  f"{removed.height} rows removed "
-                  f"(data/review/diff_{name}_*.csv)")
+        added, removed = diff_old(glossary, GLOSSARY_OUT)
+        added.write_csv(REVIEW_DIR / "diff_added.csv")
+        removed.write_csv(REVIEW_DIR / "diff_removed.csv")
+        print(f"diff vs current {GLOSSARY_OUT}: {added.height} rows added, "
+              f"{removed.height} rows removed (data/review/diff_*.csv)")
 
     if write:
-        simple.write_csv(SIMPLE_OUT)
-        complex_.write_csv(COMPLEX_OUT)
+        glossary.write_csv(GLOSSARY_OUT)
         if morphology_review:
             pl.DataFrame(morphology_review).write_csv(
                 REVIEW_DIR / "morphology_review.csv"
@@ -1343,7 +1352,7 @@ def extract(write: bool, diff: bool) -> None:
         with open(REVIEW_DIR / "extraction_report.md", "w",
                   encoding="utf-8") as file:
             file.write("\n".join(report))
-        print(f"Wrote {SIMPLE_OUT}, {COMPLEX_OUT} and data/review/.")
+        print(f"Wrote {GLOSSARY_OUT} and data/review/.")
     else:
         print("\n".join(report))
         print("\ndry run -- pass --write to update the output files")
@@ -1351,14 +1360,14 @@ def extract(write: bool, diff: bool) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Extract data/simple.csv and data/complex.csv from the "
-        "glossary export data/RGAbkVerz.csv."
+        description="Extract data/glossary.csv from the glossary export "
+        "data/RGAbkVerz.csv."
     )
     parser.add_argument("--write", action="store_true",
                         help="write the outputs (default: dry run)")
     parser.add_argument("--diff-old", action="store_true",
-                        help="compare with the simple.csv/complex.csv "
-                        "currently on disk")
+                        help="compare with the glossary.csv currently "
+                        "on disk")
     arguments = parser.parse_args()
     extract(write=arguments.write, diff=arguments.diff_old)
 

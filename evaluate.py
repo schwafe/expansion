@@ -60,6 +60,7 @@ DATA_DIR = Path("data")
 REVIEW_DIR = DATA_DIR / "review"
 GOLD_DEFAULT = DATA_DIR / "to_compare_with" / "fable_expanded.csv"
 SOURCE = DATA_DIR / "ablaesse_texts.csv"
+GLOSSARY = DATA_DIR / "glossary.csv"
 BASELINE = REVIEW_DIR / "evaluation_baseline.json"
 
 # the pipeline stages, in order; the label is what the report calls them
@@ -563,10 +564,10 @@ def collect(gold_path: Path) -> tuple[list[Occurrence], list[str], dict]:
     scored = sorted(set(gold) & set(source) & set.intersection(*(set(texts[n]) for n in stage_names)))
     occurrences = []
     lemma_index = build_lemma_index(
-        glossary_entries(DATA_DIR / "simple.csv", DATA_DIR / "complex.csv")
+        glossary_entries(GLOSSARY)
         + diocese_entries(pl.read_csv(DATA_DIR / "dioceses.csv")["expansion"].to_list())
     )
-    anchors = build_anchor_index(DATA_DIR / "simple.csv", DATA_DIR / "complex.csv")
+    anchors = build_anchor_index(GLOSSARY)
     offered = {
         stage: load_candidates(path, text_key, texts[stage])
         for stage, path, text_key in CANDIDATE_DUMPS

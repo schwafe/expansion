@@ -62,8 +62,7 @@ CHECKPOINT_DIR = DATA_DIR / "checkpoints"
 
 RG = DATA_DIR / "RG_header_sublemma_all.csv"
 SUBSET = DATA_DIR / "ablaesse.csv"  # the vitae the workflow is tried on
-SIMPLE = DATA_DIR / "simple.csv"
-COMPLEX = DATA_DIR / "complex.csv"
+GLOSSARY = DATA_DIR / "glossary.csv"
 DIOCESES = DATA_DIR / "dioceses.csv"
 
 BASE_URL = "https://chat-ai.academiccloud.de/v1"
@@ -214,14 +213,14 @@ class Run:
 
 def prepare_candidates(run: Run) -> None:
     """Step 2: choose among the Auflösungen the glossary lists."""
-    simple, complex = pl.read_csv(SIMPLE), pl.read_csv(COMPLEX)
+    glossary = pl.read_csv(GLOSSARY)
     original = pl.read_csv(RG).select(RG_COLUMNS)
-    run.state |= {"simple": simple, "complex": complex}
+    run.state["glossary"] = glossary
 
     def preview(volume, nr_RG):
         vita = run.vita(volume, nr_RG)
         text = vita_df_to_text(vita)
-        candidates = determine_candidates(vita, simple, complex)
+        candidates = determine_candidates(vita, glossary)
         occurrences = multiple_choice.find_candidate_occurrences(text, candidates)
         if not candidates or not occurrences:
             return None
@@ -320,12 +319,9 @@ def prepare_rest(run: Run) -> None:
 
 def prepare_normalize(run: Run) -> None:
     """Step 4: put the inserted base forms into the form the context asks for."""
-    simple, complex = pl.read_csv(SIMPLE), pl.read_csv(COMPLEX)
+    glossary = pl.read_csv(GLOSSARY)
     dioceses = pl.read_csv(DIOCESES)
-    entries = pl.concat([
-        simple.select("Auflösung", "Wortstamm", "Deklination"),
-        complex.select("Auflösung", "Wortstamm", "Deklination"),
-    ]).iter_rows()
+    entries = glossary.select("Auflösung", "Wortstamm", "Deklination").iter_rows()
     lexicon = normalize.build_lexicon(
         list(entries) + normalize.diocese_entries(dioceses.get_column("expansion").to_list())
     )

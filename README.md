@@ -9,7 +9,7 @@
 6. Write the result as a TEI document that holds both the text of the RG and the expansion - to_tei.py
 
 # Step 0: extracting the glossary
-`extract_glossary.py` builds `data/simple.csv` and `data/complex.csv` from `data/RGAbkVerz.csv` (the raw export of the Abkürzungsverzeichnis, the source of truth — it is never hand-edited).
+`extract_glossary.py` builds `data/glossary.csv` from `data/RGAbkVerz.csv` (the raw export of the Abkürzungsverzeichnis, the source of truth — it is never hand-edited).
 
 ```bash
 python extract_glossary.py --write
@@ -17,7 +17,7 @@ python extract_glossary.py --write
 
 Without `--write` it is a dry run that prints the report; `--diff-old` additionally compares the result with the CSVs currently on disk (`data/review/diff_*.csv`), so a re-extraction can be reviewed before it is written.
 
-Every manual decision is an explicit, documented entry in the `CORRECTIONS`/`ADDITIONS` tables of the script rather than an edit in the data — each carries the reason for it, and a correction that no longer matches any row aborts the run, so the tables cannot silently go stale if the export is updated. The remaining stages are documented in the module docstring; in short: continuation rows inherit their abbreviation, the Auflösung is normalised (alternative expansions become separate rows, notation like `op(p)idum` or `subcustos/succustos` is resolved against the abbreviation, and where the abbreviation fits both spellings the more frequent one in the RG wins), the `RG1`–`RG9` columns are reduced to the row's own abbreviation (variants they name become their own rows), abbreviations that never occur in the RG are dropped, and what is left is split into `simple.csv` (step 1 can expand it by rule) and `complex.csv` (needs the LLM in step 2). Finally `clean_morphology.py` cleans the Wortstamm/Deklination columns (see below).
+Every manual decision is an explicit, documented entry in the `CORRECTIONS`/`ADDITIONS` tables of the script rather than an edit in the data — each carries the reason for it, and a correction that no longer matches any row aborts the run, so the tables cannot silently go stale if the export is updated. The remaining stages are documented in the module docstring; in short: continuation rows inherit their abbreviation, the Auflösung is normalised (alternative expansions become separate rows, notation like `op(p)idum` or `subcustos/succustos` is resolved against the abbreviation, and where the abbreviation fits both spellings the more frequent one in the RG wins), the `RG1`–`RG9` columns are reduced to the row's own abbreviation (variants they name become their own rows), abbreviations that never occur in the RG are dropped, and what is left is marked `komplex` or not. Finally `clean_morphology.py` cleans the Wortstamm/Deklination columns (see below).
 
 Every run writes `data/review/`:
 - `extraction_report.md` — the log of the run: all counts, every applied correction with its reason, and every flagged row. This is the documentation of the extraction.
@@ -27,6 +27,8 @@ Every run writes `data/review/`:
 - `rg_volume_mismatch.csv` — rows claiming a volume in which the abbreviation is not actually found.
 
 The last three are quality checks against the corpus, not errors: they are the list of entries worth a manual look.
+
+The `komplex` column is the one thing in `glossary.csv` that is not in the Abkürzungsverzeichnis: it says whether step 1 may expand the entry by rule (`false`) or whether the reading has to be decided occurrence by occurrence in step 2 (`true`). An abbreviation is always wholly one or the other — if any of its rows is ambiguous, all of them are, since step 1 could otherwise expand one reading and leave its siblings standing. Note that the two kinds are cleaned slightly differently: the Auflösung of a complex entry is a candidate text for the model, so the glossary's notes have been moved out of it into `Anmerkungen`, and rows that this made identical were merged.
 
 # Step 1: expansion by rule
 `expand_simple.py` expands what needs no judgement: an abbreviation for which the volume at hand knows exactly one Auflösung. This is the only step that runs over the whole RG rather than over the test subset.

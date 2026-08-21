@@ -578,9 +578,9 @@ Read 1023 rows from data/RGAbkVerz.csv.
 Split: 479 simple rows (453 abbreviations), 509 complex rows (238 abbreviations).
 
 ## Morphology not automatically cleanable (kept as-is) (2)
-- [simple] 'dec.' / 'december': Deklination not automatically cleanable
-- [simple] 'prothomart.' / 'prothomartir': Wortstamm not automatically cleanable
+- 'dec.' / 'december': Deklination not automatically cleanable
+- 'prothomart.' / 'prothomartir': Wortstamm not automatically cleanable
 
 Validation `morphology_unattested`: 14 rows -> data/review/morphology_unattested.csv
-Validation `aufloesung_unattested`: 129 rows -> data/review/aufloesung_unattested.csv
+Validation `aufloesung_unattested`: 131 rows -> data/review/aufloesung_unattested.csv
 Validation `rg_volume_mismatch`: 264 rows -> data/review/rg_volume_mismatch.csv

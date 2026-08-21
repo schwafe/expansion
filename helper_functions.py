@@ -139,10 +139,19 @@ def find_abbreviations(texts: pl.DataFrame) -> pl.Series:
     return abbreviations.rename("Abkürzung").unique()
 
 
-def determine_candidates(vita: pl.DataFrame, simple: pl.DataFrame, complex: pl.DataFrame):
+def determine_candidates(vita: pl.DataFrame, glossary: pl.DataFrame):
+    """
+    The expansion candidates of step 2 for one vita.
+
+    Two kinds of glossary entry contribute, and they are exactly the ones step 1
+    could not expand by rule: every complex entry, and those simple entries
+    whose volume knows more than one reading.
+    """
     volume = vita.get_column("volume").unique().item() # implicit assertion that there is just one vita and consequently one volume in the dataframe
+    simple = glossary.filter(~pl.col("komplex"))
     simple = simple.filter(pl.col(f"^RG{volume}$").is_not_null())
     simple = simple.filter(pl.col("Abkürzung").is_duplicated())
+    complex = glossary.filter(pl.col("komplex"))
 
     abbreviations = find_abbreviations(vita)
     multiword_abbreviations_with_spaces = abbreviations.filter(abbreviations.str.find(r"\.\w").is_not_null()).str.replace_all(r"\.(\w)", r". $1")

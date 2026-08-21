@@ -395,11 +395,11 @@ class TestMorphologyIntegration:
                 Wortstamm="mystery", Deklination="???"),
         ])
 
-        cleaned, review = clean_morphology.clean_frame(frame, "simple")
+        cleaned, review = clean_morphology.clean_frame(frame, "glossary")
 
         assert cleaned.get_column("Wortstamm")[0] == "abbatiss -e"
         assert len(review) == 1
-        assert review[0]["file"] == "simple"
+        assert review[0]["file"] == "glossary"
 
 
 class TestFrame:
@@ -408,6 +408,18 @@ class TestFrame:
                                  volumes="1|2", **{eg.MULTI: True})])
         assert eg.MULTI not in frame.columns
         assert frame.get_column("volumes")[0] == "1|2"
+
+    def test_the_komplex_flag_is_written_as_a_column(self):
+        """The one file holds both kinds of entry; this is what tells them apart."""
+        frame = eg.to_frame([
+            row(Abkürzung="a.", Auflösung="annus", **{eg.KOMPLEX: False}),
+            row(Abkürzung="d.", Auflösung="dominus", **{eg.KOMPLEX: True}),
+        ])
+        assert frame.get_column(eg.KOMPLEX).to_list() == [False, True]
+
+    def test_a_row_without_the_flag_counts_as_simple(self):
+        frame = eg.to_frame([row(Abkürzung="a.", Auflösung="annus")])
+        assert frame.get_column(eg.KOMPLEX).to_list() == [False]
 
 
 if __name__ == "__main__":

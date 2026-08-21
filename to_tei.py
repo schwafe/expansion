@@ -62,7 +62,7 @@ from evaluate import (DATA_DIR, REVIEW_DIR, SOURCE, STAGES, TOKEN, align,
 
 OUTPUT = DATA_DIR / "rg_expanded.xml"
 REPORT = REVIEW_DIR / "tei_report.md"
-GLOSSARY = (DATA_DIR / "simple.csv", DATA_DIR / "complex.csv")
+GLOSSARY = (DATA_DIR / "glossary.csv",)
 
 TEI_NS = "http://www.tei-c.org/ns/1.0"
 
