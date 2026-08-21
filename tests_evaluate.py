@@ -9,8 +9,11 @@ Covers:
   abbreviation the gold leaves standing, a passage the gold drops, and the
   ambiguous case that must be reported instead of scored
 - the verdicts and the step attribution
+- the candidate coverage: which errors the offered list could not have avoided
 - the summary rates and the baseline diff
 """
+
+import json
 
 import pytest
 
@@ -19,9 +22,12 @@ from evaluate import (
     align,
     build_anchor_index,
     build_lemma_index,
+    candidate_covers,
+    candidate_summary,
     evaluate_vita,
     headline,
     inflectional_variants,
+    load_candidates,
     orthographic_key,
     phrase_key,
     rates,
@@ -253,6 +259,73 @@ class TestSummary:
         occurrences = evaluate_vita(2, 370, SOURCE, GOLD, STAGES, lemma_index)
         summary = summarize(occurrences, list(STAGES), {})
         assert headline(summary) == headline(summary)
+
+
+class TestCandidateCoverage:
+    def test_a_candidate_covers_the_gold_word_in_any_form(self, lemma_index):
+        # step 2 offers base forms, the gold is inflected: still the right word
+        assert candidate_covers("ecclesiam", ["ordo", "ecclesia"], lemma_index)
+
+    def test_a_candidate_covers_the_other_spelling(self, lemma_index):
+        assert candidate_covers("ecclesiae", ["ecclesie"], lemma_index)
+
+    def test_a_list_without_the_gold_word_covers_nothing(self, lemma_index):
+        assert not candidate_covers("ordinis", ["ecclesia", "civitas"], lemma_index)
+
+    def test_the_dump_is_read_per_vita(self, tmp_path):
+        dump = tmp_path / "results.json"
+        dump.write_text(json.dumps([
+            {"twice_expanded_text": "text of 2/370", "candidates": {"d.": ["datum", "dictus"]}},
+        ]), encoding="utf-8")
+        offered = load_candidates(dump, "twice_expanded_text", {(2, 370): "text of 2/370"})
+        assert offered == {(2, 370): {"d.": ["datum", "dictus"]}}
+
+    def test_a_dump_of_an_earlier_run_is_dropped(self, tmp_path):
+        """The text a dump records must be the text being scored."""
+        dump = tmp_path / "results.json"
+        dump.write_text(json.dumps([
+            {"twice_expanded_text": "the old text", "candidates": {"d.": ["datum"]}},
+        ]), encoding="utf-8")
+        assert load_candidates(dump, "twice_expanded_text", {(2, 370): "the new text"}) == {}
+
+    def test_a_missing_dump_is_not_an_error(self, tmp_path):
+        assert load_candidates(tmp_path / "nothing.json", "twice_expanded_text", {}) == {}
+
+    def test_the_summary_splits_the_errors_into_misses_and_bad_choices(self):
+        def occurrence(gold, expansion, verdict_, covered):
+            one = Occurrence(2, 370, "d.", gold, "")
+            one.step = "step 2 (candidates)"
+            one.stage_expansions["normalized"] = expansion
+            one.verdicts["normalized"] = verdict_
+            one.candidates["twice"] = ["datum", "dictus"]
+            one.covered["twice"] = covered
+            return one
+
+        summary = candidate_summary([
+            occurrence("datum", "datum", "exact", True),
+            occurrence("dicta", "datum", "wrong_word", True),   # could have chosen it
+            occurrence("dies", "datum", "wrong_word", False),   # not on the list
+        ], "normalized")["step 2 (candidates)"]
+
+        assert summary["expansions"] == 3
+        assert summary["errors"] == 2
+        assert summary["candidate_misses"] == 1
+        assert summary["ceiling"] == pytest.approx(2 / 3)
+        assert summary["choice_accuracy"] == pytest.approx(1 / 2)
+        assert summary["worst"] == [("d.", 1)]
+
+    def test_a_right_answer_outside_the_list_is_counted_as_such(self):
+        """Step 3 may expand freely, so it can be right without a suggestion."""
+        one = Occurrence(2, 370, "Terdon.", "Terdonensis", "")
+        one.step = "step 3 (mined)"
+        one.stage_expansions["normalized"] = "Terdonensis"
+        one.verdicts["normalized"] = "exact"
+        one.candidates["thrice"] = ["Terdonis"]
+        one.covered["thrice"] = False
+
+        summary = candidate_summary([one], "normalized")["step 3 (mined)"]
+        assert summary["beyond"] == 1
+        assert summary["candidate_misses"] == 0
 
 
 class TestOccurrence:

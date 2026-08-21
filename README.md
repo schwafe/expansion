@@ -48,9 +48,11 @@ Two expansions count as the same form when their spelling variants agree (`eccle
 
 Every occurrence is also attributed to the step that produced its expansion, by comparing the four stage texts, so a wrong word can be traced to a wrong rule (step 1), a bad candidate choice (step 2) or a bad corpus suggestion (step 3).
 
+Steps 2 and 3 do not invent an expansion, they choose one from a list, so a wrong word is only the model's fault if the list held the right one. The candidate lists are read back from the dumps the two steps wrote (`data/results_candidates.json`, `data/results_rest.json`) — an entry counts only if the text it records is exactly the stage text being scored, so a dump left over from an earlier run cannot be counted against the current one. Each error is then split into a **candidate miss** (no offered candidate would have scored as the right word, whatever the model had picked) and a choice error, which gives the report a **ceiling** — the accuracy the step could have reached — and a **choice accuracy** over exactly the occurrences it could have got right. Step 3 may also expand freely as long as the expansion extends the abbreviation, so for it the list is a hint rather than a limit and the report counts the right answers it found outside it.
+
 `--write` produces `data/review/`:
-- `evaluation_report.md` — the accuracy table per stage, the reliability figures, the errors per step, and the abbreviations ranked by how much fixing them would gain.
-- `evaluation_mismatches.csv` — every occurrence that is not exactly right, with the gold, the expansion of each stage and the source context. This is the file to read when improving a prompt or a glossary entry.
+- `evaluation_report.md` — the accuracy table per stage, the reliability figures, the errors per step, the candidate coverage of steps 2 and 3, and the abbreviations ranked by how much fixing them would gain.
+- `evaluation_mismatches.csv` — every occurrence that is not exactly right, with the gold, the expansion of each stage, the candidates the deciding step was offered (`candidate_miss` says whether the right word was among them) and the source context. This is the file to read when improving a prompt or a glossary entry.
 - `evaluation_by_abbreviation.csv` — the same numbers per abbreviation.
 
 Since the gold is model-produced, mismatches that turn out to be errors of the gold go into the `KNOWN_GOLD_ERRORS` table of `evaluate.py` — like the `CORRECTIONS` table of `extract_glossary.py`, each entry carries its reason and a stale one aborts the run, so reviewing `evaluation_mismatches.csv` accumulates instead of being repeated every run.

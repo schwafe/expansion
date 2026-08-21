@@ -29,6 +29,12 @@ score `thrice_expanded` (deliberately base forms) as broken:
 - word accuracy -- was the right word chosen? This is what steps 1-3 do.
 - form accuracy -- is the text right as it stands? This is what step 4 moves.
 
+Steps 2 and 3 do not invent an expansion, they choose one from a list, so a
+wrong word is only the model's fault if the list held the right one. The
+candidate lists the two steps were offered are read back from the dumps the
+pipeline wrote and every error is split into a candidate miss (the list could
+not have produced the gold word) and a choice error (it could have).
+
 Usage:
     python evaluate.py                  # print the summary
     python evaluate.py --write          # also write data/review/evaluation_*
@@ -72,6 +78,16 @@ STEP_OF_STAGE = {
     "thrice": "step 3 (mined)",
     "normalized": "step 4 (normalized)",
 }
+
+# the candidate lists the two model steps were offered, as they were dumped by
+# the pipeline: the stage name, the dump, and the key under which the dump
+# records the text it produced. That text is what ties an entry to a vita
+# (results_candidates.json carries no volume/nr_RG) and at the same time proves
+# that the dump belongs to the run being scored.
+CANDIDATE_DUMPS: list[tuple[str, Path, str]] = [
+    ("twice", DATA_DIR / "results_candidates.json", "twice_expanded_text"),
+    ("thrice", DATA_DIR / "results_rest.json", "thrice_expanded_text"),
+]
 
 # same token notion as normalize.py, plus numbers so dates stay anchors
 TOKEN = re.compile(r"[A-Za-z]+\.?|\d+")
@@ -376,6 +392,8 @@ class Occurrence:
     stage_expansions: dict[str, str | None] = field(default_factory=dict)
     verdicts: dict[str, str] = field(default_factory=dict)
     step: str | None = None  # the stage that expanded it (in the last stage)
+    candidates: dict[str, list[str]] = field(default_factory=dict)  # per stage
+    covered: dict[str, bool] = field(default_factory=dict)  # gold among them?
 
 
 def verdict(gold: str, system: str | None, lemma_index) -> str:
@@ -391,6 +409,20 @@ def verdict(gold: str, system: str | None, lemma_index) -> str:
     if phrase_key(gold) == phrase_key(system):
         return "orthographic"
     return same_lemma(gold, system, lemma_index) or "wrong_word"
+
+
+def candidate_covers(gold: str, offered: list[str], lemma_index) -> bool:
+    """
+    Would any of the offered candidates have counted as the right word?
+
+    The same yardstick as everywhere else in the report: a candidate covers the
+    gold if choosing it would have scored `exact`, `orthographic` or one of the
+    two `wrong_form` verdicts, i.e. if only the inflection would have been left
+    to fix. The candidates of step 2 are base forms and those of step 3 surface
+    forms, so the comparison has to run through the lemma check either way.
+    """
+    return any(verdict(gold, candidate, lemma_index) in CORRECT_WORD
+               for candidate in offered)
 
 
 def span_text(tokens: list[str], span: tuple[int, int] | None) -> str | None:
@@ -488,6 +520,36 @@ def load_texts(path: Path, keys: pl.DataFrame) -> dict[tuple[int, int], str]:
     return {(row["volume"], row["nr_RG"]): row["text"] for row in table.iter_rows(named=True)}
 
 
+def load_candidates(
+    path: Path, text_key: str, stage_texts: dict[tuple[int, int], str]
+) -> dict[tuple[int, int], dict[str, list[str]]]:
+    """
+    The candidate list every abbreviation was offered, per vita.
+
+    An entry counts only if the text it records is exactly the stage text being
+    scored -- a dump left over from an earlier run must not be counted against
+    this one. Entries that do not match, and a missing dump, are silently
+    dropped; the report states how many occurrences ended up without a list.
+    """
+    if not path.exists():
+        return {}
+    with open(path, encoding="utf-8") as file:
+        dump = json.load(file)
+    # run_step.py wraps the per-vita records in the run's provenance; the dumps
+    # the notebooks wrote are the bare list
+    entries = dump["results"] if isinstance(dump, dict) else dump
+    key_of_text = {text: key for key, text in stage_texts.items()}
+    candidates = {}
+    for entry in entries:
+        key = key_of_text.get(entry.get(text_key))
+        if key is not None:
+            candidates[key] = {
+                abbreviation: list(offered)
+                for abbreviation, offered in entry.get("candidates", {}).items()
+            }
+    return candidates
+
+
 def collect(gold_path: Path) -> tuple[list[Occurrence], list[str], dict]:
     """Score every vita that has a gold label. Returns (occurrences, stages, info)."""
     gold_table = pl.read_csv(gold_path)
@@ -505,13 +567,25 @@ def collect(gold_path: Path) -> tuple[list[Occurrence], list[str], dict]:
         + diocese_entries(pl.read_csv(DATA_DIR / "dioceses.csv")["expansion"].to_list())
     )
     anchors = build_anchor_index(DATA_DIR / "simple.csv", DATA_DIR / "complex.csv")
+    offered = {
+        stage: load_candidates(path, text_key, texts[stage])
+        for stage, path, text_key in CANDIDATE_DUMPS
+    }
     for key in scored:
-        occurrences.extend(
-            evaluate_vita(
-                key[0], key[1], source[key], gold[key],
-                {name: texts[name][key] for name in stage_names}, lemma_index, anchors,
-            )
+        scored_vita = evaluate_vita(
+            key[0], key[1], source[key], gold[key],
+            {name: texts[name][key] for name in stage_names}, lemma_index, anchors,
         )
+        for occurrence in scored_vita:
+            for stage, table in offered.items():
+                candidates = table.get(key, {}).get(occurrence.abbreviation)
+                if candidates is None:
+                    continue
+                occurrence.candidates[stage] = candidates
+                occurrence.covered[stage] = candidate_covers(
+                    occurrence.gold, candidates, lemma_index
+                )
+        occurrences.extend(scored_vita)
 
     info = {
         "gold": str(gold_path),
@@ -593,7 +667,46 @@ def summarize(occurrences: list[Occurrence], stages: list[str], info: dict) -> d
         by_step[step] = rates(Counter(o.verdicts[final] for o in subset))
 
     return {"info": info, "stages": per_stage, "by_abbreviation": by_abbreviation,
-            "by_step": by_step, "final_stage": final}
+            "by_step": by_step, "candidates": candidate_summary(occurrences, final),
+            "final_stage": final}
+
+
+def candidate_summary(occurrences: list[Occurrence], final: str) -> dict:
+    """
+    How much of each choosing step's error the candidate list is to blame for.
+
+    Only the steps whose candidates were dumped appear. `ceiling` is the share
+    of the occurrences whose list held a word that would have scored as right;
+    `choice_accuracy` is the word accuracy over exactly those, i.e. the score
+    the step gets for the choices it could actually have made. Step 3 may also
+    expand freely, so for it the ceiling is not a limit but a measure of how
+    often the mined suggestions were enough -- `beyond` counts the right
+    answers it found outside them.
+    """
+    summary = {}
+    for stage, step in STEP_OF_STAGE.items():
+        subset = [o for o in occurrences
+                  if o.step == step and o.verdicts[final] in SCOREABLE]
+        offered = [o for o in subset if stage in o.candidates]
+        if not offered:
+            continue
+        right = [o for o in offered if o.verdicts[final] in CORRECT_WORD]
+        covered = [o for o in offered if o.covered[stage]]
+        chosen_well = [o for o in covered if o.verdicts[final] in CORRECT_WORD]
+        misses = [o for o in offered
+                  if not o.covered[stage] and o.verdicts[final] not in CORRECT_WORD]
+        summary[step] = {
+            "expansions": len(offered),
+            "without_candidates": len(subset) - len(offered),
+            "word_accuracy": len(right) / len(offered),
+            "ceiling": len(covered) / len(offered),
+            "choice_accuracy": len(chosen_well) / len(covered) if covered else 0.0,
+            "errors": len(offered) - len(right),
+            "candidate_misses": len(misses),
+            "beyond": len(right) - len(chosen_well),
+            "worst": Counter(o.abbreviation for o in misses).most_common(5),
+        }
+    return summary
 
 
 def headline(summary: dict) -> dict:
@@ -673,6 +786,8 @@ def render_report(summary: dict, occurrences: list[Occurrence]) -> str:
         lines.append(f"| {step} | {stage['scoreable']} | "
                      f"{percent(stage['word_accuracy'])} | {percent(stage['form_accuracy'])} |")
 
+    lines += render_candidates(summary["candidates"])
+
     lines += ["", "## Worst abbreviations", "",
               "Sorted by how many occurrences fixing them would gain.", "",
               "| abbreviation | occurrences | word accuracy | form accuracy | "
@@ -707,6 +822,56 @@ def render_report(summary: dict, occurrences: list[Occurrence]) -> str:
     return "\n".join(lines) + "\n"
 
 
+def render_candidates(candidates: dict) -> list[str]:
+    """The candidate-coverage section: how much of the error is the list's."""
+    if not candidates:
+        return []
+    lines = [
+        "", "## Candidate coverage", "",
+        "Steps 2 and 3 do not invent an expansion, they choose one from a list, so "
+        "an error is only the model's if the list held the right word. `ceiling` is "
+        "the share of the expansions whose list did; `choice accuracy` scores the "
+        "step over exactly those, i.e. over the choices it could have made.",
+        "",
+        "| step | expansions | word accuracy | ceiling | choice accuracy | errors | "
+        "candidate misses |",
+        "| --- | ---: | ---: | ---: | ---: | ---: | ---: |",
+    ]
+    for step, entry in candidates.items():
+        misses = entry["candidate_misses"]
+        share = f" ({misses / entry['errors']:.0%})" if entry["errors"] else ""
+        lines.append(
+            f"| {step} | {entry['expansions']} | {percent(entry['word_accuracy'])} | "
+            f"{percent(entry['ceiling'])} | {percent(entry['choice_accuracy'])} | "
+            f"{entry['errors']} | {misses}{share} |"
+        )
+    lines.append("")
+    for step, entry in candidates.items():
+        if entry["worst"]:
+            worst = ", ".join(f"`{a}` ({n})" for a, n in entry["worst"])
+            lines.append(f"- {step}: the candidate misses are mostly {worst}.")
+        if entry["beyond"]:
+            lines.append(
+                f"- {step}: {entry['beyond']} of its right answers were not in its "
+                "list at all -- the step may expand freely as long as the expansion "
+                "extends the abbreviation, so for it the list is a hint, not a limit."
+            )
+        if entry["without_candidates"]:
+            lines.append(
+                f"- {step}: {entry['without_candidates']} expansions have no recorded "
+                "list (a multi-word abbreviation is offered under its whole key, not "
+                "under its parts) and are left out of this table."
+            )
+    lines.append(
+        "- A candidate counts as covering the gold under the same yardstick as the "
+        "rest of the report, so a candidate the lemma check cannot connect to the "
+        "gold form -- verbs above all, which the glossary gives no paradigm -- is "
+        "counted as a miss although it is in truth the right word. The candidate "
+        "miss column is therefore an upper bound."
+    )
+    return lines
+
+
 def mismatch_table(occurrences: list[Occurrence], stages: list[str]) -> pl.DataFrame:
     final = stages[-1]
     rows = [
@@ -718,6 +883,8 @@ def mismatch_table(occurrences: list[Occurrence], stages: list[str]) -> pl.DataF
             "system": o.stage_expansions[final] or "",
             "verdict": o.verdicts[final],
             "step": o.step or "",
+            "candidate_miss": candidate_miss(o),
+            "candidates": "; ".join(step_candidates(o)),
             **{f"verdict_{name}": o.verdicts[name] for name in stages[:-1]},
             **{f"expansion_{name}": o.stage_expansions[name] or "" for name in stages[:-1]},
             "context": o.context,
@@ -728,6 +895,22 @@ def mismatch_table(occurrences: list[Occurrence], stages: list[str]) -> pl.DataF
     if not rows:
         return pl.DataFrame()
     return pl.DataFrame(rows).sort(["verdict", "abbreviation", "volume", "nr_RG"])
+
+
+def step_candidates(occurrence: Occurrence) -> list[str]:
+    """The list the step that produced the final expansion had to choose from."""
+    for stage, step in STEP_OF_STAGE.items():
+        if occurrence.step == step:
+            return occurrence.candidates.get(stage, [])
+    return []
+
+
+def candidate_miss(occurrence: Occurrence) -> str:
+    """Whether that list could have produced the gold word at all."""
+    for stage, step in STEP_OF_STAGE.items():
+        if occurrence.step == step and stage in occurrence.covered:
+            return "no" if occurrence.covered[stage] else "yes"
+    return ""
 
 
 def abbreviation_table(summary: dict) -> pl.DataFrame:

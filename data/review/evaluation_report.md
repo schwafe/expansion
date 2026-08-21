@@ -31,6 +31,21 @@ Which step produced the expansion that is finally in the text.
 | step 3 (mined) | 276 |  88.0% |  52.5% |
 | step 4 (normalized) | 1616 |  94.6% |  65.8% |
 
+## Candidate coverage
+
+Steps 2 and 3 do not invent an expansion, they choose one from a list, so an error is only the model's if the list held the right word. `ceiling` is the share of the expansions whose list did; `choice accuracy` scores the step over exactly those, i.e. over the choices it could have made.
+
+| step | expansions | word accuracy | ceiling | choice accuracy | errors | candidate misses |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| step 2 (candidates) | 918 |  84.4% |  94.1% |  89.7% | 143 | 54 (38%) |
+| step 3 (mined) | 276 |  88.0% |  61.6% |  92.9% | 33 | 21 (64%) |
+
+- step 2 (candidates): the candidate misses are mostly `supplic.` (45), `exten.` (4), `ap.` (2), `abbrev.` (1), `s.` (1).
+- step 2 (candidates): 12 expansions have no recorded list (a multi-word abbreviation is offered under its whole key, not under its parts) and are left out of this table.
+- step 3 (mined): the candidate misses are mostly `Terdon.` (3), `Erford.` (3), `Par.` (3), `Liptzen.` (2), `Conc.` (2).
+- step 3 (mined): 85 of its right answers were not in its list at all -- the step may expand freely as long as the expansion extends the abbreviation, so for it the list is a hint, not a limit.
+- A candidate counts as covering the gold under the same yardstick as the rest of the report, so a candidate the lemma check cannot connect to the gold form -- verbs above all, which the glossary gives no paradigm -- is counted as a miss although it is in truth the right word. The candidate miss column is therefore an upper bound.
+
 ## Worst abbreviations
 
 Sorted by how many occurrences fixing them would gain.
@@ -60,8 +75,8 @@ Sorted by how many occurrences fixing them would gain.
 | `Misnen.` | 92 | 100.0% |  81.5% | Misnensis | Misnen., Misnensem, Misnenses, Misnensi, Misnensibus |
 | `fr.` | 17 |  17.6% |   5.9% | frater | fratrem, fratres, fratrum |
 | `s.` | 252 |  96.8% |  94.0% | sancti | s., sacri, sancte, sancti, sine |
-| `vicar.` | 23 | 100.0% |  34.8% | vicaria | vicaria, vicariam, vicarie, vicariis |
 | `ian.` | 19 | 100.0% |  21.1% | ianuarius | ian., ianuarii |
+| `vicar.` | 23 | 100.0% |  34.8% | vicaria | vicaria, vicariam, vicarie, vicariis |
 
 ## Sample mismatches
 
@@ -108,19 +123,4 @@ The full list is in `evaluation_mismatches.csv`.
 - 4/1307 `gen.`: gold **genere**, system **generalis** (step 2 (candidates)) -- _ex utr. de mil. gen. de benef. s. e._
 - 4/1399 `ap.`: gold **apostoli**, system **apostolici** (step 4 (normalized)) -- _Marie conceptionis Anne Andree ap. ac omn. SS. in_
 - 4/2980 `Nuremberg.`: gold **Nurembergensis**, system **Nuremberge** (step 3 (mined)) -- _Brandenburg. elector ac burggravius Nuremberg. de insigniis pont. pro_
-- 4/2980 `abb.`: gold **abbate**, system **abbatissam** (step 2 (candidates)) -- _de insigniis pont. pro abb. mon. Fontissalutis o. Cist._
-- 4/2980 `abb.`: gold **abbate**, system **abbatissam** (step 2 (candidates)) -- _de insigniis pont. pro abb. mon. in Wallerbach o._
-- 4/2980 `excom.`: gold **excommunicatorum**, system **excommunicationis** (step 4 (normalized)) -- _divina resumendi post expulsionem excom. pro consul. etc. Noveciv._
-- 4/2980 `confess.`: gold **confessionali**, system **confessione** (step 4 (normalized)) -- _S 112 20 de confess. interd. lic. sacram. eucharistie_
-- 4/2980 `conf.`: gold **confessorem**, system **confirmationis** (step 4 (normalized)) -- _v. de lic. el. conf. pro se et familia_
-- 4/2980 `conc.`: gold **concessorum**, system **concessione** (step 4 (normalized)) -- _pres. de conf. privil. conc. ab Augustino priori generali_
-- 4/2980 `fr.`: gold **fratrum**, system **frater** (step 1 (rule)) -- _Augustino priori generali o. fr. herem. s. A. conventui_
-- 4/2980 `A.`: gold **Augustini**, system **A.** (None) -- _o. fr. herem. s. A. conventui in Kulmach d._
-- 4/2980 `Nurenburg.`: gold **Nurenburgensis**, system **Nurenburg.** (None) -- _par. eccl. s. Sebaldi Nurenburg. Bamberg. dioc. et communitatem_
-- 4/2980 `d.`: gold **dictum**, system **domino** (step 4 (normalized)) -- _contributionibus ad decennium p. d. F. concessam 23 iun._
-- 4/2980 `F.`: gold **Fridericum**, system **F.** (None) -- _ad decennium p. d. F. concessam 23 iun. 1426_
-- 4/2980 `conc.`: gold **concessi**, system **concessione** (step 4 (normalized)) -- _258 de conf. indulti conc. p. H. card. s._
-- 4/2980 `f.`: gold **fratrum**, system **f.** (None) -- _Eusebii legatum domo o. f. m. Brandenburg. sup. electione_
-- 4/2980 `m.`: gold **minorum**, system **marcae** (step 4 (normalized)) -- _legatum domo o. f. m. Brandenburg. sup. electione vicarii_
-- 4/2980 `J.`: gold **Johanne**, system **J.** (None) -- _diem et interd. pro J. de lacticiniis pro J._
 - ...
