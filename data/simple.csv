@@ -3,9 +3,7 @@ a.,annus,Jahr,"siehe Eintrag ""an.""",ann -i,o,a.,,a.,,,,,,,,,1|2|3|4|5|6|7|8|9|
 a.,argentum,Silber,,argent -i,o (n.),,,,,,a.,a.,,a.,,meist in Verbindung m. a. p.; m. arg. p.,1|2|3|4|5|6|7|8|9|10
 abb.,abbas,Abt,,abbat -is,kons. (m.),abb.,abb.,abb.,abb.,abb.,abb.,abb.,abb.,abb.,,,1|2|3|4|5|6|7|8|9|10
 abb.,abbatissam,Akk. Sg. von abbatissa: Äbtissin,,abbatiss -e,a,,,,abb.,,,,,,,"wo nicht benutzt, wahrscheinlich Abk. ""abba."" verwendet",1|2|3|4|5|6|7|8|9|10
-abb. et conv.,abbas et conventus,Abt und Konvent,,abbat -is; et; convent -us,kons. (m.); -; u,abb. et conv.,,,,,,,,,,,1|3|5|9|10
-abb. et. conv.,abbas et conventus,Abt und Konvent,,abbat -is; et; convent -us,kons. (m.); -; u,,abb. et. conv.,abb. et. conv.,abb. et. conv.,abb. et. conv.,abb. et. conv.,,abb. et. conv.,abb. et. conv.,,,1|3|5|9|10
-abb. etc.,abbas et conventus,Abt und Konvent,,abbat -is; et; convent -us,kons. (m.); -; u,abb. etc.,abb. etc.,,abb. etc.,abb. etc.,abb. etc.,abb. etc.,abb. etc.,abb. etc.,,,1|2|3|4|5|6|7|8|9|10
+abb. et. conv.,abbas et conventus,Abt und Konvent,,,,,,,,,,,,,,,1|3|5|9|10
 abba.,abbatissa,Äbtissin,,abbatiss -e,a,abba.,abba.,,abba.,abba.,abba.,abba.,abba.,abba.,,,1|2|4|5|6|7|8|9|10
 abbam.,abbatissam,Akk. Sg. von abbatissa: Äbtissin,,abbatiss -e,a,,abbam.,,,abbam.,,,,,,"wo nicht benutzt, wahrscheinlich Abk. ""abba."" verwendet",2|4|5
 abbat.,abbatia,Abtei; Stelle/Amt des Abtes,,abbati -e,a,abbat.,,abbat.,,abbat.,abbat.,abbat.,abbat.,abbat.,,,1|3|5|6|7|8|9|10
@@ -19,11 +17,6 @@ add. ment.,addendo mentionem,,,,Gerundium,,add. ment.,,add. ment.,,,,,,,,2|4
 adhes.,adhesio,,,adhesion -is,kons.,,,,,adhes.,,,,,,,5
 adiudic.,adiudicare,,,"adiudic, adiudicav, adiudicat",a-Konj.,,adiudic.,,,,,,,,,,2
 aep.,archiepiscopus,Erzbischof,,archiepiscop -i,o,aep.,aep.,aep.,aep.,aep.,aep.,aep.,aep.,aep.,,,1|2|3|4|5|6|7|8|9|10
-aep. et cap.,"archiepiscopus, prepositus, decanus et canonici","Erzbischof, Propst, Dekan und die Kanoniker",,,,aep. et cap.,,,,,,,,,,,1
-aep. et capit.,"archiepiscopus, prepositus, decanus et canonici","Erzbischof, Propst, Dekan und die Kanoniker",,,,,aep. et capit.,aep. et capit.,aep. et capit.,aep. et capit.,,,,aep. et capit.,,,2|3|4|5|9|10
-aep. et eccl.,"archiepiscopus, prepositus, decanus et canonici","Erzbischof, Propst, Dekan und die Kanoniker",,,,,,,,,,,,aep. et eccl.,,,1|9|10
-aep. et prep. etc.,"archiepiscopus, prepositus, decanus et canonici","Erzbischof, Propst, Dekan und die Kanoniker",,,,,,,,,,aep. et prep. etc.,,,,,7
-aep. etc.,"archiepiscopus, prepositus, decanus et canonici","Erzbischof, Propst, Dekan und die Kanoniker",,,,aep. etc.,aep. etc.,,aep. etc.,aep. etc.,aep. etc.,aep. etc.,aep. etc.,aep. etc.,,,1|2|4|5|6|7|8|9|10
 aepisc.,archiepiscopalis,erzbischöflich,,archiepiscopal -is,i (Adj.),aepisc.,,aepisc.,,aepisc.,aepisc.,aepisc.,aepisc.,aepisc.,,,1|3|5|6|7|8|9|10
 aff.,affinitas,,,,,,,,,,,,,,,,5
 alt.,altare,Altar,,altar -is,kons. (n.),alt.,alt.,alt.,alt.,alt.,alt.,alt.,alt.,alt.,,,1|2|3|4|5|6|7|8|9|10
@@ -132,9 +125,6 @@ de ref. disp. sup. matrim.,de reformatione dispensationis super matrimonio,,,,,,
 dec.,decanatus,Amt/Stelle des Dekans,,decanat -us,u,,dec.,dec.,dec.,dec.,dec.,dec.,dec.,dec.,,,1|2|3|4|5|6|7|8|9|10
 dec.,decanus,Dekan,,decan -i,o,dec.,dec.,dec.,dec.,dec.,dec.,dec.,dec.,dec.,,"in allen Bd. auch ""decanus""",1|2|3|4|5|6|7|8|9|10
 dec.,december,Dezember,,decembr -is,konsonantisch?,dec.,dec.,dec.,dec.,,dec.,dec.,,,,,1|2|3|4|5|6|7|8|9|10
-dec. et cap.,"decanus, capitulum et singuli canonici","Dekan, Kapitel und die einzelnen Kanoniker",,,,dec. et cap.,dec. et cap.,,dec. et cap.,,,,,,,,1|2|4
-dec. et capit.,"decanus, capitulum et singuli canonici","Dekan, Kapitel und die einzelnen Kanoniker",,,,,dec. et capit.,dec. et capit.,dec. et capit.,dec. et capit.,dec. et capit.,dec. et capit.,dec. et capit.,dec. et capit.,,,2|3|4|5|6|7|8|9|10
-dec. etc.,"decanus, capitulum et singuli canonici","Dekan, Kapitel und die einzelnen Kanoniker",,,,,dec. etc.,,dec. etc.,dec. etc.,dec. etc.,dec. etc.,dec. etc.,dec. etc.,,,2|4|5|6|7|8|9|10
 decan.,decanatus,Amt/Stelle des Dekans,,decanat -us,u,decan.,,,,,,,,,,,1|2|3|4|5|6|7|8|9|10
 decan.,decanus,Dekan,in Bd. 1,decan -i,o,decan.,,,,,,,,,,"in allen Bd. auch ""decanus""",1|2|3|4|5|6|7|8|9|10
 decanat.,decanatus,Amt/Stelle des Dekans,,decanat -us,u,decanat.,,,,,,,,,,,1
@@ -187,12 +177,12 @@ elemosin.,elemosina,,Auflösung im Abk.-Verzeichnis mit '?' markiert,elemosin/el
 elemosin.,elemosinaria,,Auflösung im Abk.-Verzeichnis mit '?' markiert,elemosin/elemosinari -e,a,,,elemosin.,elemosin.,,,,,,,ausgeschrieben auch: elimosinaria,3|4
 elig.,eligere,wählen,,"elig, eleg, elect",kons.-Konj.,,elig.,elig.,elig.,elig.,elig.,elig.,elig.,elig.,,"in allen Bd. auch ""eligere""",2|3|4|5|6|7|8|9|10
 ep.,episcopus,Bischof,,episcop -i,o,ep.,ep.,ep.,ep.,ep.,ep.,ep.,ep.,ep.,,,1|2|3|4|5|6|7|8|9|10
-ep. etc.,"episcopus, prepositus, decanus et canonici","Bischof, Propst, Dekan und die Kanoniker",,,,ep. etc.,ep. etc.,ep. etc.,ep. etc.,ep. etc.,ep. etc.,ep. etc.,ep. etc.,ep. etc.,,,1|2|3|4|5|6|7|8|9|10
+ep. et cap.,episcopus et capitulum,Bischof und Kapitel,siehe ep. etc.,,,,,,,,,,,,,,1
+ep. et capit.,episcopus et capitulum,Bischof und Kapitel,siehe ep. etc.,,,,,,,,,,,,,,10
 episc.,episcopalis,bischöflich,,episcopal -is,i (Adj.),,,episc.,,episc.,episc.,episc.,episc.,episc.,,,3|4|5|6|7|8|9|10
 Epp.,Episcopi,Bischöfe,,episcop -orum,o,,,,,Epp.,,,,,,,4|5|6|9
 epp.,episcopi,Bischöfe,,episcop -orum,o,epp.,,epp.,,epp.,,,,,,,1|3|5
 erig.,erigere,errichten; (eine Kirche in einen höheren Status) erheben,,"erig, erex, erect",kons.-Konj.,,erig.,,,erig.,erig.,erig.,erig.,erig.,,"in allen Bd. auch ""erigere""",2|5|6|7|8|9|10
-et.,etas,Alter,,etat -is,kons.,,et.,,et.,et.,et.,et.,et.,et.,,"möglicherweise ""et."" für ""etas"" auch in Bd. 1 und 3 verwendet, aber wg. tausender Treffer zu ""et""(und) nicht nachzuprüfen; ""etas"" kommt im übrigen nie im Nominativ vor, daher auch in RG 3 Abk. ""etat.""",1|2|3|4|5|6|7|8|9|10
 etat.,etas,Alter,,etat -is,kons.,,,etat.,,,,,,,,"möglicherweise ""et."" für ""etas"" auch in Bd. 1 und 3 verwendet, aber wg. tausender Treffer zu ""et""(und) nicht nachzuprüfen; ""etas"" kommt im übrigen nie im Nominativ vor, daher auch in RG 3 Abk. ""etat.""",3
 ev.,evangelista,(Johannes) der Evangelist,,evangelist -e,a (m.),,ev.,,ev.,ev.,ev.,ev.,ev.,ev.,,,2|3|4|5|6|7|8|9
 evangelist.,evangelista,(Johannes) der Evangelist,,evangelist -e,a (m.),,,,evangelist.,,,,,,,,4
@@ -215,7 +205,6 @@ fr.,frater,Bruder,,fratr -is,gem.,fr.,fr.,fr.,fr.,fr.,fr.,fr.,fr.,fr.,,,1|2|3|4|
 fragm.,fragmentum,"Bruchstück, unvollständiger Eintrag",,fragment -i,o (n.),,,,,fragm.,,,fragm.,fragm.,,,5|8|9|10
 fratern.,fraternitas,,,fraternitat -is,kons.,,,fratern.,,,,,,,,,3
 fruct.,fructus,"Ertrag, Einkünfte",,fruct -us,u,,fruct.,fruct.,fruct.,fruct.,fruct.,fruct.,fruct.,fruct.,,,2|3|4|5|6|7|8|9|10
-fruct. etc.,"fructus, proventus et redditus",,,fruct -us; provent -us; et; reddit -us,u; u; -; u,,,fruct. etc.,fruct. etc.,fruct. etc.,fruct. etc.,fruct. etc.,fruct. etc.,fruct. etc.,,,10
 gener.,generalis,"allgemein, General-","gen. 1,4",general -is,i (Adj.),,gener.,,gener.,,,,,,,,2|4|5|6|7|8|9|10
 grad.,gradus,Grad,,grad -us,u,grad.,,grad.,,,grad.,,,grad.,,,1|3|6|9|10
 guard.,guardianus,Guardian,"nur in 6,7,8",guardian -i,o,,,,,,guard.,guard.,guard.,,,,6|7|8|10
@@ -358,11 +347,6 @@ prec.,preces,Bitte,,prec -um,kons. (Pl.),,,,prec.,prec.,,prec.,prec.,prec.,,,4|5
 predec.,predecessor,,,predecessor -is,kons.,,predec.,,,,,,,,,,2
 predic.,predicare,,,"predic, predicav, predicat",a-Konj.,,predic.,predic.,,,,,,,,,2|3
 prep.,prepositus,"Propst, Vorsteher",,preposit -i ?,o ?,prep.,prep.,prep.,prep.,prep.,prep.,prep.,prep.,prep.,,,1|2|3|4|5|6|7|8|9|10
-prep. etc.,"prepositus, decanus et canonici","Propst, Dekan und die Kanoniker",,,,prep. etc.,prep. etc.,,prep. etc.,prep. etc.,prep. etc.,prep. etc.,prep. etc.,prep. etc.,,,1|2|4|5|6|7|8|9|10
-"prep., dec. et can.","prepositus, decanus et canonici","Propst, Dekan und die Kanoniker",,,,,,,,,,,,"prep., dec. et can.",,,9
-"prep., dec. et capit.","prepositus, decanus et canonici","Propst, Dekan und die Kanoniker",,,,,,"prep., dec. et capit.",,"prep., dec. et capit.",,,,"prep., dec. et capit.",,,3|5|9|10
-"prep., dec. etc.","prepositus, decanus et canonici","Propst, Dekan und die Kanoniker",,,,,,,,,,,"prep., dec. etc.",,,,5|8
-"prep., dec., can. et capit.","prepositus, decanus et canonici","Propst, Dekan und die Kanoniker",,,,,,,,,,,,"prep., dec., can. et capit.",,,9
 prerog.,prerogativa,"Vorrecht, Vorrang",,prerogativ -e,a,,,,,prerog.,prerog.,prerog.,prerog.,prerog.,,,5|6|7|8|9|10
 presb.,presbiter,Priester,auch presbyter,,,presb.,presb.,presb.,presb.,presb.,presb.,presb.,presb.,presb.,,,1|2|3|4|5|6|7|8|9|10
 prim.,primarius,"der erste, vorrangige",,primari -i,o/a (Adj.),,,prim.,prim.,prim.,,prim.,prim.,prim.,,,3|4|5|7|8|9|10

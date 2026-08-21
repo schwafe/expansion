@@ -428,6 +428,45 @@ CORRECTIONS: list[Correction] = [
         match={"Abkürzung": "o. in cur.", "Auflösung": "obitus in cur."},
         set={"Auflösung": "obitus in curia"},
     ),
+    # ----- some (or potentially just one) further manual corrections:
+    Correction(
+        reason="Christian P. said that it shouldn't be expanded like this",
+        match={"Abkürzung": "aep. etc."},
+        delete=True,
+    ),
+    Correction(
+        reason="Same applies most likely to this too",
+        match={"Abkürzung": "dec. etc."},
+        delete=True,
+    ),
+    Correction(
+        reason="Same applies most likely to this too",
+        match={"Abkürzung": "ep. etc."},
+        delete=True,
+    ),
+    Correction(
+        reason="Same applies most likely to this too",
+        match={"Abkürzung": "fruct. etc."},
+        delete=True,
+    ),
+    Correction(
+        reason="Same applies most likely to this too",
+        match={"Abkürzung": "prep. etc."},
+        delete=True,
+    ),
+    Correction(
+        reason="unsure about this one - #TODO ask Christian",
+        match={"Abkürzung": "abb. etc."},
+        delete=True,
+    ),
+    Correction(
+        reason="From the entries like aep. etc., it seems that "
+        "etc. can mean more things than what the etc. entries "
+        "themselves say, so just not expanding etc. (as Fable 5 did) "
+        "seems smartest",
+        match={"Abkürzung": "etc."},
+        delete=True,
+    ),
 ]
 
 # Rows that are not in the glossary at all. The matrimony entries were

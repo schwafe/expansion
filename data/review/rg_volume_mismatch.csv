@@ -1,8 +1,4 @@
 Abkürzung,Auflösung,volume,found_in
-abb. et. conv.,abbas et conventus,2,1|3|5|9|10
-abb. et. conv.,abbas et conventus,4,1|3|5|9|10
-abb. et. conv.,abbas et conventus,6,1|3|5|9|10
-abb. et. conv.,abbas et conventus,8,1|3|5|9|10
 Ap.,Apostolus,1,5|7
 Apost.,Apostolus,3,2
 archid.,archidiaconus,4,2|10
@@ -36,13 +32,6 @@ e. m.,extra muros,9,2|3|4|6|7|8|10
 ecc.,ecclesia,5,4|6
 f. gr.,fit gratia,4,1|2|3
 fit gr.,fit gratia,2,1|4
-fruct. etc.,"fructus, proventus et redditus",3,10
-fruct. etc.,"fructus, proventus et redditus",4,10
-fruct. etc.,"fructus, proventus et redditus",5,10
-fruct. etc.,"fructus, proventus et redditus",6,10
-fruct. etc.,"fructus, proventus et redditus",7,10
-fruct. etc.,"fructus, proventus et redditus",8,10
-fruct. etc.,"fructus, proventus et redditus",9,10
 i. m.,intra muros,5,1|4|6|7|8|10
 i. m.,intra muros,9,1|4|6|7|8|10
 inhab.,inhabilitas,2,4|10
@@ -224,13 +213,6 @@ domic.,domicella,1,2|3|4|5|6|7
 domic.,domicella,8,2|3|4|5|6|7
 domic.,domicella,9,2|3|4|5|6|7
 duc.,ducatus,3,2|4|5|6|7|8|9|10
-ep. et capit.,"episcopus, prepositus, decanus et canonici",2,10
-ep. et capit.,"episcopus, prepositus, decanus et canonici",3,10
-ep. et capit.,"episcopus, prepositus, decanus et canonici",4,10
-ep. et capit.,"episcopus, prepositus, decanus et canonici",5,10
-ep. et capit.,"episcopus, prepositus, decanus et canonici",7,10
-ep. et capit.,"episcopus, prepositus, decanus et canonici",8,10
-ep. et capit.,"episcopus, prepositus, decanus et canonici",9,10
 exec.,executere,1,2|3|4|5|6|7|8|9|10
 express.,expressus,1,5|6|7|8|9|10
 express.,expressus,4,5|6|7|8|9|10

@@ -2,7 +2,7 @@
 
 Read 1023 rows from data/RGAbkVerz.csv.
 
-## Corrections applied (75)
+## Corrections applied (82)
 - edited '' / '?': volume reference in an RG cell belongs into the Bemerkungen
 - edited 'abb.' / 'abbas': counting note '1x' is not part of the abbreviation
 - edited 'adc.' / 'auri de camera': the currency qualifier is a note, not part of the expansion
@@ -59,6 +59,13 @@ Read 1023 rows from data/RGAbkVerz.csv.
 - edited 'cur.' / 'Romana curia': 'curia' without an addition refers to the Romana curia (the glossary's own note), which is what the RG writes out
 - edited 'id.' / 'identisch': 'identisch' is a German editorial gloss, not a Latin expansion -- do not let step 1 insert it into the texts
 - edited 'o. in cur.' / 'obitus in curia': the glossary leaves 'cur.' abbreviated inside the expansion; an expansion must not contain an abbreviation
+- deleted 'aep. etc.' / 'archiepiscopus, prepositus, decanus et canonici': Christian P. said that it shouldn't be expanded like this
+- deleted 'dec. etc.' / 'decanus, capitulum et singuli canonici': Same applies most likely to this too
+- deleted 'ep. etc.' / 'episcopus, prepositus, decanus et canonici': Same applies most likely to this too
+- deleted 'fruct. etc.' / 'fructus, proventus et redditus': Same applies most likely to this too
+- deleted 'prep. etc.' / 'prepositus, decanus et canonici': Same applies most likely to this too
+- deleted 'abb. etc.' / 'abbas et conventus': unsure about this one - #TODO ask Christian
+- deleted 'etc.' / 'et cetera': From the entries like aep. etc., it seems that etc. can mean more things than what the etc. entries themselves say, so just not expanding etc. (as Fable 5 did) seems smartest
 - added 'conf. disp. sup. matrim.': found in the texts, suggested by OpenAI GPT-5.5
 - added 'de disp. sup. matrim.': found in the texts, suggested by OpenAI GPT-5.5
 - added 'de conf. disp. sup. matrim.': found in the texts, suggested by OpenAI GPT-5.5
@@ -207,9 +214,8 @@ Read 1023 rows from data/RGAbkVerz.csv.
 - 'op.': 'op(p)idum' -> 'opidum' (corpus: opidum* 8x, oppidum* 3x)
 - 'red.': 'red(d)itus' -> 'redditus' (corpus: reditus* 7x, redditus* 53x)
 
-## Duplicate rows merged (185)
+## Duplicate rows merged (184)
 - merged duplicate 'abbat.' / 'abbatissa'
-- merged duplicate 'abb. et. conv.' / 'abbas et conventus'
 - merged duplicate 'a.' / 'annus'
 - merged duplicate 'Ap.' / 'apostolus'
 - merged duplicate 'Apost.' / 'apostolus'
@@ -394,7 +400,7 @@ Read 1023 rows from data/RGAbkVerz.csv.
 - merged duplicate 'universit.' / 'universitas'
 - merged duplicate 'v.' / 'virgo'
 
-## Abbreviations not found in the corpus (dropped) (172)
+## Abbreviations not found in the corpus (dropped) (171)
 - 'accip.' ('accipere'): not found in the corpus
 - 'archiep.' ('archiepiscopus'): not found in the corpus
 - 'apost.' ('apostolus'): not found in the corpus
@@ -498,7 +504,6 @@ Read 1023 rows from data/RGAbkVerz.csv.
 - 'poss.' ('possessio'): not found in the corpus
 - 'poss.' ('possessor'): not found in the corpus
 - 'predict.' ('predictum'): not found in the corpus
-- 'prep., dec. et canonici(s)' ('prepositus, decanus et canonici'): not found in the corpus
 - 'presbyt.' ('presbiteratus'): not found in the corpus
 - 'presbyter.' ('presbiteratus'): not found in the corpus
 - 'presbyt.' ('presbyteratus'): not found in the corpus
@@ -570,7 +575,7 @@ Read 1023 rows from data/RGAbkVerz.csv.
 
 ## Complex rows merged after stripping the notes (0)
 
-Split: 495 simple rows (469 abbreviations), 513 complex rows (240 abbreviations).
+Split: 479 simple rows (453 abbreviations), 509 complex rows (238 abbreviations).
 
 ## Morphology not automatically cleanable (kept as-is) (2)
 - [simple] 'dec.' / 'december': Deklination not automatically cleanable
@@ -578,4 +583,4 @@ Split: 495 simple rows (469 abbreviations), 513 complex rows (240 abbreviations)
 
 Validation `morphology_unattested`: 14 rows -> data/review/morphology_unattested.csv
 Validation `aufloesung_unattested`: 129 rows -> data/review/aufloesung_unattested.csv
-Validation `rg_volume_mismatch`: 282 rows -> data/review/rg_volume_mismatch.csv
+Validation `rg_volume_mismatch`: 264 rows -> data/review/rg_volume_mismatch.csv
