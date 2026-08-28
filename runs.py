@@ -150,6 +150,26 @@ def record(run: str, step: int, inherited: dict, **entry) -> dict:
     return manifest
 
 
+def the_run(name: str | None) -> str:
+    """
+    Which run a reader means: the one it named, or the only one there is.
+
+    Guessing between several would silently score or publish the wrong model's
+    output, so with more than one run the caller has to say.
+    """
+    if name is not None:
+        if not manifest_path(name).exists():
+            known = ", ".join(existing_runs()) or "none yet"
+            raise LookupError(f"no run {name!r} in {RUNS_DIR} (there is: {known})")
+        return name
+    available = existing_runs()
+    if len(available) == 1:
+        return available[0]
+    if not available:
+        raise LookupError(f"no run in {RUNS_DIR} yet -- run `python run_step.py 2` first")
+    raise LookupError("several runs, so which one? " + ", ".join(available))
+
+
 def chain(run: str) -> list[tuple[int, dict]]:
     """The steps of a run in order, each with what produced it."""
     steps = read_manifest(run)["steps"]

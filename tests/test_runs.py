@@ -127,6 +127,29 @@ class TestManifest:
         assert runs.previous_prompt("gemma", 4) is None
 
 
+class TestTheRun:
+    """Which run a reader means, when it does not say."""
+
+    def test_the_only_run_needs_no_naming(self):
+        produce("gemma", 2)
+        assert runs.the_run(None) == "gemma"
+
+    def test_several_runs_have_to_be_told_apart(self):
+        produce("gemma", 2)
+        produce("qwen-nothink", 2)
+        with pytest.raises(LookupError, match="which one"):
+            runs.the_run(None)
+
+    def test_a_named_run_that_does_not_exist_lists_the_ones_that_do(self):
+        produce("gemma", 2)
+        with pytest.raises(LookupError, match="there is: gemma"):
+            runs.the_run("typo")
+
+    def test_no_run_at_all_says_what_to_do(self):
+        with pytest.raises(LookupError, match="run_step.py 2"):
+            runs.the_run(None)
+
+
 class TestPaths:
     def test_every_run_has_its_own_checkpoint(self):
         assert runs.checkpoint_path("gemma", 2) != runs.checkpoint_path("qwen-nothink", 2)

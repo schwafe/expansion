@@ -62,21 +62,57 @@ REVIEW_DIR = DATA_DIR / "review"
 GOLD_DEFAULT = DATA_DIR / "to_compare_with" / "fable_expanded.csv"
 SOURCE = DATA_DIR / "ablaesse_texts.csv"
 GLOSSARY = DATA_DIR / "glossary.csv"
-BASELINE = REVIEW_DIR / "evaluation_baseline.json"
+COMPARISON = REVIEW_DIR / "runs.md"  # every run against every other
 
-# The run whose output is scored. Steps 2-4 are run per model and per thinking
-# setting (`runs.py`), so a stage is a file of one run -- for now always this
-# one; scoring another is the next step, and then this becomes an argument.
-RUN = "gemma-4-31b-it"
 
-# the pipeline stages, in order; the label is what the report calls them
-STAGES: list[tuple[str, str, Path]] = [
-    ("source", "abbreviated text", SOURCE),
-    ("once", "step 1 (rule)", runs.STEP1),
-    ("twice", "step 2 (candidates)", runs.output_path(RUN, 2)),
-    ("thrice", "step 3 (mined)", runs.output_path(RUN, 3)),
-    ("normalized", "step 4 (normalized)", runs.output_path(RUN, 4)),
-]
+def baseline_path(run: str) -> Path:
+    """A baseline belongs to a run: it answers whether *this* chain got better."""
+    return runs.run_dir(run) / "evaluation_baseline.json"
+
+# the pipeline stages, in order; the label is what the report calls them. Steps
+# 2-4 are run per model and per thinking setting, so which file a stage is comes
+# from the run being scored (`runs.py`) -- the source and the rule-based step 1
+# are the same for every run.
+STAGE_OF_STEP = {1: "once", 2: "twice", 3: "thrice", 4: "normalized"}
+LABELS = {
+    "source": "abbreviated text",
+    "once": "step 1 (rule)",
+    "twice": "step 2 (candidates)",
+    "thrice": "step 3 (mined)",
+    "normalized": "step 4 (normalized)",
+}
+
+
+def stages(run: str) -> list[tuple[str, str, Path]]:
+    """
+    The stages of one run: the source, and every step its chain has reached.
+
+    A run that has only got as far as step 2 is scored as far as step 2 rather
+    than not at all, so a new model can be judged before the rest is re-run.
+    """
+    found = [("source", LABELS["source"], SOURCE)]
+    for number, entry in runs.chain(run):
+        name = STAGE_OF_STEP[number]
+        found.append((name, LABELS[name], Path(entry["output"])))
+    return found
+
+
+def candidate_dumps(run: str) -> list[tuple[str, Path, str]]:
+    """
+    The candidate lists the two model steps were offered, as they were dumped.
+
+    The dump belongs to whichever run produced that step, which for an inherited
+    step is not the run being scored.
+    """
+    # the key under which a dump records the text it produced: that text is what
+    # ties an entry to a vita (the dumps carry no volume/nr_RG) and at the same
+    # time proves that the dump belongs to the output being scored
+    keys = {2: "twice_expanded_text", 3: "thrice_expanded_text"}
+    found = []
+    for number, entry in runs.chain(run):
+        if number in keys and entry.get("dump"):
+            found.append((STAGE_OF_STEP[number], Path(entry["dump"]), keys[number]))
+    return found
 
 # the step each stage attributes an expansion to (the source expands nothing)
 STEP_OF_STAGE = {
@@ -85,16 +121,6 @@ STEP_OF_STAGE = {
     "thrice": "step 3 (mined)",
     "normalized": "step 4 (normalized)",
 }
-
-# the candidate lists the two model steps were offered, as they were dumped by
-# the pipeline: the stage name, the dump, and the key under which the dump
-# records the text it produced. That text is what ties an entry to a vita
-# (results_candidates.json carries no volume/nr_RG) and at the same time proves
-# that the dump belongs to the run being scored.
-CANDIDATE_DUMPS: list[tuple[str, Path, str]] = [
-    ("twice", runs.dump_path(RUN, 2), "twice_expanded_text"),
-    ("thrice", runs.dump_path(RUN, 3), "thrice_expanded_text"),
-]
 
 # same token notion as normalize.py, plus numbers so dates stay anchors
 TOKEN = re.compile(r"[A-Za-z]+\.?|\d+")
@@ -557,15 +583,16 @@ def load_candidates(
     return candidates
 
 
-def collect(gold_path: Path) -> tuple[list[Occurrence], list[str], dict]:
+def collect(gold_path: Path, run: str) -> tuple[list[Occurrence], list[str], dict]:
     """Score every vita that has a gold label. Returns (occurrences, stages, info)."""
     gold_table = pl.read_csv(gold_path)
     keys = gold_table.select(["volume", "nr_RG"]).unique()
     gold = {(row["volume"], row["nr_RG"]): row["text"] for row in gold_table.iter_rows(named=True)}
 
-    texts = {name: load_texts(path, keys) for name, _, path in STAGES}
+    of_the_run = stages(run)
+    texts = {name: load_texts(path, keys) for name, _, path in of_the_run}
     source = texts.pop("source")
-    stage_names = [name for name, _, _ in STAGES if name != "source"]
+    stage_names = [name for name, _, _ in of_the_run if name != "source"]
 
     scored = sorted(set(gold) & set(source) & set.intersection(*(set(texts[n]) for n in stage_names)))
     occurrences = []
@@ -576,7 +603,7 @@ def collect(gold_path: Path) -> tuple[list[Occurrence], list[str], dict]:
     anchors = build_anchor_index(GLOSSARY)
     offered = {
         stage: load_candidates(path, text_key, texts[stage])
-        for stage, path, text_key in CANDIDATE_DUMPS
+        for stage, path, text_key in candidate_dumps(run)
     }
     for key in scored:
         scored_vita = evaluate_vita(
@@ -596,6 +623,8 @@ def collect(gold_path: Path) -> tuple[list[Occurrence], list[str], dict]:
 
     info = {
         "gold": str(gold_path),
+        "run": run,
+        "produced_by": {str(number): entry for number, entry in runs.chain(run)},
         "vitae_with_gold": len(gold),
         "vitae_scored": len(scored),
         "vitae_missing": sorted(set(gold) - set(scored)),
@@ -730,17 +759,48 @@ def percent(value: float) -> str:
     return f"{value * 100:5.1f}%"
 
 
+def describe_settings(entry: dict) -> str:
+    """What was asked of the model's thinking, as the manifest recorded it."""
+    if entry.get("reasoning_effort"):
+        return f"effort {entry['reasoning_effort']}"
+    if entry.get("thinking") is None:
+        return "default"
+    return "on" if entry["thinking"] else "off"
+
+
+def produced_by(info: dict) -> list[str]:
+    """
+    What produced every step of the chain being scored.
+
+    A step can come from another run (`run_step.py --from`), so the run a number
+    belongs to is worth stating next to it rather than assumed from the heading.
+    """
+    lines = ["## What produced this", "",
+             "| step | model | thinking | run | written |",
+             "| --- | --- | --- | --- | --- |"]
+    for number, entry in sorted(info["produced_by"].items(), key=lambda item: int(item[0])):
+        if entry.get("model") is None:  # step 1 applies rules, no model involved
+            lines.append(f"| step {number} | rule (`expand_simple.py`) | | | |")
+            continue
+        lines.append(
+            f"| step {number} | `{entry['model']}` | {describe_settings(entry)} "
+            f"| `{entry.get('run') or ''}` | {entry.get('written') or 'unrecorded'} |"
+        )
+    return lines + [""]
+
+
 def render_report(summary: dict, occurrences: list[Occurrence]) -> str:
     info, stages = summary["info"], summary["stages"]
     final = summary["final_stage"]
-    labels = {name: label for name, label, _ in STAGES}
+    labels = LABELS
 
     lines = [
-        "# Evaluation against the gold labels",
+        f"# Evaluation of `{info['run']}` against the gold labels",
         "",
         f"Gold: `{info['gold']}` -- {info['vitae_scored']} of {info['vitae_with_gold']} "
         "vitae scored (the rest are missing from a pipeline stage).",
         "",
+        *produced_by(info),
         "## Accuracy per stage",
         "",
         "Word accuracy asks whether the right word was chosen (steps 1-3), form "
@@ -939,7 +999,7 @@ def abbreviation_table(summary: dict) -> pl.DataFrame:
 
 
 def render_baseline_diff(current: dict, previous: dict) -> str:
-    labels = {name: label for name, label, _ in STAGES}
+    labels = LABELS
     lines = ["", "Change against the baseline:", ""]
     for name, stage in current.items():
         old = previous.get(name)
@@ -960,40 +1020,91 @@ def render_baseline_diff(current: dict, previous: dict) -> str:
 # CLI
 # --------------------------------------------------------------------------
 
-def evaluate(gold_path: Path, write: bool, baseline: bool, save_baseline: bool) -> dict:
-    occurrences, stages, info = collect(gold_path)
+def score(gold_path: Path, run: str) -> tuple[dict, list[Occurrence], list[str]]:
+    """One run scored: its summary, its occurrences and the stages it reached."""
+    occurrences, stage_names, info = collect(gold_path, run)
     occurrences = drop_known_gold_errors(occurrences)
-    summary = summarize(occurrences, stages, info)
+    return summarize(occurrences, stage_names, info), occurrences, stage_names
+
+
+def evaluate(gold_path: Path, run: str, write: bool, baseline: bool,
+             save_baseline: bool) -> dict:
+    summary, occurrences, stages = score(gold_path, run)
     report = render_report(summary, occurrences)
+    baseline_file = baseline_path(run)
 
     print(report)
 
     if baseline:
-        if BASELINE.exists():
-            with open(BASELINE, encoding="utf-8") as file:
+        if baseline_file.exists():
+            with open(baseline_file, encoding="utf-8") as file:
                 print(render_baseline_diff(headline(summary), json.load(file)["stages"]))
         else:
-            print(f"\nno baseline yet -- run with --save-baseline to create {BASELINE}")
+            print(f"\nno baseline for {run} yet -- run with --save-baseline "
+                  f"to create {baseline_file}")
 
     if write:
-        REVIEW_DIR.mkdir(parents=True, exist_ok=True)
-        with open(REVIEW_DIR / "evaluation_report.md", "w", encoding="utf-8") as file:
+        directory = runs.run_dir(run)
+        directory.mkdir(parents=True, exist_ok=True)
+        with open(directory / "evaluation_report.md", "w", encoding="utf-8") as file:
             file.write(report)
         mismatches = mismatch_table(occurrences, stages)
         if not mismatches.is_empty():
-            mismatches.write_csv(REVIEW_DIR / "evaluation_mismatches.csv")
-        abbreviation_table(summary).write_csv(REVIEW_DIR / "evaluation_by_abbreviation.csv")
-        print(f"Wrote {REVIEW_DIR}/evaluation_*.")
+            mismatches.write_csv(directory / "evaluation_mismatches.csv")
+        abbreviation_table(summary).write_csv(directory / "evaluation_by_abbreviation.csv")
+        print(f"Wrote {directory}/evaluation_*.")
     else:
-        print("\ndry run -- pass --write to update data/review/evaluation_*")
+        print(f"\ndry run -- pass --write to update {runs.run_dir(run)}/evaluation_*")
 
     if save_baseline:
-        REVIEW_DIR.mkdir(parents=True, exist_ok=True)
-        with open(BASELINE, "w", encoding="utf-8") as file:
-            json.dump({"gold": str(gold_path), "stages": headline(summary)}, file, indent=2)
-        print(f"Saved the current numbers as the baseline in {BASELINE}.")
+        baseline_file.parent.mkdir(parents=True, exist_ok=True)
+        with open(baseline_file, "w", encoding="utf-8") as file:
+            json.dump({"gold": str(gold_path), "run": run, "stages": headline(summary)},
+                      file, indent=2)
+        print(f"Saved the current numbers as the baseline in {baseline_file}.")
 
     return summary
+
+
+def compare(gold_path: Path, names: list[str]) -> str:
+    """
+    Every run in one table: which model did which step, and what came of it.
+
+    The rates are those of the last stage a run has reached, so a chain that
+    stops at step 2 is listed with what it did reach rather than left out --
+    the stage is named in its own column so the rows stay comparable.
+    """
+    rows = []
+    for name in names:
+        summary, _, stage_names = score(gold_path, name)
+        final = summary["stages"][summary["final_stage"]]
+        steps = dict(runs.chain(name))
+        rows.append({
+            "run": name,
+            "models": [f"{steps[number]['model']} ({describe_settings(steps[number])})"
+                       if number in steps else "" for number in (2, 3, 4)],
+            "final": LABELS[summary["final_stage"]],
+            "word": final["word_accuracy"],
+            "form": final["form_accuracy"],
+            "scoreable": final["scoreable"],
+        })
+    rows.sort(key=lambda row: (-row["form"], -row["word"]))
+
+    lines = [
+        "# The runs against each other",
+        "",
+        f"Gold: `{gold_path}`. Word accuracy asks whether the right word was chosen, "
+        "form accuracy whether the text is right as it stands; both are those of the "
+        "last stage the run reached.",
+        "",
+        "| run | step 2 | step 3 | step 4 | scored at | word accuracy | form accuracy |",
+        "| --- | --- | --- | --- | --- | ---: | ---: |",
+    ]
+    for row in rows:
+        models = " | ".join(f"`{model}`" if model else "—" for model in row["models"])
+        lines.append(f"| `{row['run']}` | {models} | {row['final']} | "
+                     f"{percent(row['word'])} | {percent(row['form'])} |")
+    return "\n".join(lines) + "\n"
 
 
 def main() -> None:
@@ -1002,14 +1113,34 @@ def main() -> None:
     )
     parser.add_argument("--gold", type=Path, default=GOLD_DEFAULT,
                         help=f"the gold CSV (default: {GOLD_DEFAULT})")
+    parser.add_argument("--run", help="which run to score (default: the only one there is)")
+    parser.add_argument("--runs", action="store_true",
+                        help=f"score every run and write {COMPARISON}")
     parser.add_argument("--write", action="store_true",
-                        help="write data/review/evaluation_* (default: dry run)")
+                        help="write data/runs/<run>/evaluation_* (default: dry run)")
     parser.add_argument("--baseline", action="store_true",
-                        help="print the change against the saved baseline")
+                        help="print the change against this run's saved baseline")
     parser.add_argument("--save-baseline", action="store_true",
-                        help="store the current numbers as the baseline")
+                        help="store the current numbers as this run's baseline")
     arguments = parser.parse_args()
-    evaluate(arguments.gold, arguments.write, arguments.baseline, arguments.save_baseline)
+
+    if arguments.runs:
+        names = runs.existing_runs()
+        if not names:
+            raise SystemExit(f"no run in {runs.RUNS_DIR} yet")
+        table = compare(arguments.gold, names)
+        print(table)
+        REVIEW_DIR.mkdir(parents=True, exist_ok=True)
+        COMPARISON.write_text(table, encoding="utf-8")
+        print(f"Wrote {COMPARISON}.")
+        return
+
+    try:
+        run = runs.the_run(arguments.run)
+    except LookupError as error:
+        raise SystemExit(str(error))
+    evaluate(arguments.gold, run, arguments.write, arguments.baseline,
+             arguments.save_baseline)
 
 
 if __name__ == "__main__":

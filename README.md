@@ -150,14 +150,24 @@ Latin-specific models, tried with a plain "Please expand all abbreviations in th
 - `hathibelagal/llama-3.2-latin` — seemed promising, but that prompt for some reason led to no output being generated at all.
 
 # Step 5: quality control
-`evaluate.py` scores the output of every stage against the gold expansions in `data/to_compare_with/fable_expanded.csv`. It reads the stages of the run named by its `RUN` constant; scoring a chosen run, and comparing the runs against each other, is the next thing to build.
+`evaluate.py` scores the output of every stage against the gold expansions in `data/to_compare_with/fable_expanded.csv`.
 
 ```bash
-python evaluate.py                  # print the summary
-python evaluate.py --write          # also write data/review/evaluation_*
-python evaluate.py --save-baseline  # store the current numbers as the baseline
-python evaluate.py --baseline       # print the change against the baseline
+python evaluate.py                        # the only run there is, or --run says which
+python evaluate.py --run qwen3.8-27b-low
+python evaluate.py --write                # also write data/runs/<run>/evaluation_*
+python evaluate.py --save-baseline        # store the current numbers as this run's baseline
+python evaluate.py --baseline             # print the change against that baseline
+python evaluate.py --runs                 # every run in one table, into data/review/runs.md
 ```
+
+**Which run.** The stages come from the run's manifest, so a chain that borrowed its step 3 from another run is scored against the files that actually produced it, and the report opens with a table saying which model did which step and when. A run that has only reached step 2 is scored as far as step 2 rather than left out, so a new model can be judged before the rest is re-run. With one run present none of this has to be said; with several, `--run` does, because guessing would score the wrong model's output.
+
+Each run keeps its own `evaluation_report.md`, `evaluation_mismatches.csv`, `evaluation_by_abbreviation.csv` and `evaluation_baseline.json` in its directory — a baseline belongs to a run, since it answers whether *this* chain got better. `--runs` puts them side by side in `data/review/runs.md`, sorted by form accuracy, with the model of each step and the stage each run was scored at:
+
+| run | step 2 | step 3 | step 4 | scored at | word accuracy | form accuracy |
+| --- | --- | --- | --- | --- | ---: | ---: |
+| `gemma-4-31b-it` | `gemma-4-31b-it (default)` | `gemma-4-31b-it (default)` | `gemma-4-31b-it (default)` | step 4 (normalized) | 92.9% | 64.8% |
 
 The unit of measurement is the single abbreviation, not the text: a text-level diff mixes one expansion error with twenty inflection differences and tells you nothing actionable. The abbreviated source text is the anchor — for each vita it is aligned with the gold and with each stage output at word level, so every abbreviation gets a gold expansion and a system expansion that are compared directly. The alignment works because the expansion steps only ever replace abbreviations, so every word that was not abbreviated reappears unchanged and anchors the alignment (the property `normalize.py` already relies on); inside a changed passage each abbreviation is re-anchored on the expansion that continues it (`eccl.` → `ecclesiam`, or via the glossary where it does not, `aep.` → `archiepiscopus`). What cannot be anchored is reported as `unaligned` and left out of every rate rather than scored — that number is the reliability check on the metric itself.
 
@@ -171,7 +181,7 @@ Every occurrence is also attributed to the step that produced its expansion, by 
 
 Steps 2 and 3 do not invent an expansion, they choose one from a list, so a wrong word is only the model's fault if the list held the right one. The candidate lists are read back from the dumps the two steps wrote (`data/runs/<run>/step2.json`, `step3.json`) — an entry counts only if the text it records is exactly the stage text being scored, so a dump left over from an earlier run cannot be counted against the current one. Each error is then split into a **candidate miss** (no offered candidate would have scored as the right word, whatever the model had picked) and a choice error, which gives the report a **ceiling** — the accuracy the step could have reached — and a **choice accuracy** over exactly the occurrences it could have got right. Step 3 may also expand freely as long as the expansion extends the abbreviation, so for it the list is a hint rather than a limit and the report counts the right answers it found outside it.
 
-`--write` produces `data/review/`:
+`--write` produces, in `data/runs/<run>/`:
 - `evaluation_report.md` — the accuracy table per stage, the reliability figures, the errors per step, the candidate coverage of steps 2 and 3, and the abbreviations ranked by how much fixing them would gain.
 - `evaluation_mismatches.csv` — every occurrence that is not exactly right, with the gold, the expansion of each stage, the candidates the deciding step was offered (`candidate_miss` says whether the right word was among them) and the source context. This is the file to read when improving a prompt or a glossary entry.
 - `evaluation_by_abbreviation.csv` — the same numbers per abbreviation.
@@ -184,6 +194,7 @@ Since the gold is model-produced, mismatches that turn out to be errors of the g
 ```bash
 python to_tei.py            # dry run, prints the report
 python to_tei.py --write    # write data/rg_expanded.xml
+python to_tei.py --run gemma-4-31b-it --write     # which run to publish
 ```
 
 Every stage of the workflow produces a text in which the abbreviations have been replaced, which loses the reading of the RG: once `eccl.` has become `ecclesiae` there is no way back. The TEI document keeps both, so either can be read automatically:

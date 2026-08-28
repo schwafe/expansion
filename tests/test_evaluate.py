@@ -11,15 +11,21 @@ Covers:
 - the verdicts and the step attribution
 - the candidate coverage: which errors the offered list could not have avoided
 - the summary rates and the baseline diff
+- which files a run is scored from, and what the report says produced them
 """
 
 import json
 
 import pytest
 
+import evaluate
+import runs
 from evaluate import (
     Occurrence,
     align,
+    candidate_dumps,
+    describe_settings,
+    produced_by,
     build_anchor_index,
     build_lemma_index,
     candidate_covers,
@@ -333,3 +339,83 @@ class TestOccurrence:
         first, second = Occurrence(2, 1, "s.", "sancti", ""), Occurrence(2, 2, "s.", "sancti", "")
         first.verdicts["once"] = "exact"
         assert second.verdicts == {}
+
+
+class TestStagesOfARun:
+    """Which files are scored comes from the run's manifest, not a constant."""
+
+    @pytest.fixture(autouse=True)
+    def a_temporary_runs_dir(self, tmp_path, monkeypatch):
+        monkeypatch.setattr(runs, "RUNS_DIR", tmp_path / "runs")
+        monkeypatch.setattr(runs, "STEP1", tmp_path / "step1.csv")
+        runs.STEP1.write_text("volume,nr_RG\n", encoding="utf-8")
+
+    def produce(self, run, step, model="a-model", dump=True, parent=None):
+        source, inherited = runs.resolve_input(run, step, parent)
+        runs.record(run, step, inherited, model=model, thinking=None, reasoning_effort=None,
+                    prompt_sha1="abc", input=str(source),
+                    output=str(runs.output_path(run, step)),
+                    dump=str(runs.dump_path(run, step)) if dump else None,
+                    vitae=1, written="2026-08-28T00:00:00+00:00")
+
+    def test_the_stages_are_the_steps_the_run_reached(self):
+        self.produce("gemma", 2)
+        self.produce("gemma", 3)
+        assert [name for name, _, _ in evaluate.stages("gemma")] == [
+            "source", "once", "twice", "thrice"
+        ]
+
+    def test_a_stage_points_at_the_run_that_produced_it(self):
+        self.produce("gemma", 2)
+        self.produce("gemma", 3)
+        self.produce("qwen-nothink", 4, model="qwen3.8-27b", parent="gemma")
+        paths = {name: path for name, _, path in evaluate.stages("qwen-nothink")}
+        assert paths["thrice"] == runs.output_path("gemma", 3)
+        assert paths["normalized"] == runs.output_path("qwen-nothink", 4)
+
+    def test_the_candidate_dumps_follow_the_steps_that_wrote_them(self):
+        self.produce("gemma", 2)
+        self.produce("gemma", 3)
+        self.produce("qwen-nothink", 4, model="qwen3.8-27b", parent="gemma")
+        dumps = {stage: path for stage, path, _ in candidate_dumps("qwen-nothink")}
+        assert dumps == {"twice": runs.dump_path("gemma", 2),
+                         "thrice": runs.dump_path("gemma", 3)}
+
+    def test_a_step_without_a_dump_is_left_out_rather_than_guessed(self):
+        self.produce("gemma", 2, dump=False)
+        assert candidate_dumps("gemma") == []
+
+
+class TestProducedBy:
+    """The report says which model did which step, through however many runs."""
+
+    def info(self, steps):
+        return {"produced_by": steps}
+
+    def test_step_one_is_named_as_the_rule_it_is(self):
+        rendered = "\n".join(produced_by(self.info({"1": {"run": None, "model": None}})))
+        assert "rule" in rendered and "expand_simple" in rendered
+
+    def test_a_step_carries_its_model_settings_and_run(self):
+        rendered = "\n".join(produced_by(self.info({"4": {
+            "run": "qwen3.8-27b-nothink", "model": "qwen3.8-27b", "thinking": False,
+            "written": "2026-08-28T00:00:00+00:00"}})))
+        assert "`qwen3.8-27b`" in rendered and "off" in rendered
+        assert "`qwen3.8-27b-nothink`" in rendered
+
+    def test_a_step_from_before_the_dumps_recorded_a_date_says_so(self):
+        rendered = "\n".join(produced_by(self.info({"3": {
+            "run": "gemma", "model": "gemma-4-31b-it", "thinking": None, "written": None}})))
+        assert "unrecorded" in rendered
+
+
+class TestDescribeSettings:
+    def test_the_default_is_named_rather_than_left_blank(self):
+        assert describe_settings({"thinking": None, "reasoning_effort": None}) == "default"
+
+    def test_the_switch_is_reported_either_way(self):
+        assert describe_settings({"thinking": False}) == "off"
+        assert describe_settings({"thinking": True}) == "on"
+
+    def test_a_level_is_reported_instead_of_the_switch_it_implies(self):
+        assert describe_settings({"thinking": True, "reasoning_effort": "low"}) == "effort low"

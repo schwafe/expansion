@@ -57,8 +57,9 @@ from xml.sax.saxutils import escape
 
 import polars as pl
 
-from evaluate import (DATA_DIR, REVIEW_DIR, SOURCE, STAGES, TOKEN, align,
-                      build_anchor_index, is_abbreviation)
+import runs
+from evaluate import (DATA_DIR, REVIEW_DIR, SOURCE, TOKEN, align,
+                      build_anchor_index, is_abbreviation, stages)
 
 OUTPUT = DATA_DIR / "rg_expanded.xml"
 REPORT = REVIEW_DIR / "tei_report.md"
@@ -454,15 +455,16 @@ def render_report(info: dict, output: Path) -> str:
     return "\n".join(lines) + "\n"
 
 
-def to_tei(output: Path, write: bool) -> dict:
+def to_tei(output: Path, write: bool, run: str) -> dict:
     source = pl.read_csv(SOURCE)
     source_texts = {(row["volume"], row["nr_RG"]): row["text"]
                     for row in source.iter_rows(named=True)}
-    stages = {name: stage_rows(path) for name, _, path in STAGES if name != "source"}
+    stage_texts = {name: stage_rows(path)
+                   for name, _, path in stages(run) if name != "source"}
     anchors = build_anchor_index(*GLOSSARY)
     known = known_abbreviations(*GLOSSARY)
 
-    document, info = build(source_texts, stages, anchors, known)
+    document, info = build(source_texts, stage_texts, anchors, known)
     report = render_report(info, output)
     print(report)
 
@@ -487,8 +489,13 @@ def main() -> None:
                         help=f"the document to write (default: {OUTPUT})")
     parser.add_argument("--write", action="store_true",
                         help=f"write {OUTPUT} (default: dry run)")
+    parser.add_argument("--run", help="which run to publish (default: the only one there is)")
     arguments = parser.parse_args()
-    to_tei(arguments.out, arguments.write)
+    try:
+        run = runs.the_run(arguments.run)
+    except LookupError as error:
+        raise SystemExit(str(error))
+    to_tei(arguments.out, arguments.write, run)
 
 
 if __name__ == "__main__":
