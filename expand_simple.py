@@ -29,7 +29,7 @@ abbreviation, `e. m.` and `e.m.`). Longer abbreviations are applied first, so
 
 Usage:
     python expand_simple.py            # dry run, prints the report
-    python expand_simple.py --write    # write data/once_expanded.csv
+    python expand_simple.py --write    # write data/step1.csv
 """
 
 import argparse
@@ -45,7 +45,7 @@ REVIEW_DIR = DATA_DIR / "review"
 GLOSSARY = DATA_DIR / "glossary.csv"
 DIOCESES = DATA_DIR / "dioceses.csv"
 RG = DATA_DIR / "RG_header_sublemma_all.csv"
-OUTPUT = DATA_DIR / "once_expanded.csv"
+OUTPUT = DATA_DIR / "step1.csv"
 REPORT = REVIEW_DIR / "expansion_report.md"
 
 # the volumes the glossary has rules for; volume 10 is dropped

@@ -18,9 +18,15 @@ it, so a bad answer can only leave the text as it was:
   abbreviation (or `SKIP`),
 - step 4 accepts only a form from the word's own paradigm.
 
+**Runs.** The output of a step is not one file but one per run:
+`data/runs/<run>/step<n>.csv`, where the run is named after the model and its
+thinking settings unless `--run` says otherwise. `--from` takes the input from
+another run, so only the step being tried has to be run again. What produced
+what is in `data/runs/<run>/manifest.json`; `runs.py` holds the layout.
+
 **Checkpoints.** A run is 150+ model calls at 15 calls a minute, so it has to
 survive being interrupted. Every vita is appended to
-`data/checkpoints/step<n>.jsonl` as it is finished (flushed every ten by
+`data/checkpoints/<run>/step<n>.jsonl` as it is finished (flushed every ten by
 default); `--resume` reads that file and processes only what is missing. The
 CSV and the JSON dump are written only once every vita is done -- an
 interrupted run never overwrites a complete output with a partial one.
@@ -29,9 +35,9 @@ Usage:
     python run_step.py 2                       # the whole subset
     python run_step.py 3 --limit 5             # a trial run, writes no output
     python run_step.py 4 --resume              # continue an interrupted run
-    python run_step.py 2 --model qwen3.6-35b-a3b
     python run_step.py 2 --model gemma-4-31b-it --no-thinking
     python run_step.py 2 --model qwen3.8-27b --reasoning-effort low
+    python run_step.py 4 --model qwen3.8-27b --from gemma-4-31b-it
 
 **Thinking.** The reasoning models think by default, which on a whole vita can
 take minutes per call and rarely changes the answer, since every step is a
@@ -60,6 +66,7 @@ from openai import OpenAI
 import expand_rest
 import multiple_choice
 import normalize
+import runs
 from helper_functions import (
     call_chat_ai,
     determine_candidates,
@@ -70,8 +77,6 @@ from helper_functions import (
 )
 
 DATA_DIR = Path("data")
-REVIEW_DIR = DATA_DIR / "review"
-CHECKPOINT_DIR = DATA_DIR / "checkpoints"
 
 RG = DATA_DIR / "RG_header_sublemma_all.csv"
 SUBSET = DATA_DIR / "ablaesse.csv"  # the vitae the workflow is tried on
@@ -192,13 +197,10 @@ def ask(client, model: str, system_prompt: str, user_prompt: str, parse, attempt
 
 @dataclass
 class Step:
-    """What tells the three passes apart: their files, their prompt, their work."""
+    """What tells the three passes apart: their prompt and their work."""
 
     number: int
     stage: str  # the name the evaluation knows the stage by
-    source: Path
-    output: Path
-    dump: Path
     prompt: str
     prepare: Callable  # (Run) -> None; fills in preview and process
     subset: bool = False  # restrict the input to data/ablaesse.csv
@@ -210,6 +212,9 @@ class Run:
 
     step: Step
     model: str
+    name: str = ""  # the run this belongs to, `runs.slug` by default
+    source_path: Path = None  # the file this step read
+    inherited: dict = field(default_factory=dict)  # the chain up to this step
     attempts: int = MAX_ATTEMPTS
     thinking: bool | None = None  # None: whatever the model does by itself
     reasoning_effort: str | None = None
@@ -226,6 +231,14 @@ class Run:
 
     def keys(self) -> list[tuple[int, int]]:
         return [(row["volume"], row["nr_RG"]) for row in self.ids.iter_rows(named=True)]
+
+    @property
+    def output(self) -> Path:
+        return runs.output_path(self.name, self.step.number)
+
+    @property
+    def dump(self) -> Path:
+        return runs.dump_path(self.name, self.step.number)
 
 
 def describe_reasoning(run: Run) -> str:
@@ -421,13 +434,9 @@ def prepare_normalize(run: Run) -> None:
 
 
 STEPS: dict[int, Step] = {
-    2: Step(2, "twice", DATA_DIR / "once_expanded.csv", DATA_DIR / "twice_expanded.csv",
-            DATA_DIR / "results_candidates.json", CANDIDATES_PROMPT, prepare_candidates,
-            subset=True),
-    3: Step(3, "thrice", DATA_DIR / "twice_expanded.csv", DATA_DIR / "thrice_expanded.csv",
-            DATA_DIR / "results_rest.json", REST_PROMPT, prepare_rest),
-    4: Step(4, "normalized", DATA_DIR / "thrice_expanded.csv", DATA_DIR / "normalized.csv",
-            DATA_DIR / "results_normalize.json", NORMALIZE_PROMPT, prepare_normalize),
+    2: Step(2, "twice", CANDIDATES_PROMPT, prepare_candidates, subset=True),
+    3: Step(3, "thrice", REST_PROMPT, prepare_rest),
+    4: Step(4, "normalized", NORMALIZE_PROMPT, prepare_normalize),
 }
 
 
@@ -437,7 +446,8 @@ def connect() -> OpenAI:
 
 
 def prepare(step: Step, model: str = MODEL, attempts: int = MAX_ATTEMPTS, client=None,
-            thinking: bool | None = None, reasoning_effort: str | None = None) -> Run:
+            thinking: bool | None = None, reasoning_effort: str | None = None,
+            name: str | None = None, parent: str | None = None) -> Run:
     """
     Load everything the step needs and return it ready to run.
 
@@ -447,13 +457,22 @@ def prepare(step: Step, model: str = MODEL, attempts: int = MAX_ATTEMPTS, client
     `thinking` and `reasoning_effort` are passed to every call of this run, in
     the shape this model wants them; see `helper_functions.thinking_kwargs` for
     what they do and what leaving them out means.
+
+    `name` is the run to write into, by default the one named after this model
+    and its settings; `parent` the run to take the input from, by default this
+    one. See `runs.py` for how the two hang together.
     """
-    source = pl.read_csv(step.source)
+    name = name or runs.slug(model, thinking, reasoning_effort)
+    source_path, inherited = runs.resolve_input(name, step.number, parent)
+    source = pl.read_csv(source_path)
     if step.subset:
         source = source.join(pl.read_csv(SUBSET), on=["volume", "nr_RG"], how="inner")
     run = Run(
         step=step,
         model=model,
+        name=name,
+        source_path=source_path,
+        inherited=inherited,
         attempts=attempts,
         thinking=thinking,
         reasoning_effort=reasoning_effort,
@@ -470,21 +489,43 @@ def prepare(step: Step, model: str = MODEL, attempts: int = MAX_ATTEMPTS, client
 # checkpoints
 # --------------------------------------------------------------------------
 
-def checkpoint_path(step: Step) -> Path:
-    return CHECKPOINT_DIR / f"step{step.number}.jsonl"
+def checkpoint_path(run_name: str, step: Step) -> Path:
+    return runs.checkpoint_path(run_name, step.number)
+
+
+def checkpoint_head(run: Run) -> dict:
+    """What a checkpoint says about the run that started it."""
+    return {"run": run.name, "step": run.step.number, "model": run.model,
+            "thinking": run.thinking, "reasoning_effort": run.reasoning_effort,
+            "input": str(run.source_path)}
 
 
 def read_checkpoint(path: Path) -> dict[tuple[int, int], dict]:
     """What an earlier run already finished, keyed by vita."""
+    return {(entry["volume"], entry["nr_RG"]): entry
+            for entry in read_checkpoint_lines(path) if "volume" in entry}
+
+
+def read_checkpoint_lines(path: Path) -> list[dict]:
     if not path.exists():
-        return {}
-    done = {}
+        return []
     with open(path, encoding="utf-8") as file:
-        for line in file:
-            if line.strip():
-                entry = json.loads(line)
-                done[(entry["volume"], entry["nr_RG"])] = entry
-    return done
+        return [json.loads(line) for line in file if line.strip()]
+
+
+def read_checkpoint_head(path: Path) -> dict | None:
+    """The first line of a checkpoint, or None for one written before there was any."""
+    lines = read_checkpoint_lines(path)
+    return lines[0] if lines and "volume" not in lines[0] else None
+
+
+def start_checkpoint(path: Path, head: dict) -> None:
+    """Write the head of a fresh checkpoint, so a resume can check it belongs."""
+    if path.exists():
+        return
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with open(path, "w", encoding="utf-8") as file:
+        file.write(json.dumps(head, ensure_ascii=False) + "\n")
 
 
 def append_checkpoint(path: Path, entries: list[dict]) -> None:
@@ -505,6 +546,7 @@ def append_checkpoint(path: Path, entries: list[dict]) -> None:
 
 def run_batch(run: Run, done: dict, checkpoint: Path, every: int, limit: int | None) -> dict:
     """Process every vita that is not in the checkpoint yet."""
+    start_checkpoint(checkpoint, checkpoint_head(run))
     todo = [key for key in run.keys() if key not in done]
     if limit is not None:
         todo = todo[:limit]
@@ -534,7 +576,8 @@ def run_batch(run: Run, done: dict, checkpoint: Path, every: int, limit: int | N
         append_checkpoint(checkpoint, buffered)
         raise SystemExit(
             f"\ninterrupted -- {len(done)} vitae are in {checkpoint}; "
-            f"continue with `python run_step.py {run.step.number} --resume`"
+            f"continue with `python run_step.py {run.step.number} "
+            f"--run {run.name} --resume`"
         )
     append_checkpoint(checkpoint, buffered)
     return done
@@ -559,21 +602,40 @@ def write_outputs(run: Run, expanded: pl.DataFrame, results: list[dict]) -> None
     The CSV for the next step and the dump for the evaluation.
 
     The dump records the model, its thinking settings and the prompt it was
-    produced with, so the evaluation and the TEI header can state where an
-    expansion comes from instead of having to be told.
+    produced with, and the manifest records the same next to the file this step
+    read -- so the evaluation and the TEI header can state where an expansion
+    comes from, through however many runs the chain reaches back.
     """
-    expanded.write_csv(run.step.output)
+    run.output.parent.mkdir(parents=True, exist_ok=True)
+    expanded.write_csv(run.output)
+    written = datetime.now(timezone.utc).isoformat(timespec="seconds")
+    prompt_sha1 = hashlib.sha1(run.step.prompt.encode("utf-8")).hexdigest()
     dump = {
         "step": run.step.number,
+        "run": run.name,
         "model": run.model,
         "reasoning": run.settings or None,
-        "prompt_sha1": hashlib.sha1(run.step.prompt.encode("utf-8")).hexdigest(),
-        "written": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "prompt_sha1": prompt_sha1,
+        "input": str(run.source_path),
+        "written": written,
         "results": results,
     }
-    with open(run.step.dump, "w", encoding="utf-8") as file:
+    with open(run.dump, "w", encoding="utf-8") as file:
         json.dump(dump, file, indent=2, ensure_ascii=False)
-    print(f"Wrote {run.step.output} ({len(expanded)} rows) and {run.step.dump}.")
+    runs.record(
+        run.name, run.step.number, run.inherited,
+        model=run.model,
+        thinking=run.thinking,
+        reasoning_effort=run.reasoning_effort,
+        prompt_sha1=prompt_sha1,
+        input=str(run.source_path),
+        output=str(run.output),
+        dump=str(run.dump),
+        vitae=len(run.keys()),
+        written=written,
+    )
+    print(f"Wrote {run.output} ({len(expanded)} rows), {run.dump} "
+          f"and {runs.manifest_path(run.name)}.")
 
 
 # --------------------------------------------------------------------------
@@ -645,6 +707,21 @@ def render_report(run: Run, expanded: pl.DataFrame, results: list[dict]) -> str:
 # CLI
 # --------------------------------------------------------------------------
 
+def warn_about_the_prompt(name: str, step: Step) -> None:
+    """
+    Say so when this run's last output for the step came from another prompt.
+
+    The run is named after the model and its settings, so a prompt that has been
+    edited since would otherwise replace a result of different instructions with
+    no trace of it.
+    """
+    before = runs.previous_prompt(name, step.number)
+    now = hashlib.sha1(step.prompt.encode("utf-8")).hexdigest()
+    if before is not None and before != now:
+        print(f"note: {name} step {step.number} was last written with prompt {before[:8]}, "
+              f"this one is {now[:8]} -- the output will be replaced")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Run one of the model-driven steps 2-4.")
     parser.add_argument("step", type=int, choices=sorted(STEPS), help="which step to run")
@@ -658,6 +735,10 @@ def main() -> None:
     parser.add_argument("--reasoning-effort",
                         help="how much the model may think; implies --thinking. The levels "
                              f"differ per model -- {known_efforts()}")
+    parser.add_argument("--run", help="the run to write into (default: the model and its "
+                                      "settings, e.g. gemma-4-31b-it-nothink)")
+    parser.add_argument("--from", dest="parent",
+                        help="the run to take the input of this step from (default: this run)")
     parser.add_argument("--attempts", type=int, default=MAX_ATTEMPTS,
                         help=f"parse attempts per vita (default: {MAX_ATTEMPTS})")
     parser.add_argument("--checkpoint-every", type=int, default=CHECKPOINT_EVERY,
@@ -670,29 +751,44 @@ def main() -> None:
         raise SystemExit(str(error))
 
     step = STEPS[arguments.step]
-    checkpoint = checkpoint_path(step)
+    name = arguments.run or runs.slug(arguments.model, arguments.thinking,
+                                      arguments.reasoning_effort)
+    checkpoint = checkpoint_path(name, step)
     if checkpoint.exists() and not arguments.resume:
         raise SystemExit(
             f"{checkpoint} holds an unfinished run. Pass --resume to continue it, "
             "or delete the file to start over."
         )
     done = read_checkpoint(checkpoint) if arguments.resume else {}
+    warn_about_the_prompt(name, step)
 
-    run = prepare(step, arguments.model, arguments.attempts,
-                  thinking=arguments.thinking, reasoning_effort=arguments.reasoning_effort)
+    try:  # nothing to build this step on: the message says what is there
+        run = prepare(step, arguments.model, arguments.attempts,
+                      thinking=arguments.thinking,
+                      reasoning_effort=arguments.reasoning_effort,
+                      name=name, parent=arguments.parent)
+    except (LookupError, ValueError) as error:
+        raise SystemExit(str(error))
+
+    head = read_checkpoint_head(checkpoint)
+    if head is not None and head != checkpoint_head(run):
+        raise SystemExit(
+            f"{checkpoint} was written by {head} but this is {checkpoint_head(run)}. "
+            "Resume it as it was, or delete the file to start over."
+        )
     done = run_batch(run, done, checkpoint, arguments.checkpoint_every, arguments.limit)
 
     missing = [key for key in run.keys() if key not in done]
     if missing:
-        print(f"\n{len(missing)} vitae still missing -- {step.output} and {step.dump} are "
-              f"left untouched. Continue with `python run_step.py {step.number} --resume`.")
+        print(f"\n{len(missing)} vitae still missing -- {run.output} and {run.dump} are "
+              f"left untouched. Continue with "
+              f"`python run_step.py {step.number} --run {name} --resume`.")
         return
 
     expanded, results = assemble(run, done)
     write_outputs(run, expanded, results)
-    REVIEW_DIR.mkdir(parents=True, exist_ok=True)
     report = render_report(run, expanded, results)
-    report_path = REVIEW_DIR / f"step{step.number}_report.md"
+    report_path = runs.report_path(name, step.number)
     report_path.write_text(report, encoding="utf-8")
     print(report)
     print(f"Wrote {report_path}. The run is complete; {checkpoint} can be deleted.")

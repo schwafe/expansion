@@ -52,6 +52,7 @@ from pathlib import Path
 
 import polars as pl
 
+import runs
 from helper_functions import vita_dfs_to_vita_texts
 from normalize import diocese_entries
 from paradigm import ADJ_ENDINGS, NOUN_ENDINGS, entry_forms
@@ -63,13 +64,18 @@ SOURCE = DATA_DIR / "ablaesse_texts.csv"
 GLOSSARY = DATA_DIR / "glossary.csv"
 BASELINE = REVIEW_DIR / "evaluation_baseline.json"
 
+# The run whose output is scored. Steps 2-4 are run per model and per thinking
+# setting (`runs.py`), so a stage is a file of one run -- for now always this
+# one; scoring another is the next step, and then this becomes an argument.
+RUN = "gemma-4-31b-it"
+
 # the pipeline stages, in order; the label is what the report calls them
 STAGES: list[tuple[str, str, Path]] = [
     ("source", "abbreviated text", SOURCE),
-    ("once", "step 1 (rule)", DATA_DIR / "once_expanded.csv"),
-    ("twice", "step 2 (candidates)", DATA_DIR / "twice_expanded.csv"),
-    ("thrice", "step 3 (mined)", DATA_DIR / "thrice_expanded.csv"),
-    ("normalized", "step 4 (normalized)", DATA_DIR / "normalized.csv"),
+    ("once", "step 1 (rule)", runs.STEP1),
+    ("twice", "step 2 (candidates)", runs.output_path(RUN, 2)),
+    ("thrice", "step 3 (mined)", runs.output_path(RUN, 3)),
+    ("normalized", "step 4 (normalized)", runs.output_path(RUN, 4)),
 ]
 
 # the step each stage attributes an expansion to (the source expands nothing)
@@ -86,8 +92,8 @@ STEP_OF_STAGE = {
 # (results_candidates.json carries no volume/nr_RG) and at the same time proves
 # that the dump belongs to the run being scored.
 CANDIDATE_DUMPS: list[tuple[str, Path, str]] = [
-    ("twice", DATA_DIR / "results_candidates.json", "twice_expanded_text"),
-    ("thrice", DATA_DIR / "results_rest.json", "thrice_expanded_text"),
+    ("twice", runs.dump_path(RUN, 2), "twice_expanded_text"),
+    ("thrice", runs.dump_path(RUN, 3), "thrice_expanded_text"),
 ]
 
 # same token notion as normalize.py, plus numbers so dates stay anchors

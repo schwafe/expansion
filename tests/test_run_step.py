@@ -7,7 +7,8 @@ and tests_normalize.py; what is tested here is the loop around them:
 
 - the retry on an unparseable model answer
 - the thinking settings, from the arguments to the log line
-- the checkpoint: what it records, and that a resumed run skips it
+- the checkpoint: what it records, that a resumed run skips it, and that it
+  knows which model wrote it
 - the assembly of the output CSV, including the vitae with nothing to do
 - the report counts
 """
@@ -23,10 +24,13 @@ from run_step import (
     Step,
     append_checkpoint,
     ask,
+    checkpoint_head,
     assemble,
     describe_reasoning,
     read_checkpoint,
+    read_checkpoint_head,
     render_report,
+    start_checkpoint,
     run_batch,
 )
 
@@ -47,11 +51,11 @@ SOURCE = pl.DataFrame(
             "id_RG_all": pl.String},
 )
 
-STEP = Step(2, "twice", None, None, None, "a prompt", lambda run: None)
+STEP = Step(2, "twice", "a prompt", lambda run: None)
 
 
 def make_run(process) -> Run:
-    run = Run(step=STEP, model="a-model", source=SOURCE,
+    run = Run(step=STEP, model="a-model", name="a-run", source=SOURCE,
               ids=SOURCE.select("volume", "nr_RG").unique().sort(by="*"))
     run.process = process
     return run
@@ -165,6 +169,33 @@ class TestAssemble:
         row = expanded.filter((pl.col("volume") == 2) & (pl.col("nr_RG") == 370))
         assert row.get_column("header_no_tags").item() == "ecclesia maior"
         assert results == [{"volume": 2, "nr_RG": 370}]
+
+
+class TestCheckpointHead:
+    """The first line of a checkpoint says whose it is."""
+
+    def test_it_names_the_run_and_what_it_was_run_with(self):
+        head = checkpoint_head(make_run(lambda volume, nr: None))
+        assert head["run"] == "a-run" and head["model"] == "a-model" and head["step"] == 2
+
+    def test_it_is_written_once_and_read_back(self, tmp_path):
+        path = tmp_path / "step2.jsonl"
+        head = checkpoint_head(make_run(lambda volume, nr: None))
+        start_checkpoint(path, head)
+        start_checkpoint(path, {"run": "someone-else"})  # an existing one is left alone
+        assert read_checkpoint_head(path) == head
+
+    def test_the_vitae_are_read_past_it(self, tmp_path):
+        path = tmp_path / "step2.jsonl"
+        start_checkpoint(path, checkpoint_head(make_run(lambda volume, nr: None)))
+        append_checkpoint(path, [{"volume": 2, "nr_RG": 370, "text": "a", "record": None}])
+        assert set(read_checkpoint(path)) == {(2, 370)}
+
+    def test_a_checkpoint_from_before_the_head_is_read_as_it_is(self, tmp_path):
+        path = tmp_path / "step2.jsonl"
+        append_checkpoint(path, [{"volume": 2, "nr_RG": 370, "text": "a", "record": None}])
+        assert read_checkpoint_head(path) is None
+        assert set(read_checkpoint(path)) == {(2, 370)}
 
 
 class TestReport:

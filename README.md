@@ -35,7 +35,7 @@ The `komplex` column is the one thing in `glossary.csv` that is not in the Abkü
 
 ```bash
 python expand_simple.py            # dry run, prints the report
-python expand_simple.py --write    # write data/once_expanded.csv
+python expand_simple.py --write    # write data/step1.csv
 ```
 
 Where a volume lists several Auflösungen for the same abbreviation, nothing is substituted — that is what step 2 decides, one occurrence at a time. Two decisions in this step are not forced by the data and are worth stating:
@@ -45,7 +45,7 @@ Where a volume lists several Auflösungen for the same abbreviation, nothing is 
 
 The substitution uses `multiple_choice.occurrence_pattern`, the same pattern step 2 marks its occurrences with, so both steps agree on where an abbreviation begins and ends — in particular on the optional spaces inside a multi-word abbreviation (`e. m.` and `e.m.`). Longer abbreviations are applied first, so `s. p. d.` is resolved as a whole and never as three separate parts. No expansion contains a period and every abbreviation ends in one, so an expansion can never be expanded again.
 
-`--write` produces `data/once_expanded.csv` and `data/review/expansion_report.md` — how many abbreviations the substitution resolved, how many rules each volume could apply, the most frequent abbreviations before and after, and what a clearer glossary entry would gain (the abbreviations still standing although the glossary knows them, ranked by how often they occur).
+`--write` produces `data/step1.csv` and `data/review/expansion_report.md` — how many abbreviations the substitution resolved, how many rules each volume could apply, the most frequent abbreviations before and after, and what a clearer glossary entry would gain (the abbreviations still standing although the glossary knows them, ranked by how often they occur).
 
 # Steps 2–4: the model-driven passes
 The three passes differ only in what they ask the model and what they let it answer. The loop around them is the same and lives in `run_step.py`: read the output of the previous step, take one vita at a time, mark the occurrences in the text, ask the model, substitute its answer programmatically, record what happened.
@@ -54,10 +54,33 @@ The three passes differ only in what they ask the model and what they let it ans
 python run_step.py 2                       # the whole subset
 python run_step.py 3 --limit 5             # a trial run, writes no output
 python run_step.py 4 --resume              # continue an interrupted run
-python run_step.py 2 --model qwen3.6-35b-a3b
 python run_step.py 2 --model qwen3.8-27b --no-thinking
 python run_step.py 2 --model qwen3.8-27b --reasoning-effort low
+python run_step.py 4 --model qwen3.8-27b --from gemma-4-31b-it   # only step 4 anew
 ```
+
+**Runs.** A step is worth running with several models, and the interesting comparisons mix them — one model for the choices, another for the grammar — so the output of a step is not one file but one per run:
+
+```
+data/step1.csv                       the rule-based expansion, the same for every run
+data/runs/gemma-4-31b-it/
+    manifest.json                    what produced every step of this chain
+    step2.csv  step2.json  step2_report.md
+    step3.csv  step3.json  step3_report.md
+    step4.csv  step4.json  step4_report.md
+data/runs/qwen3.8-27b-nothink/
+    manifest.json                    steps 2–3 inherited from gemma-4-31b-it
+    step4.csv  step4.json  step4_report.md
+```
+
+A run is named after the model and its thinking settings (`gemma-4-31b-it`, `qwen3.8-27b-nothink`, `deepseek-v4-flash-0731-low`), so running the whole workflow with one model needs no extra flag; `--run NAME` overrides the name for a chain worth labelling. A step reads the output of the step before it **in its own run**, unless `--from RUN` points it at another one — then that run's manifest entries come along, so every manifest describes a complete chain from step 1 onwards no matter how many runs it reaches back through. A step with nothing to build on says so and lists the runs that have what it needs, rather than falling back to whatever file was there last:
+
+```
+$ python run_step.py 4 --model qwen3.8-27b --no-thinking
+run 'qwen3.8-27b-nothink' has no step 3 to build on. Pass --from <run>; these have one: gemma-4-31b-it
+```
+
+The layout lives in `runs.py`, which is what `run_step.py`, `evaluate.py` and `to_tei.py` ask for a path. Because a run is named after the model and its settings, a re-run replaces its own output — so a prompt that has been edited since is announced (`the output will be replaced`) instead of quietly overwriting a result that came from different instructions.
 
 **The model never rewrites the text.** Each occurrence is marked as `[[id|abbreviation]]` and the model returns only a JSON object mapping id to its answer; the substitution happens in code. That replaced an earlier full-text rewrite which corrupted words it should not have touched (`Halberstad.` → `Halhalstad.`), silently expanded abbreviations it had no business expanding, and needed a fragile token diff to validate. Everything the model may change is decided before the call and checked after it, so a bad answer can only leave the text as it was: step 2 accepts only a candidate from the list it offered, step 3 only an expansion that continues the letters of the abbreviation, step 4 only a form from the word's own paradigm.
 
@@ -77,9 +100,9 @@ Every family wants this asked differently, and **ignores what it does not know w
 
 The entries were checked against the endpoint by asking one small arithmetic question per model and setting and counting the completion tokens, which is the only reliable signal — the wall clock says nothing, since the same request can take 0.1s or 90s depending on the load. Thinking off against on: `gemma-4-31b-it` 4 → 225 tokens, `qwen3.8-27b` 4 → 50, `deepseek-v4-flash-0731` 2 → 49, `mistral-medium-3.5-128b` 4 (`none`) → 152 (`high`), `openai-gpt-oss-120b` 20 (`low`) → 45 (`medium`) → 84 (`high`). Only `glm-4.7` answers with the same 3 tokens whatever it is asked, so that deployment seems to have its thinking switched off for good. The levels are worth less than the switch: on deepseek and on qwen3.8 they differ from each other only within the noise of a question this small.
 
-**Checkpoints.** A run is 150+ model calls at 15 calls a minute, so it has to survive being interrupted. Every vita is appended to `data/checkpoints/step<n>.jsonl` as it is finished (flushed every ten by default, `--checkpoint-every` to change it), and `--resume` processes only what is missing. The CSV and the JSON dump are written only once every vita is done, so an interrupted or `--limit`ed run never overwrites a complete output with a partial one.
+**Checkpoints.** A run is 150+ model calls at 15 calls a minute, so it has to survive being interrupted. Every vita is appended to `data/checkpoints/<run>/step<n>.jsonl` as it is finished (flushed every ten by default, `--checkpoint-every` to change it), and `--resume` processes only what is missing. The first line records the run, the model and its settings, so a resume with anything else is refused rather than interleaved into one file. The CSV and the JSON dump are written only once every vita is done, so an interrupted or `--limit`ed run never overwrites a complete output with a partial one.
 
-**What a run leaves behind.** The CSV for the next step, a dump of every decision (`data/results_candidates.json`, `data/results_rest.json`, `data/results_normalize.json`) that also records the model and the prompt it was produced with — so the evaluation and the TEI header can state where an expansion comes from instead of having to be told — and `data/review/step<n>_report.md` with the acceptance tiers, the errors and the most frequent changes.
+**What a run leaves behind.** In `data/runs/<run>/`: the CSV for the next step, a dump of every decision (`step<n>.json`) that also records the model, its thinking settings, the prompt and the file the step read — so the evaluation and the TEI header can state where an expansion comes from instead of having to be told — `step<n>_report.md` with the acceptance tiers, the errors and the most frequent changes, and the manifest tying the chain together.
 
 **Trying something by hand.** `expanding_candidates.ipynb`, `expanding_rest.ipynb` and `normalizing.ipynb` are probes: they import from `run_step.py` and run a single vita, showing the text, the candidates, the whole prompt, the result and every decision. What is tried there is exactly what the batch does, and `prepare(STEPS[2], model=..., thinking=..., reasoning_effort=...)` switches the model and its thinking for the experiment.
 
@@ -127,7 +150,7 @@ Latin-specific models, tried with a plain "Please expand all abbreviations in th
 - `hathibelagal/llama-3.2-latin` — seemed promising, but that prompt for some reason led to no output being generated at all.
 
 # Step 5: quality control
-`evaluate.py` scores the output of every stage against the gold expansions in `data/to_compare_with/fable_expanded.csv`.
+`evaluate.py` scores the output of every stage against the gold expansions in `data/to_compare_with/fable_expanded.csv`. It reads the stages of the run named by its `RUN` constant; scoring a chosen run, and comparing the runs against each other, is the next thing to build.
 
 ```bash
 python evaluate.py                  # print the summary
@@ -146,7 +169,7 @@ Two expansions count as the same form when their spelling variants agree (`eccle
 
 Every occurrence is also attributed to the step that produced its expansion, by comparing the four stage texts, so a wrong word can be traced to a wrong rule (step 1), a bad candidate choice (step 2) or a bad corpus suggestion (step 3).
 
-Steps 2 and 3 do not invent an expansion, they choose one from a list, so a wrong word is only the model's fault if the list held the right one. The candidate lists are read back from the dumps the two steps wrote (`data/results_candidates.json`, `data/results_rest.json`) — an entry counts only if the text it records is exactly the stage text being scored, so a dump left over from an earlier run cannot be counted against the current one. Each error is then split into a **candidate miss** (no offered candidate would have scored as the right word, whatever the model had picked) and a choice error, which gives the report a **ceiling** — the accuracy the step could have reached — and a **choice accuracy** over exactly the occurrences it could have got right. Step 3 may also expand freely as long as the expansion extends the abbreviation, so for it the list is a hint rather than a limit and the report counts the right answers it found outside it.
+Steps 2 and 3 do not invent an expansion, they choose one from a list, so a wrong word is only the model's fault if the list held the right one. The candidate lists are read back from the dumps the two steps wrote (`data/runs/<run>/step2.json`, `step3.json`) — an entry counts only if the text it records is exactly the stage text being scored, so a dump left over from an earlier run cannot be counted against the current one. Each error is then split into a **candidate miss** (no offered candidate would have scored as the right word, whatever the model had picked) and a choice error, which gives the report a **ceiling** — the accuracy the step could have reached — and a **choice accuracy** over exactly the occurrences it could have got right. Step 3 may also expand freely as long as the expansion extends the abbreviation, so for it the list is a hint rather than a limit and the report counts the right answers it found outside it.
 
 `--write` produces `data/review/`:
 - `evaluation_report.md` — the accuracy table per stage, the reliability figures, the errors per step, the candidate coverage of steps 2 and 3, and the abbreviations ranked by how much fixing them would gain.
