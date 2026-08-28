@@ -30,14 +30,17 @@ Usage:
     python run_step.py 3 --limit 5             # a trial run, writes no output
     python run_step.py 4 --resume              # continue an interrupted run
     python run_step.py 2 --model qwen3.6-35b-a3b
-    python run_step.py 2 --model qwen3.8-27b --no-thinking
+    python run_step.py 2 --model gemma-4-31b-it --no-thinking
     python run_step.py 2 --model qwen3.8-27b --reasoning-effort low
 
 **Thinking.** The reasoning models think by default, which on a whole vita can
 take minutes per call and rarely changes the answer, since every step is a
 choice from a list. `--no-thinking` turns it off, `--reasoning-effort` sets how
-much of it there is; passing neither leaves the model at its default. What a run
-used is recorded in the dump next to the model name.
+much of it there is; passing neither leaves the model at its default. Every
+family takes these differently and ignores what it does not know without a
+word, so the request is built from the table in `helper_functions.STYLES` and
+anything the model cannot do is refused before the run starts. What a run used
+is recorded in the dump next to the model name.
 """
 
 import argparse
@@ -58,11 +61,11 @@ import expand_rest
 import multiple_choice
 import normalize
 from helper_functions import (
-    REASONING_EFFORTS,
     call_chat_ai,
     determine_candidates,
+    known_efforts,
     text_to_vita_df,
-    thinking_body,
+    thinking_kwargs,
     vita_df_to_text,
 )
 
@@ -164,7 +167,7 @@ NORMALIZE_PROMPT = """**Role:** You are a historian specializing in medieval chu
 # --------------------------------------------------------------------------
 
 def ask(client, model: str, system_prompt: str, user_prompt: str, parse, attempts: int,
-        extra_body: dict | None = None):
+        settings: dict | None = None):
     """
     Call the model until its answer parses, then hand the answer to the caller.
 
@@ -176,7 +179,7 @@ def ask(client, model: str, system_prompt: str, user_prompt: str, parse, attempt
     """
     parsed = (None, None, [{"message": "No attempt was made"}])
     for _ in range(attempts):
-        response = call_chat_ai(client, model, system_prompt, user_prompt, extra_body)
+        response = call_chat_ai(client, model, system_prompt, user_prompt, settings)
         parsed = parse(response["choices"][0]["message"]["content"])
         if parsed[0] is not None:
             break
@@ -208,7 +211,9 @@ class Run:
     step: Step
     model: str
     attempts: int = MAX_ATTEMPTS
-    extra_body: dict | None = None  # the thinking settings, None for the default
+    thinking: bool | None = None  # None: whatever the model does by itself
+    reasoning_effort: str | None = None
+    settings: dict = field(default_factory=dict)  # what those two become in the request
     client: object = None
     source: pl.DataFrame = None
     ids: pl.DataFrame = None
@@ -225,13 +230,11 @@ class Run:
 
 def describe_reasoning(run: Run) -> str:
     """How the run set the model's thinking, for the report and the log line."""
-    kwargs = (run.extra_body or {}).get("chat_template_kwargs")
-    if kwargs is None:
+    if run.thinking is None and run.reasoning_effort is None:
         return "thinking left at the model's default"
-    if not kwargs.get("thinking"):
+    if run.thinking is False:
         return "thinking off"
-    effort = kwargs.get("reasoning_effort")
-    return "thinking on" + (f", effort {effort}" if effort else "")
+    return "thinking on" + (f", effort {run.reasoning_effort}" if run.reasoning_effort else "")
 
 
 def prepare_candidates(run: Run) -> None:
@@ -266,7 +269,7 @@ def prepare_candidates(run: Run) -> None:
 
         choices, _, errors = ask(
             run.client, run.model, run.step.prompt, ahead["prompt"], parse, run.attempts,
-            run.extra_body,
+            run.settings,
         )
         text = multiple_choice.apply_choices(ahead["text"], occurrences, choices or {})
         return {
@@ -322,7 +325,7 @@ def prepare_rest(run: Run) -> None:
         choices, details, errors = ask(
             run.client, run.model, run.step.prompt, ahead["prompt"],
             lambda content: expand_rest.parse_expansions(content, occurrences, candidates),
-            run.attempts, run.extra_body,
+            run.attempts, run.settings,
         )
         text = multiple_choice.apply_choices(ahead["text"], occurrences, choices or {})
         return {
@@ -399,7 +402,7 @@ def prepare_normalize(run: Run) -> None:
         choices, details, errors = ask(
             run.client, run.model, run.step.prompt, ahead["prompt"],
             lambda content: normalize.parse_forms(content, occurrences, forms),
-            run.attempts, run.extra_body,
+            run.attempts, run.settings,
         )
         text = multiple_choice.apply_choices(ahead["text"], occurrences, choices or {})
         return {
@@ -441,9 +444,9 @@ def prepare(step: Step, model: str = MODEL, attempts: int = MAX_ATTEMPTS, client
     Reading the RG, mining the vocabulary and building the lexicon together take
     well under a minute, so nothing is cached -- a single model call costs more.
 
-    `thinking` and `reasoning_effort` are passed to every call of this run; see
-    `helper_functions.thinking_body` for what they do and what leaving them out
-    means.
+    `thinking` and `reasoning_effort` are passed to every call of this run, in
+    the shape this model wants them; see `helper_functions.thinking_kwargs` for
+    what they do and what leaving them out means.
     """
     source = pl.read_csv(step.source)
     if step.subset:
@@ -452,7 +455,9 @@ def prepare(step: Step, model: str = MODEL, attempts: int = MAX_ATTEMPTS, client
         step=step,
         model=model,
         attempts=attempts,
-        extra_body=thinking_body(thinking, reasoning_effort),
+        thinking=thinking,
+        reasoning_effort=reasoning_effort,
+        settings=thinking_kwargs(model, thinking, reasoning_effort),
         client=client if client is not None else connect(),
         source=source,
         ids=source.select("volume", "nr_RG").unique().sort(by="*"),
@@ -561,7 +566,7 @@ def write_outputs(run: Run, expanded: pl.DataFrame, results: list[dict]) -> None
     dump = {
         "step": run.step.number,
         "model": run.model,
-        "reasoning": (run.extra_body or {}).get("chat_template_kwargs"),
+        "reasoning": run.settings or None,
         "prompt_sha1": hashlib.sha1(run.step.prompt.encode("utf-8")).hexdigest(),
         "written": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "results": results,
@@ -650,13 +655,19 @@ def main() -> None:
     parser.add_argument("--thinking", action=argparse.BooleanOptionalAction, default=None,
                         help="switch the model's thinking on or off "
                              "(default: leave it at the model's own default)")
-    parser.add_argument("--reasoning-effort", choices=REASONING_EFFORTS,
-                        help="how much the model may think; implies --thinking")
+    parser.add_argument("--reasoning-effort",
+                        help="how much the model may think; implies --thinking. The levels "
+                             f"differ per model -- {known_efforts()}")
     parser.add_argument("--attempts", type=int, default=MAX_ATTEMPTS,
                         help=f"parse attempts per vita (default: {MAX_ATTEMPTS})")
     parser.add_argument("--checkpoint-every", type=int, default=CHECKPOINT_EVERY,
                         help=f"flush after this many vitae (default: {CHECKPOINT_EVERY})")
     arguments = parser.parse_args()
+
+    try:  # a setting this model has no way of taking, before anything is loaded
+        thinking_kwargs(arguments.model, arguments.thinking, arguments.reasoning_effort)
+    except ValueError as error:
+        raise SystemExit(str(error))
 
     step = STEPS[arguments.step]
     checkpoint = checkpoint_path(step)

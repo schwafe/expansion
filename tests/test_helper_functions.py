@@ -6,7 +6,7 @@ Mostly the two shapes a vita is kept in: `data/*.csv` has one row per regest
 (plus one for the header), which is how the RG itself is laid out; the model
 steps and the evaluation want the vita as one text. The two conversions have to
 be exact inverses of each other, since the workflow goes back and forth between
-them at every step. The rest is the body that switches a model's thinking.
+them at every step. The rest is the per-model shape of the thinking settings.
 """
 
 import polars as pl
@@ -15,7 +15,7 @@ import pytest
 from helper_functions import (
     VITA_SCHEMA,
     text_to_vita_df,
-    thinking_body,
+    thinking_kwargs,
     vita_df_to_text,
     vita_dfs_to_vita_texts,
     vita_texts_to_vita_dfs,
@@ -88,20 +88,64 @@ class TestRoundTrip:
         assert text_to_vita_df(VITA.get_column("text").item(), 2, 370).equals(vita)
 
 
-class TestThinkingBody:
-    """The `extra_body` that tells a reasoning model how much to think."""
+class TestThinkingKwargs:
+    """The thinking settings in the shape each family of models expects."""
 
     def test_asking_for_nothing_changes_nothing(self):
-        assert thinking_body() is None
+        assert thinking_kwargs("gemma-4-31b-it") == {}
 
-    def test_thinking_can_be_turned_off(self):
-        assert thinking_body(thinking=False) == {"chat_template_kwargs": {"thinking": False}}
-
-    def test_an_effort_turns_thinking_on_by_itself(self):
-        assert thinking_body(reasoning_effort="max") == {
-            "chat_template_kwargs": {"thinking": True, "reasoning_effort": "max"}
+    def test_the_families_that_take_a_template_variable_get_their_own_name_for_it(self):
+        assert thinking_kwargs("gemma-4-31b-it", thinking=False) == {
+            "extra_body": {"chat_template_kwargs": {"enable_thinking": False}}
+        }
+        assert thinking_kwargs("deepseek-v4-flash-0731", thinking=False) == {
+            "extra_body": {"chat_template_kwargs": {"thinking": False}}
         }
 
-    def test_an_effort_the_provider_does_not_know_is_refused(self):
-        with pytest.raises(ValueError):
-            thinking_body(reasoning_effort="very high")
+    def test_the_longer_prefix_wins(self):
+        """qwen3.8 knows levels, the rest of qwen3 does not."""
+        assert thinking_kwargs("qwen3.8-27b", reasoning_effort="low")["reasoning_effort"] == "low"
+        assert "reasoning_effort" not in thinking_kwargs("qwen3.6-35b-a3b", thinking=True)
+
+    def test_a_level_is_a_parameter_for_some_and_a_template_variable_for_others(self):
+        assert thinking_kwargs("openai-gpt-oss-120b", reasoning_effort="high") == {
+            "reasoning_effort": "high"
+        }
+        assert thinking_kwargs("deepseek-v4-flash-0731", reasoning_effort="max") == {
+            "extra_body": {"chat_template_kwargs": {"reasoning_effort": "max", "thinking": True}}
+        }
+
+    def test_a_level_turns_the_thinking_on_by_itself(self):
+        template = thinking_kwargs("qwen3.8-27b", reasoning_effort="low")["extra_body"]
+        assert template["chat_template_kwargs"] == {"enable_thinking": True}
+
+    def test_a_family_without_a_switch_says_it_with_a_level(self):
+        assert thinking_kwargs("mistral-medium-3.5-128b", thinking=False) == {
+            "reasoning_effort": "none"
+        }
+        assert thinking_kwargs("mistral-medium-3.5-128b", thinking=True) == {
+            "reasoning_effort": "high"
+        }
+
+    def test_a_level_the_family_does_not_know_is_refused(self):
+        with pytest.raises(ValueError, match="low/medium/xhigh"):
+            thinking_kwargs("qwen3.8-27b", reasoning_effort="max")
+
+    def test_a_family_with_no_levels_at_all_says_so(self):
+        with pytest.raises(ValueError, match="no levels at all"):
+            thinking_kwargs("glm-4.7", reasoning_effort="high")
+
+    def test_a_model_that_cannot_stop_thinking_says_so(self):
+        with pytest.raises(ValueError, match="cannot be told not to think"):
+            thinking_kwargs("openai-gpt-oss-120b", thinking=False)
+
+    def test_a_level_that_contradicts_the_switch_is_refused(self):
+        with pytest.raises(ValueError, match="contradict"):
+            thinking_kwargs("mistral-medium-3.5-128b", thinking=False, reasoning_effort="high")
+
+    def test_an_unknown_model_is_not_guessed_at(self):
+        with pytest.raises(ValueError, match="no thinking style known"):
+            thinking_kwargs("apertus-70b-instruct-2509", thinking=False)
+
+    def test_an_unknown_model_without_a_setting_is_left_alone(self):
+        assert thinking_kwargs("apertus-70b-instruct-2509") == {}

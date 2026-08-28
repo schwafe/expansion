@@ -1,8 +1,10 @@
 import re
 import time
+from dataclasses import dataclass
+
 import polars as pl
 
-from openai import InternalServerError, OpenAI
+from openai import BadRequestError, InternalServerError, OpenAI, RateLimitError
 from ratelimit import limits, sleep_and_retry
 
 ONE_MINUTE = 60
@@ -187,37 +189,127 @@ def vita_texts_to_vita_dfs(df:pl.DataFrame, column:str="text") -> pl.DataFrame:
         for row in df.iter_rows(named=True)
     )
 
-REASONING_EFFORTS = ("low", "medium", "high", "max")
-
-
-def thinking_body(thinking: bool | None = None,
-                  reasoning_effort: str | None = None) -> dict | None:
+@dataclass(frozen=True)
+class ThinkingStyle:
     """
-    The `extra_body` that switches a reasoning model's thinking on or off.
+    How one family of models is told whether and how much to think.
 
-    The provider takes both settings in `chat_template_kwargs`. Passing neither
-    returns None, which leaves the request as it was and the model at whatever
-    it does by default -- for the reasoning models that is thinking, which can
-    take minutes on a text of this size. `thinking=False` turns it off; an
-    effort without a `thinking` of its own turns it on.
+    There is no shared way of asking. For most families the switch is a variable
+    of the chat template (`enable_thinking`, `thinking` for DeepSeek); the effort
+    is a top-level request parameter for some families and another template
+    variable for others, and each knows its own levels. Asking the way another
+    family expects is not an error and not reported: a template that does not use
+    the variable renders as if nothing had been passed, and the model answers as
+    it would have anyway. Hence this table -- measured against the model cards,
+    not guessed from a shared shape.
+    """
+
+    switch: str | None = None        # the template variable that takes a boolean
+    efforts: tuple[str, ...] = ()    # the levels this family knows, least first
+    effort_parameter: bool = False   # the level is a top-level parameter, not a template variable
+    on: str | None = None            # the level that means "think", where there is no switch
+    off: str | None = None           # the level that means "do not think"
+
+
+# keyed by the beginning of the model name, longest match wins
+STYLES: dict[str, ThinkingStyle] = {
+    # thinking is a template variable, the model card documents no levels
+    "gemma-4": ThinkingStyle(switch="enable_thinking"),
+    "glm-4": ThinkingStyle(switch="enable_thinking"),
+    "qwen3": ThinkingStyle(switch="enable_thinking"),
+    # ... and for these two the level as well
+    "qwen3.8": ThinkingStyle(switch="enable_thinking", efforts=("low", "medium", "xhigh"),
+                             effort_parameter=True),
+    "deepseek-v4": ThinkingStyle(switch="thinking", efforts=("low", "high", "max")),
+    # no switch: the level alone says whether to think, and it is a parameter
+    "mistral-medium-3.5": ThinkingStyle(efforts=("none", "high"), effort_parameter=True,
+                                        on="high", off="none"),
+    "openai-gpt-oss": ThinkingStyle(efforts=("low", "medium", "high"), effort_parameter=True,
+                                    on="high"),
+}
+
+
+class ThinkingUnsupported(RuntimeError):
+    """
+    The model refused the thinking settings outright.
+
+    A model whose tokenizer has no chat template at all (the Mistral ones)
+    answers 400 rather than ignoring a template variable it does not know, so
+    this is what a wrong entry in `STYLES` looks like when it is loud. The
+    quiet version cannot be caught here at all -- see `ThinkingStyle`.
+    """
+
+
+def thinking_style(model: str) -> ThinkingStyle:
+    """The entry of `STYLES` for a model, by the longest matching name."""
+    matching = [prefix for prefix in STYLES if model.startswith(prefix)]
+    if not matching:
+        raise ValueError(
+            f"no thinking style known for {model}: add one to helper_functions.STYLES, "
+            "from the model card. Without it the settings would be sent the way some "
+            "other model wants them and silently do nothing."
+        )
+    return STYLES[max(matching, key=len)]
+
+
+def known_efforts() -> str:
+    """The levels per family, for a help text that cannot go stale."""
+    return "; ".join(f"{prefix}: {'/'.join(style.efforts)}"
+                     for prefix, style in STYLES.items() if style.efforts)
+
+
+def thinking_kwargs(model: str, thinking: bool | None = None,
+                    reasoning_effort: str | None = None) -> dict:
+    """
+    What to add to `chat.completions.create` so this model thinks as asked.
+
+    Asking for neither adds nothing and leaves the model at its own default --
+    for the reasoning models that is thinking, which on a whole vita can take
+    minutes. Asking for a level implies asking to think. Everything the model
+    cannot do is raised here rather than sent and ignored.
     """
     if thinking is None and reasoning_effort is None:
-        return None
-    if reasoning_effort is not None and reasoning_effort not in REASONING_EFFORTS:
-        raise ValueError(
-            f"unknown reasoning effort {reasoning_effort!r}, "
-            f"expected one of {', '.join(REASONING_EFFORTS)}"
-        )
-    kwargs = {"thinking": thinking if thinking is not None else True}
+        return {}
+    style = thinking_style(model)
+    template: dict[str, object] = {}
+    parameters: dict[str, object] = {}
+
     if reasoning_effort is not None:
-        kwargs["reasoning_effort"] = reasoning_effort
-    return {"chat_template_kwargs": kwargs}
+        if reasoning_effort not in style.efforts:
+            knows = "/".join(style.efforts) if style.efforts else "no levels at all"
+            raise ValueError(f"{model} does not take the effort {reasoning_effort!r}; "
+                             f"it knows {knows}")
+        if style.effort_parameter:
+            parameters["reasoning_effort"] = reasoning_effort
+        else:
+            template["reasoning_effort"] = reasoning_effort
+
+    wants = thinking if thinking is not None else True
+    if style.switch is not None:
+        template[style.switch] = wants
+    elif thinking is not None:
+        if reasoning_effort is not None:
+            if wants != (reasoning_effort != style.off):
+                raise ValueError(f"{model} says how much to think through the level alone, so "
+                                 f"{reasoning_effort!r} and thinking={thinking} contradict")
+        else:
+            level = style.on if wants else style.off
+            if level is None:
+                raise ValueError(
+                    f"{model} cannot be told {'to think' if wants else 'not to think'}; "
+                    f"it knows the levels {'/'.join(style.efforts)}"
+                )
+            parameters["reasoning_effort"] = level
+
+    if template:
+        parameters["extra_body"] = {"chat_template_kwargs": template}
+    return parameters
 
 
 @sleep_and_retry
 @limits(calls=15, period=ONE_MINUTE)
 def _call_chat_ai_once(client: OpenAI, model: str, system_prompt: str, user_prompt: str,
-                       extra_body: dict | None = None):
+                       settings: dict | None = None):
     chat_completion = client.chat.completions.create(
         messages=[
             {
@@ -228,15 +320,24 @@ def _call_chat_ai_once(client: OpenAI, model: str, system_prompt: str, user_prom
         ],
         model=model,
         temperature=0,
-        extra_body=extra_body,
+        **(settings or {}),
     )
     return chat_completion.model_dump()
 
-def call_chat_ai(client: OpenAI, model: str, system_prompt: str, user_prompt: str, extra_body: dict | None = None, max_retries: int = 5, retry_wait: float = 5):
+def call_chat_ai(client: OpenAI, model: str, system_prompt: str, user_prompt: str, settings: dict | None = None, max_retries: int = 5, retry_wait: float = 5):
     for retry in range(max_retries + 1):
         try:
-            return _call_chat_ai_once(client, model, system_prompt, user_prompt, extra_body)
-        except InternalServerError as e:
+            return _call_chat_ai_once(client, model, system_prompt, user_prompt, settings)
+        except BadRequestError as e:
+            if not settings:
+                raise
+            raise ThinkingUnsupported(
+                f"{model} rejected the thinking settings {settings}: {e.message} "
+                "-- run it without --thinking/--reasoning-effort."
+            ) from e
+        except (InternalServerError, RateLimitError) as e:
+            # the endpoint counts its own rate limit, which the decorator above
+            # only approximates -- a 429 is worth waiting out like a 500
             if retry == max_retries:
                 raise
             print(f"server error ({e.status_code}), retrying in {retry_wait}s ({retry + 1}/{max_retries})")

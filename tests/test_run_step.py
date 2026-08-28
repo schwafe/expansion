@@ -16,7 +16,7 @@ and tests_normalize.py; what is tested here is the loop around them:
 import polars as pl
 import pytest
 
-from helper_functions import thinking_body
+from helper_functions import thinking_kwargs
 
 from run_step import (
     Run,
@@ -61,22 +61,22 @@ class TestAsk:
     def test_the_first_parseable_answer_is_taken(self):
         calls = []
 
-        def call(client, model, system, user, extra_body=None):
-            calls.append(extra_body)
+        def call(client, model, system, user, settings=None):
+            calls.append(settings)
             return {"choices": [{"message": {"content": "{}"}}]}
 
         import run_step
         run_step.call_chat_ai = call
         result = ask(None, "m", "system", "user", lambda content: ({1: "a"}, None, []), 5,
-                     {"chat_template_kwargs": {"thinking": False}})
+                     thinking_kwargs("gemma-4-31b-it", thinking=False))
         assert result[0] == {1: "a"}
         assert len(calls) == 1  # no retry once it parses
-        assert calls == [{"chat_template_kwargs": {"thinking": False}}]  # passed on
+        assert calls == [thinking_kwargs("gemma-4-31b-it", thinking=False)]  # passed on
 
     def test_an_unparseable_answer_is_retried_and_then_given_up_on(self):
         calls = []
 
-        def call(client, model, system, user, extra_body=None):
+        def call(client, model, system, user, settings=None):
             calls.append(user)
             return {"choices": [{"message": {"content": "sorry"}}]}
 
@@ -93,8 +93,7 @@ class TestDescribeReasoning:
     """What the log line and the report say about the model's thinking."""
 
     def described(self, **arguments) -> str:
-        return describe_reasoning(Run(step=STEP, model="a-model",
-                                      extra_body=thinking_body(**arguments)))
+        return describe_reasoning(Run(step=STEP, model="gemma-4-31b-it", **arguments))
 
     def test_nothing_asked_for_leaves_the_model_to_itself(self):
         assert self.described() == "thinking left at the model's default"
@@ -103,7 +102,7 @@ class TestDescribeReasoning:
         assert self.described(thinking=False) == "thinking off"
 
     def test_an_effort_is_named(self):
-        assert self.described(reasoning_effort="high") == "thinking on, effort high"
+        assert self.described(reasoning_effort="max") == "thinking on, effort max"
 
 
 class TestCheckpoint:
