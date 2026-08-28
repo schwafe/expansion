@@ -1,18 +1,21 @@
 #!/usr/bin/env python3
 """
-Test suite for the two shapes a vita is kept in.
+Test suite for the helpers the whole workflow shares.
 
-`data/*.csv` has one row per regest (plus one for the header), which is how the
-RG itself is laid out; the model steps and the evaluation want the vita as one
-text. The two conversions have to be exact inverses of each other, since the
-workflow goes back and forth between them at every step.
+Mostly the two shapes a vita is kept in: `data/*.csv` has one row per regest
+(plus one for the header), which is how the RG itself is laid out; the model
+steps and the evaluation want the vita as one text. The two conversions have to
+be exact inverses of each other, since the workflow goes back and forth between
+them at every step. The rest is the body that switches a model's thinking.
 """
 
 import polars as pl
+import pytest
 
 from helper_functions import (
     VITA_SCHEMA,
     text_to_vita_df,
+    thinking_body,
     vita_df_to_text,
     vita_dfs_to_vita_texts,
     vita_texts_to_vita_dfs,
@@ -83,3 +86,22 @@ class TestRoundTrip:
         vita = vita_texts_to_vita_dfs(VITA)
         assert vita_df_to_text(vita) == VITA.get_column("text").item()
         assert text_to_vita_df(VITA.get_column("text").item(), 2, 370).equals(vita)
+
+
+class TestThinkingBody:
+    """The `extra_body` that tells a reasoning model how much to think."""
+
+    def test_asking_for_nothing_changes_nothing(self):
+        assert thinking_body() is None
+
+    def test_thinking_can_be_turned_off(self):
+        assert thinking_body(thinking=False) == {"chat_template_kwargs": {"thinking": False}}
+
+    def test_an_effort_turns_thinking_on_by_itself(self):
+        assert thinking_body(reasoning_effort="max") == {
+            "chat_template_kwargs": {"thinking": True, "reasoning_effort": "max"}
+        }
+
+    def test_an_effort_the_provider_does_not_know_is_refused(self):
+        with pytest.raises(ValueError):
+            thinking_body(reasoning_effort="very high")

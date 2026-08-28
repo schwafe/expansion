@@ -30,6 +30,14 @@ Usage:
     python run_step.py 3 --limit 5             # a trial run, writes no output
     python run_step.py 4 --resume              # continue an interrupted run
     python run_step.py 2 --model qwen3.6-35b-a3b
+    python run_step.py 2 --model qwen3.8-27b --no-thinking
+    python run_step.py 2 --model qwen3.8-27b --reasoning-effort low
+
+**Thinking.** The reasoning models think by default, which on a whole vita can
+take minutes per call and rarely changes the answer, since every step is a
+choice from a list. `--no-thinking` turns it off, `--reasoning-effort` sets how
+much of it there is; passing neither leaves the model at its default. What a run
+used is recorded in the dump next to the model name.
 """
 
 import argparse
@@ -50,9 +58,11 @@ import expand_rest
 import multiple_choice
 import normalize
 from helper_functions import (
+    REASONING_EFFORTS,
     call_chat_ai,
     determine_candidates,
     text_to_vita_df,
+    thinking_body,
     vita_df_to_text,
 )
 
@@ -153,7 +163,8 @@ NORMALIZE_PROMPT = """**Role:** You are a historian specializing in medieval chu
 # the model call
 # --------------------------------------------------------------------------
 
-def ask(client, model: str, system_prompt: str, user_prompt: str, parse, attempts: int):
+def ask(client, model: str, system_prompt: str, user_prompt: str, parse, attempts: int,
+        extra_body: dict | None = None):
     """
     Call the model until its answer parses, then hand the answer to the caller.
 
@@ -165,7 +176,7 @@ def ask(client, model: str, system_prompt: str, user_prompt: str, parse, attempt
     """
     parsed = (None, None, [{"message": "No attempt was made"}])
     for _ in range(attempts):
-        response = call_chat_ai(client, model, system_prompt, user_prompt)
+        response = call_chat_ai(client, model, system_prompt, user_prompt, extra_body)
         parsed = parse(response["choices"][0]["message"]["content"])
         if parsed[0] is not None:
             break
@@ -197,6 +208,7 @@ class Run:
     step: Step
     model: str
     attempts: int = MAX_ATTEMPTS
+    extra_body: dict | None = None  # the thinking settings, None for the default
     client: object = None
     source: pl.DataFrame = None
     ids: pl.DataFrame = None
@@ -209,6 +221,17 @@ class Run:
 
     def keys(self) -> list[tuple[int, int]]:
         return [(row["volume"], row["nr_RG"]) for row in self.ids.iter_rows(named=True)]
+
+
+def describe_reasoning(run: Run) -> str:
+    """How the run set the model's thinking, for the report and the log line."""
+    kwargs = (run.extra_body or {}).get("chat_template_kwargs")
+    if kwargs is None:
+        return "thinking left at the model's default"
+    if not kwargs.get("thinking"):
+        return "thinking off"
+    effort = kwargs.get("reasoning_effort")
+    return "thinking on" + (f", effort {effort}" if effort else "")
 
 
 def prepare_candidates(run: Run) -> None:
@@ -242,7 +265,8 @@ def prepare_candidates(run: Run) -> None:
             return choices, None, errors
 
         choices, _, errors = ask(
-            run.client, run.model, run.step.prompt, ahead["prompt"], parse, run.attempts
+            run.client, run.model, run.step.prompt, ahead["prompt"], parse, run.attempts,
+            run.extra_body,
         )
         text = multiple_choice.apply_choices(ahead["text"], occurrences, choices or {})
         return {
@@ -298,7 +322,7 @@ def prepare_rest(run: Run) -> None:
         choices, details, errors = ask(
             run.client, run.model, run.step.prompt, ahead["prompt"],
             lambda content: expand_rest.parse_expansions(content, occurrences, candidates),
-            run.attempts,
+            run.attempts, run.extra_body,
         )
         text = multiple_choice.apply_choices(ahead["text"], occurrences, choices or {})
         return {
@@ -375,7 +399,7 @@ def prepare_normalize(run: Run) -> None:
         choices, details, errors = ask(
             run.client, run.model, run.step.prompt, ahead["prompt"],
             lambda content: normalize.parse_forms(content, occurrences, forms),
-            run.attempts,
+            run.attempts, run.extra_body,
         )
         text = multiple_choice.apply_choices(ahead["text"], occurrences, choices or {})
         return {
@@ -409,12 +433,17 @@ def connect() -> OpenAI:
     return OpenAI(api_key=os.environ["API_KEY"], base_url=BASE_URL)
 
 
-def prepare(step: Step, model: str = MODEL, attempts: int = MAX_ATTEMPTS, client=None) -> Run:
+def prepare(step: Step, model: str = MODEL, attempts: int = MAX_ATTEMPTS, client=None,
+            thinking: bool | None = None, reasoning_effort: str | None = None) -> Run:
     """
     Load everything the step needs and return it ready to run.
 
     Reading the RG, mining the vocabulary and building the lexicon together take
     well under a minute, so nothing is cached -- a single model call costs more.
+
+    `thinking` and `reasoning_effort` are passed to every call of this run; see
+    `helper_functions.thinking_body` for what they do and what leaving them out
+    means.
     """
     source = pl.read_csv(step.source)
     if step.subset:
@@ -423,6 +452,7 @@ def prepare(step: Step, model: str = MODEL, attempts: int = MAX_ATTEMPTS, client
         step=step,
         model=model,
         attempts=attempts,
+        extra_body=thinking_body(thinking, reasoning_effort),
         client=client if client is not None else connect(),
         source=source,
         ids=source.select("volume", "nr_RG").unique().sort(by="*"),
@@ -474,7 +504,7 @@ def run_batch(run: Run, done: dict, checkpoint: Path, every: int, limit: int | N
     if limit is not None:
         todo = todo[:limit]
     print(f"step {run.step.number}: {len(run.keys())} vitae, {len(done)} already done, "
-          f"{len(todo)} to do (model {run.model})")
+          f"{len(todo)} to do (model {run.model}, {describe_reasoning(run)})")
 
     buffered = []
     try:
@@ -523,14 +553,15 @@ def write_outputs(run: Run, expanded: pl.DataFrame, results: list[dict]) -> None
     """
     The CSV for the next step and the dump for the evaluation.
 
-    The dump records the model and the prompt it was produced with, so the
-    evaluation and the TEI header can state where an expansion comes from
-    instead of having to be told.
+    The dump records the model, its thinking settings and the prompt it was
+    produced with, so the evaluation and the TEI header can state where an
+    expansion comes from instead of having to be told.
     """
     expanded.write_csv(run.step.output)
     dump = {
         "step": run.step.number,
         "model": run.model,
+        "reasoning": (run.extra_body or {}).get("chat_template_kwargs"),
         "prompt_sha1": hashlib.sha1(run.step.prompt.encode("utf-8")).hexdigest(),
         "written": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "results": results,
@@ -561,8 +592,8 @@ def render_report(run: Run, expanded: pl.DataFrame, results: list[dict]) -> str:
     lines = [
         f"# Step {step.number}: {step.stage}",
         "",
-        f"Model `{run.model}`, {len(run.keys())} vitae, {len(results)} of them with "
-        f"something to do. Written "
+        f"Model `{run.model}` ({describe_reasoning(run)}), {len(run.keys())} vitae, "
+        f"{len(results)} of them with something to do. Written "
         f"{datetime.now(timezone.utc).isoformat(timespec='seconds')}.",
         "",
         f"- abbreviations in the input: {count_abbreviations(run.source)}",
@@ -616,6 +647,11 @@ def main() -> None:
     parser.add_argument("--limit", type=int, help="process at most this many vitae")
     parser.add_argument("--resume", action="store_true",
                         help="continue the run in the checkpoint instead of starting over")
+    parser.add_argument("--thinking", action=argparse.BooleanOptionalAction, default=None,
+                        help="switch the model's thinking on or off "
+                             "(default: leave it at the model's own default)")
+    parser.add_argument("--reasoning-effort", choices=REASONING_EFFORTS,
+                        help="how much the model may think; implies --thinking")
     parser.add_argument("--attempts", type=int, default=MAX_ATTEMPTS,
                         help=f"parse attempts per vita (default: {MAX_ATTEMPTS})")
     parser.add_argument("--checkpoint-every", type=int, default=CHECKPOINT_EVERY,
@@ -631,7 +667,8 @@ def main() -> None:
         )
     done = read_checkpoint(checkpoint) if arguments.resume else {}
 
-    run = prepare(step, arguments.model, arguments.attempts)
+    run = prepare(step, arguments.model, arguments.attempts,
+                  thinking=arguments.thinking, reasoning_effort=arguments.reasoning_effort)
     done = run_batch(run, done, checkpoint, arguments.checkpoint_every, arguments.limit)
 
     missing = [key for key in run.keys() if key not in done]

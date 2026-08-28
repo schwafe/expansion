@@ -55,15 +55,19 @@ python run_step.py 2                       # the whole subset
 python run_step.py 3 --limit 5             # a trial run, writes no output
 python run_step.py 4 --resume              # continue an interrupted run
 python run_step.py 2 --model qwen3.6-35b-a3b
+python run_step.py 2 --model qwen3.8-27b --no-thinking
+python run_step.py 2 --model qwen3.8-27b --reasoning-effort low
 ```
 
 **The model never rewrites the text.** Each occurrence is marked as `[[id|abbreviation]]` and the model returns only a JSON object mapping id to its answer; the substitution happens in code. That replaced an earlier full-text rewrite which corrupted words it should not have touched (`Halberstad.` → `Halhalstad.`), silently expanded abbreviations it had no business expanding, and needed a fragile token diff to validate. Everything the model may change is decided before the call and checked after it, so a bad answer can only leave the text as it was: step 2 accepts only a candidate from the list it offered, step 3 only an expansion that continues the letters of the abbreviation, step 4 only a form from the word's own paradigm.
+
+**Thinking.** The reasoning models think by default, which on a whole vita can take minutes per call — and there is not much for them to reason about, since every step is a choice from a list the code has already narrowed down. `--no-thinking` turns it off, `--reasoning-effort low|medium|high|max` sets how much of it there is (and turns it on by itself); passing neither leaves the model at its own default. Both go to the endpoint as `chat_template_kwargs` (`helper_functions.thinking_body`) and are recorded in the dump and the report next to the model name, so a run can be told apart from one with the same model and a different setting.
 
 **Checkpoints.** A run is 150+ model calls at 15 calls a minute, so it has to survive being interrupted. Every vita is appended to `data/checkpoints/step<n>.jsonl` as it is finished (flushed every ten by default, `--checkpoint-every` to change it), and `--resume` processes only what is missing. The CSV and the JSON dump are written only once every vita is done, so an interrupted or `--limit`ed run never overwrites a complete output with a partial one.
 
 **What a run leaves behind.** The CSV for the next step, a dump of every decision (`data/results_candidates.json`, `data/results_rest.json`, `data/results_normalize.json`) that also records the model and the prompt it was produced with — so the evaluation and the TEI header can state where an expansion comes from instead of having to be told — and `data/review/step<n>_report.md` with the acceptance tiers, the errors and the most frequent changes.
 
-**Trying something by hand.** `expanding_candidates.ipynb`, `expanding_rest.ipynb` and `normalizing.ipynb` are probes: they import from `run_step.py` and run a single vita, showing the text, the candidates, the whole prompt, the result and every decision. What is tried there is exactly what the batch does, and `prepare(STEPS[2], model=...)` switches the model for the experiment.
+**Trying something by hand.** `expanding_candidates.ipynb`, `expanding_rest.ipynb` and `normalizing.ipynb` are probes: they import from `run_step.py` and run a single vita, showing the text, the candidates, the whole prompt, the result and every decision. What is tried there is exactly what the batch does, and `prepare(STEPS[2], model=..., thinking=..., reasoning_effort=...)` switches the model and its thinking for the experiment.
 
 ## Step 2: choosing among the glossary candidates
 The candidates for an abbreviation are the Auflösungen the glossary lists for it in this volume (`helper_functions.determine_candidates`), so this step only ever sees the abbreviations that have more than one reading — the genuinely ambiguous ones. The chosen candidate is inserted in its base (dictionary) form; the inflection is left to step 4. Because the answer must be a member of the candidate list, validating it is a membership test, and an invalid answer simply leaves the abbreviation standing.
@@ -88,6 +92,8 @@ Every response is recorded with a tier (`changed` / `kept` / `rejected` / `missi
 
 ## Which models were tried
 Judged by hand on the chat-ai.academiccloud.de endpoint, most of them before the multiple-choice reformulation — back then the model rewrote the whole text, so several of the complaints below are about it changing what it should not have, which the current setup makes impossible. `--model` switches the model for a run.
+
+The reasoning models among them are worth a second try with `--no-thinking` or a low effort: the earlier verdicts were reached with the thinking they do by default, which the multiple-choice reformulation has made largely pointless.
 
 | model | verdict |
 | --- | --- |

@@ -6,6 +6,7 @@ The per-step work is tested by tests_multiple_choice.py, tests_expand_rest.py
 and tests_normalize.py; what is tested here is the loop around them:
 
 - the retry on an unparseable model answer
+- the thinking settings, from the arguments to the log line
 - the checkpoint: what it records, and that a resumed run skips it
 - the assembly of the output CSV, including the vitae with nothing to do
 - the report counts
@@ -15,12 +16,15 @@ and tests_normalize.py; what is tested here is the loop around them:
 import polars as pl
 import pytest
 
+from helper_functions import thinking_body
+
 from run_step import (
     Run,
     Step,
     append_checkpoint,
     ask,
     assemble,
+    describe_reasoning,
     read_checkpoint,
     render_report,
     run_batch,
@@ -57,20 +61,22 @@ class TestAsk:
     def test_the_first_parseable_answer_is_taken(self):
         calls = []
 
-        def call(client, model, system, user):
-            calls.append(user)
+        def call(client, model, system, user, extra_body=None):
+            calls.append(extra_body)
             return {"choices": [{"message": {"content": "{}"}}]}
 
         import run_step
         run_step.call_chat_ai = call
-        result = ask(None, "m", "system", "user", lambda content: ({1: "a"}, None, []), 5)
+        result = ask(None, "m", "system", "user", lambda content: ({1: "a"}, None, []), 5,
+                     {"chat_template_kwargs": {"thinking": False}})
         assert result[0] == {1: "a"}
         assert len(calls) == 1  # no retry once it parses
+        assert calls == [{"chat_template_kwargs": {"thinking": False}}]  # passed on
 
     def test_an_unparseable_answer_is_retried_and_then_given_up_on(self):
         calls = []
 
-        def call(client, model, system, user):
+        def call(client, model, system, user, extra_body=None):
             calls.append(user)
             return {"choices": [{"message": {"content": "sorry"}}]}
 
@@ -81,6 +87,23 @@ class TestAsk:
         assert choices is None  # the caller leaves the text alone
         assert len(calls) == 3
         assert errors == [{"message": "no JSON"}]
+
+
+class TestDescribeReasoning:
+    """What the log line and the report say about the model's thinking."""
+
+    def described(self, **arguments) -> str:
+        return describe_reasoning(Run(step=STEP, model="a-model",
+                                      extra_body=thinking_body(**arguments)))
+
+    def test_nothing_asked_for_leaves_the_model_to_itself(self):
+        assert self.described() == "thinking left at the model's default"
+
+    def test_thinking_can_be_turned_off(self):
+        assert self.described(thinking=False) == "thinking off"
+
+    def test_an_effort_is_named(self):
+        assert self.described(reasoning_effort="high") == "thinking on, effort high"
 
 
 class TestCheckpoint:

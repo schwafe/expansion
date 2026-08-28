@@ -187,9 +187,37 @@ def vita_texts_to_vita_dfs(df:pl.DataFrame, column:str="text") -> pl.DataFrame:
         for row in df.iter_rows(named=True)
     )
 
+REASONING_EFFORTS = ("low", "medium", "high", "max")
+
+
+def thinking_body(thinking: bool | None = None,
+                  reasoning_effort: str | None = None) -> dict | None:
+    """
+    The `extra_body` that switches a reasoning model's thinking on or off.
+
+    The provider takes both settings in `chat_template_kwargs`. Passing neither
+    returns None, which leaves the request as it was and the model at whatever
+    it does by default -- for the reasoning models that is thinking, which can
+    take minutes on a text of this size. `thinking=False` turns it off; an
+    effort without a `thinking` of its own turns it on.
+    """
+    if thinking is None and reasoning_effort is None:
+        return None
+    if reasoning_effort is not None and reasoning_effort not in REASONING_EFFORTS:
+        raise ValueError(
+            f"unknown reasoning effort {reasoning_effort!r}, "
+            f"expected one of {', '.join(REASONING_EFFORTS)}"
+        )
+    kwargs = {"thinking": thinking if thinking is not None else True}
+    if reasoning_effort is not None:
+        kwargs["reasoning_effort"] = reasoning_effort
+    return {"chat_template_kwargs": kwargs}
+
+
 @sleep_and_retry
 @limits(calls=15, period=ONE_MINUTE)
-def _call_chat_ai_once(client: OpenAI, model: str, system_prompt: str, user_prompt: str):
+def _call_chat_ai_once(client: OpenAI, model: str, system_prompt: str, user_prompt: str,
+                       extra_body: dict | None = None):
     chat_completion = client.chat.completions.create(
         messages=[
             {
@@ -200,13 +228,14 @@ def _call_chat_ai_once(client: OpenAI, model: str, system_prompt: str, user_prom
         ],
         model=model,
         temperature=0,
+        extra_body=extra_body,
     )
     return chat_completion.model_dump()
 
-def call_chat_ai(client: OpenAI, model: str, system_prompt: str, user_prompt: str, max_retries: int = 5, retry_wait: float = 5):
+def call_chat_ai(client: OpenAI, model: str, system_prompt: str, user_prompt: str, extra_body: dict | None = None, max_retries: int = 5, retry_wait: float = 5):
     for retry in range(max_retries + 1):
         try:
-            return _call_chat_ai_once(client, model, system_prompt, user_prompt)
+            return _call_chat_ai_once(client, model, system_prompt, user_prompt, extra_body)
         except InternalServerError as e:
             if retry == max_retries:
                 raise
