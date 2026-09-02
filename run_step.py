@@ -26,7 +26,10 @@ what is in `data/runs/<run>/manifest.json`; `runs.py` holds the layout.
 
 **Workers.** The vitae are independent, so `--workers N` has several of them in
 flight at once. The threads share the process's rate limit rather than
-multiplying it, and everything that writes stays in the main thread. What a run
+multiplying it, and everything that writes stays in the main thread. A vita the
+endpoint never answered for -- a read timeout is routine once several requests
+are queued there -- is not a result: it is left out of the checkpoint and asked
+for again by `--resume`, rather than being written out unexpanded. What a run
 cost is recorded per vita -- answers asked for, server errors waited out, wall
 clock -- and added up in the report, because a model that is slow, an endpoint
 that is overloaded and a model that cannot keep to the format look the same
@@ -64,7 +67,7 @@ import json
 import os
 import time
 from collections import Counter
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, wait
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
@@ -74,6 +77,8 @@ from typing import Callable
 import polars as pl
 from dotenv import load_dotenv
 from openai import OpenAI
+
+from openai import APIError
 
 import expand_rest
 import multiple_choice
@@ -100,6 +105,7 @@ MODEL = "gemma-4-31b-it"
 MAX_ATTEMPTS = 5  # parse attempts per vita before it is left unexpanded
 CHECKPOINT_EVERY = 10
 WORKERS = 1  # vitae in flight at once; they share the rate limit, not multiply it
+MAX_FAILURES = 10  # vitae the endpoint may fail on before the batch gives up
 CALLS_PER_MINUTE = 15  # what helper_functions limits the process to
 
 RG_COLUMNS = ["volume", "nr_RG", "nr_suffix", "header_no_tags", "regest_no_tags", "id_RG_all"]
@@ -605,6 +611,13 @@ def run_batch(run: Run, done: dict, checkpoint: Path, every: int, limit: int | N
     a lock), so more workers use more of the same budget rather than multiplying
     it. Everything that writes stays in this thread: the workers only return
     their entry, and the checkpoint is appended as the results arrive.
+
+    A vita the endpoint gave up on (after the waiting `call_chat_ai` already
+    did) is not a result and is not recorded: the batch says so, carries on with
+    the others, and leaves that vita to be picked up by `--resume`. Whatever
+    ends the batch -- an interruption, a failure of this code, a second Ctrl+C
+    while the vitae in flight are being waited for -- the answers already paid
+    for are written to the checkpoint on the way out.
     """
     start_checkpoint(checkpoint, checkpoint_head(run))
     todo = [key for key in run.keys() if key not in done]
@@ -615,55 +628,97 @@ def run_batch(run: Run, done: dict, checkpoint: Path, every: int, limit: int | N
           + (f", {run.workers} at a time" if run.workers > 1 else "") + ")")
 
     buffered: list[dict] = []
+    failures: list[tuple[tuple[int, int], str]] = []
 
-    def keep(entry: dict) -> None:
-        done[(entry["volume"], entry["nr_RG"])] = entry
-        buffered.append(entry)
+    def flush() -> None:
+        append_checkpoint(checkpoint, buffered)
+        buffered.clear()
 
     pool = ThreadPoolExecutor(max_workers=run.workers)
-    futures = [pool.submit(process_vita, run, key) for key in todo]
-    collected: set = set()
-    try:
-        for number, future in enumerate(as_completed(futures), start=1):
-            collected.add(future)
+    queue: dict = {}  # the futures in flight or waiting for a worker, by vita
+    waiting = iter(todo)
+
+    def fill() -> None:
+        """
+        Keep one spare vita queued per worker and no more.
+
+        What is never submitted needs no cancelling, so a batch that stops early
+        -- interrupted, or given up on -- leaves nothing behind but the handful
+        of answers it is already waiting for.
+        """
+        while len(queue) < run.workers + 1:
+            key = next(waiting, None)
+            if key is None:
+                return
+            queue[pool.submit(process_vita, run, key)] = key
+
+    def harvest(future, progress: str = "") -> None:
+        """
+        Take in what one worker came back with, result or failure.
+
+        A failure must not escape: it would take the whole batch with it,
+        including the answers that are waiting to be written.
+        """
+        volume, nr_RG = queue.pop(future)
+        try:
             entry = future.result()
-            keep(entry)
-            errors = len(entry["record"]["errors"]) if entry["record"] else 0
-            tries = (entry["record"] or {}).get("effort", {}).get("tries", 1)
-            print(f"  [{number}/{len(todo)}] {entry['volume']}/{entry['nr_RG']}"
-                  + (" -- nothing to do" if entry["record"] is None else "")
-                  + (f" -- {tries} tries" if tries > 1 else "")
-                  + (f" -- {errors} error(s)" if errors else ""))
+        except APIError as error:
+            failures.append(((volume, nr_RG), f"{type(error).__name__}: {error}"))
+            print(f"  {progress}{volume}/{nr_RG} -- the endpoint gave up "
+                  f"({type(error).__name__}); left for --resume")
+            return
+        done[(volume, nr_RG)] = entry
+        buffered.append(entry)
+        errors = len(entry["record"]["errors"]) if entry["record"] else 0
+        tries = (entry["record"] or {}).get("effort", {}).get("tries", 1)
+        print(f"  {progress}{volume}/{nr_RG}"
+              + (" -- nothing to do" if entry["record"] is None else "")
+              + (f" -- {tries} tries" if tries > 1 else "")
+              + (f" -- {errors} error(s)" if errors else ""))
+
+    interrupted = False
+    number = 0
+    try:
+        fill()
+        while queue:
+            finished, _ = wait(list(queue), return_when=FIRST_COMPLETED)
+            for future in finished:
+                number += 1
+                harvest(future, f"[{number}/{len(todo)}] ")
             if len(buffered) >= every:
-                append_checkpoint(checkpoint, buffered)
-                buffered.clear()
+                flush()
+            if len(failures) >= MAX_FAILURES:
+                print(f"\n{len(failures)} vitae the endpoint gave up on -- stopping "
+                      "rather than working through the rest of them")
+                break
+            fill()
     except KeyboardInterrupt:
-        # what has not started is dropped; what is in flight is finished and
-        # kept, because those answers are paid for and the process would wait
-        # for the threads at exit anyway
-        for pending in futures:
-            pending.cancel()
-        in_flight = sum(1 for f in futures if f.running())
-        if in_flight:
-            print(f"\ninterrupted -- finishing the {in_flight} vitae already in flight")
-        pool.shutdown(wait=True)
-        for future in futures:
-            if future.done() and not future.cancelled() and future not in collected:
-                keep(future.result())
-        append_checkpoint(checkpoint, buffered)
+        interrupted = True
+    finally:
+        try:
+            for future in queue:
+                future.cancel()
+            in_flight = sum(1 for future in queue if future.running())
+            if interrupted and in_flight:
+                print(f"\ninterrupted -- finishing the {in_flight} vitae already in flight")
+            pool.shutdown(wait=True)
+            for future in list(queue):
+                if future.done() and not future.cancelled():
+                    harvest(future)
+        finally:  # a second Ctrl+C must not cost the answers already paid for
+            flush()
+
+    if interrupted:
         raise SystemExit(
             f"\ninterrupted -- {len(done)} vitae are in {checkpoint}; "
             f"continue with `python run_step.py {run.step.number} "
             f"--run {run.name} --resume`"
         )
-    except BaseException:
-        for pending in futures:
-            pending.cancel()
-        append_checkpoint(checkpoint, buffered)  # keep the answers already paid for
-        pool.shutdown(wait=False)
-        raise
-    pool.shutdown(wait=True)
-    append_checkpoint(checkpoint, buffered)
+    if failures:
+        print(f"\n{len(failures)} vitae the endpoint did not answer for; they are not "
+              f"in {checkpoint} and a resume will ask for them again:")
+        for (volume, nr_RG), why in failures:
+            print(f"  {volume}/{nr_RG}: {why}")
     return done
 
 

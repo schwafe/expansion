@@ -6,14 +6,18 @@ Mostly the two shapes a vita is kept in: `data/*.csv` has one row per regest
 (plus one for the header), which is how the RG itself is laid out; the model
 steps and the evaluation want the vita as one text. The two conversions have to
 be exact inverses of each other, since the workflow goes back and forth between
-them at every step. The rest is the per-model shape of the thinking settings.
+them at every step. The rest is the per-model shape of the thinking settings,
+and which failures of the endpoint are worth another try.
 """
 
 import polars as pl
 import pytest
+from openai import APITimeoutError
 
+import helper_functions
 from helper_functions import (
     VITA_SCHEMA,
+    call_chat_ai,
     text_to_vita_df,
     thinking_kwargs,
     vita_df_to_text,
@@ -149,3 +153,56 @@ class TestThinkingKwargs:
 
     def test_an_unknown_model_without_a_setting_is_left_alone(self):
         assert thinking_kwargs("apertus-70b-instruct-2509") == {}
+
+
+class TestWaitingOutTheEndpoint:
+    """
+    Which failures are worth another answer.
+
+    With several vitae in flight the endpoint queues them, so a request that
+    never comes back says the queue was long, not that this vita cannot be
+    answered -- and giving up on it would throw away a whole vita's work.
+    """
+
+    def answer(self, monkeypatch, failures: list, max_retries: int = 3):
+        """Call through `call_chat_ai` with an endpoint that fails like this."""
+        remaining, calls, waits = list(failures), [], []
+
+        def once(client, model, system_prompt, user_prompt, settings=None):
+            calls.append(1)
+            if remaining:
+                raise remaining.pop(0)
+            return {"choices": [{"message": {"content": "ok"}}]}
+
+        monkeypatch.setattr(helper_functions, "_call_chat_ai_once", once)
+        monkeypatch.setattr(helper_functions.time, "sleep", waits.append)
+        try:
+            response = call_chat_ai(None, "m", "system", "user", max_retries=max_retries,
+                                    retry_wait=5)
+        finally:
+            self.calls, self.waits = len(calls), waits
+        return response
+
+    def test_a_read_timeout_is_waited_out(self, monkeypatch):
+        response = self.answer(monkeypatch, [APITimeoutError(request=None)])
+        assert response["retries"] == 1  # and the report can say it happened
+        assert self.calls == 2
+
+    def test_the_wait_grows_with_every_failure(self, monkeypatch):
+        # all of these mean the endpoint has more work than it can take, so
+        # asking again at the same pace is the one thing not to do
+        self.answer(monkeypatch, [APITimeoutError(request=None),
+                                  APITimeoutError(request=None)])
+        assert self.waits == [5, 10]
+
+    def test_an_endpoint_that_never_comes_back_is_reported(self, monkeypatch):
+        with pytest.raises(APITimeoutError):
+            self.answer(monkeypatch, [APITimeoutError(request=None)] * 9, max_retries=2)
+        assert self.calls == 3  # the first try and its two retries
+
+    def test_an_answer_at_the_first_try_says_it_waited_for_nothing(self, monkeypatch):
+        assert self.answer(monkeypatch, [])["retries"] == 0
+
+
+if __name__ == "__main__":
+    pytest.main([__file__, "-v"])

@@ -4,7 +4,8 @@ from dataclasses import dataclass
 
 import polars as pl
 
-from openai import BadRequestError, InternalServerError, OpenAI, RateLimitError
+from openai import (APIConnectionError, BadRequestError, InternalServerError,
+                    OpenAI, RateLimitError)
 from ratelimit import limits, sleep_and_retry
 
 ONE_MINUTE = 60
@@ -345,10 +346,17 @@ def call_chat_ai(client: OpenAI, model: str, system_prompt: str, user_prompt: st
                 f"{model} rejected the thinking settings {settings}: {e.message} "
                 "-- run it without --thinking/--reasoning-effort."
             ) from e
-        except (InternalServerError, RateLimitError) as e:
-            # the endpoint counts its own rate limit, which the decorator above
-            # only approximates -- a 429 is worth waiting out like a 500
+        except (InternalServerError, RateLimitError, APIConnectionError) as e:
+            # A 500 is worth waiting out; so is a 429, since the endpoint counts
+            # its own rate limit and the decorator above only approximates it;
+            # and so is a request that never came back -- with several vitae in
+            # flight the endpoint queues them, and a read timeout
+            # (APITimeoutError, an APIConnectionError) says the queue was long,
+            # not that this vita is unanswerable. The wait grows, because all of
+            # these mean the endpoint has more work than it can take.
             if retry == max_retries:
                 raise
-            print(f"server error ({e.status_code}), retrying in {retry_wait}s ({retry + 1}/{max_retries})")
-            time.sleep(retry_wait)
+            waiting = retry_wait * (retry + 1)
+            reason = getattr(e, "status_code", None) or type(e).__name__
+            print(f"server error ({reason}), retrying in {waiting}s ({retry + 1}/{max_retries})")
+            time.sleep(waiting)

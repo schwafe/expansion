@@ -7,7 +7,8 @@ and tests_normalize.py; what is tested here is the loop around them:
 
 - the retry on an unparseable model answer, and the count of what it cost
 - the thinking settings, from the arguments to the log line
-- the workers: several vitae in flight at once, all of them recorded
+- the workers: several vitae in flight at once, all of them recorded, and
+  what happens to the batch when the endpoint gives up on one of them
 - the checkpoint: what it records, that a resumed run skips it, and that it
   knows which model wrote it
 - the assembly of the output CSV, including the vitae with nothing to do
@@ -19,6 +20,9 @@ import threading
 
 import polars as pl
 import pytest
+from openai import APIError
+
+import run_step
 
 from helper_functions import thinking_kwargs
 
@@ -225,10 +229,61 @@ class TestWorkers:
 
         def process(volume, nr):
             if (volume, nr) == (3, 12):
-                raise RuntimeError("the endpoint gave up")
+                raise RuntimeError("a bug in here, not a bad answer")
             return {"text": "t", "record": {"errors": []}}
 
-        with pytest.raises(RuntimeError):
+        with pytest.raises(RuntimeError):  # our own fault: not for the batch to absorb
+            run_batch(make_run(process), {}, path, every=10, limit=None)
+        assert set(read_checkpoint(path)) == {(2, 370), (2, 371)}
+
+
+class TestWhenTheEndpointGivesUp:
+    """
+    A vita the endpoint never answered for is not a result and not a reason to
+    lose the rest of the batch: it is simply not done, so a resume asks again.
+    """
+
+    def failing(self, keys: set):
+        def process(volume, nr):
+            if (volume, nr) in keys:
+                raise APIError("Request timed out.", None, body=None)
+            return {"text": "t", "record": {"errors": []}}
+        return process
+
+    def test_the_others_are_finished_and_the_failure_is_left_out(self, tmp_path, capsys):
+        path = tmp_path / "step2.jsonl"
+        done = run_batch(make_run(self.failing({(2, 371)})), {}, path, every=10, limit=None)
+        assert set(done) == {(2, 370), (3, 12)}
+        assert set(read_checkpoint(path)) == {(2, 370), (3, 12)}
+        assert "2/371" in capsys.readouterr().out  # and it says which one
+
+    def test_a_failure_is_not_recorded_as_an_empty_answer(self, tmp_path):
+        # a vita recorded with no text would be written to the output as it
+        # stands and never asked about again -- the one outcome to avoid
+        run_batch(make_run(self.failing({(2, 371)})), {}, tmp_path / "step2.jsonl",
+                  every=1, limit=None)
+        assert (2, 371) not in read_checkpoint(tmp_path / "step2.jsonl")
+
+    def test_a_run_of_failures_stops_the_batch(self, tmp_path, monkeypatch):
+        monkeypatch.setattr(run_step, "MAX_FAILURES", 2)
+        seen = []
+
+        def process(volume, nr):
+            seen.append((volume, nr))
+            raise APIError("Request timed out.", None, body=None)
+
+        run_batch(make_run(process), {}, tmp_path / "step2.jsonl", every=10, limit=None)
+        assert len(seen) < 3  # the third was never asked for
+
+    def test_an_interruption_still_keeps_what_is_answered(self, tmp_path):
+        path = tmp_path / "step2.jsonl"
+
+        def process(volume, nr):
+            if (volume, nr) == (3, 12):
+                raise KeyboardInterrupt
+            return {"text": "t", "record": {"errors": []}}
+
+        with pytest.raises(SystemExit):
             run_batch(make_run(process), {}, path, every=10, limit=None)
         assert set(read_checkpoint(path)) == {(2, 370), (2, 371)}
 
