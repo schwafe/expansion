@@ -24,6 +24,14 @@ thinking settings unless `--run` says otherwise. `--from` takes the input from
 another run, so only the step being tried has to be run again. What produced
 what is in `data/runs/<run>/manifest.json`; `runs.py` holds the layout.
 
+**Workers.** The vitae are independent, so `--workers N` has several of them in
+flight at once. The threads share the process's rate limit rather than
+multiplying it, and everything that writes stays in the main thread. What a run
+cost is recorded per vita -- answers asked for, server errors waited out, wall
+clock -- and added up in the report, because a model that is slow, an endpoint
+that is overloaded and a model that cannot keep to the format look the same
+from the outside and want different remedies.
+
 **Checkpoints.** A run is 150+ model calls at 15 calls a minute, so it has to
 survive being interrupted. Every vita is appended to
 `data/checkpoints/<run>/step<n>.jsonl` as it is finished (flushed every ten by
@@ -38,6 +46,7 @@ Usage:
     python run_step.py 2 --model gemma-4-31b-it --no-thinking
     python run_step.py 2 --model qwen3.8-27b --reasoning-effort low
     python run_step.py 4 --model qwen3.8-27b --from gemma-4-31b-it
+    python run_step.py 2 --workers 5           # five vitae in flight at once
 
 **Thinking.** The reasoning models think by default, which on a whole vita can
 take minutes per call and rarely changes the answer, since every step is a
@@ -53,10 +62,13 @@ import argparse
 import hashlib
 import json
 import os
+import time
 from collections import Counter
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
+from statistics import mean, median
 from typing import Callable
 
 import polars as pl
@@ -87,6 +99,8 @@ BASE_URL = "https://chat-ai.academiccloud.de/v1"
 MODEL = "gemma-4-31b-it"
 MAX_ATTEMPTS = 5  # parse attempts per vita before it is left unexpanded
 CHECKPOINT_EVERY = 10
+WORKERS = 1  # vitae in flight at once; they share the rate limit, not multiply it
+CALLS_PER_MINUTE = 15  # what helper_functions limits the process to
 
 RG_COLUMNS = ["volume", "nr_RG", "nr_suffix", "header_no_tags", "regest_no_tags", "id_RG_all"]
 
@@ -181,14 +195,23 @@ def ask(client, model: str, system_prompt: str, user_prompt: str, parse, attempt
     since an answer that parses but is invalid has already been reported per
     occurrence. After the last attempt the unparseable result is returned as it
     is and the caller leaves the text alone.
+
+    Returns what it cost as a fourth element, because a step that is slow
+    because every vita takes several answers is a prompt problem, while one
+    that is slow at a single answer per vita is the model or the endpoint --
+    and from the outside the two look exactly the same.
     """
     parsed = (None, None, [{"message": "No attempt was made"}])
+    effort = {"tries": 0, "server_retries": 0}
     for _ in range(attempts):
         response = call_chat_ai(client, model, system_prompt, user_prompt, settings)
+        effort["tries"] += 1
+        effort["server_retries"] += response.get("retries", 0)
         parsed = parse(response["choices"][0]["message"]["content"])
         if parsed[0] is not None:
             break
-    return parsed
+    effort["readable"] = parsed[0] is not None
+    return (*parsed, effort)
 
 
 # --------------------------------------------------------------------------
@@ -216,6 +239,7 @@ class Run:
     source_path: Path = None  # the file this step read
     inherited: dict = field(default_factory=dict)  # the chain up to this step
     attempts: int = MAX_ATTEMPTS
+    workers: int = WORKERS  # vitae in flight at once
     thinking: bool | None = None  # None: whatever the model does by itself
     reasoning_effort: str | None = None
     settings: dict = field(default_factory=dict)  # what those two become in the request
@@ -280,7 +304,7 @@ def prepare_candidates(run: Run) -> None:
             choices, errors = multiple_choice.parse_choices(content, occurrences, candidates)
             return choices, None, errors
 
-        choices, _, errors = ask(
+        choices, _, errors, effort = ask(
             run.client, run.model, run.step.prompt, ahead["prompt"], parse, run.attempts,
             run.settings,
         )
@@ -297,6 +321,7 @@ def prepare_candidates(run: Run) -> None:
                     for occurrence in occurrences
                 ],
                 "errors": errors,
+                "effort": effort,
                 "original_text": vita_df_to_text(
                     original.filter((pl.col("volume") == volume) & (pl.col("nr_RG") == nr_RG))
                 ),
@@ -335,7 +360,7 @@ def prepare_rest(run: Run) -> None:
         if ahead is None:
             return None
         occurrences, candidates = ahead["occurrences"], ahead["candidates"]
-        choices, details, errors = ask(
+        choices, details, errors, effort = ask(
             run.client, run.model, run.step.prompt, ahead["prompt"],
             lambda content: expand_rest.parse_expansions(content, occurrences, candidates),
             run.attempts, run.settings,
@@ -349,6 +374,7 @@ def prepare_rest(run: Run) -> None:
                 "candidates": candidates,
                 "details": details or [],
                 "errors": errors,
+                "effort": effort,
                 "twice_expanded_text": ahead["text"],
                 "thrice_expanded_text": text,
             },
@@ -412,7 +438,7 @@ def prepare_normalize(run: Run) -> None:
                 },
             }
         occurrences = ahead["occurrences"]
-        choices, details, errors = ask(
+        choices, details, errors, effort = ask(
             run.client, run.model, run.step.prompt, ahead["prompt"],
             lambda content: normalize.parse_forms(content, occurrences, forms),
             run.attempts, run.settings,
@@ -425,6 +451,7 @@ def prepare_normalize(run: Run) -> None:
                 "nr_RG": nr_RG,
                 "details": details or [],
                 "errors": errors,
+                "effort": effort,
                 "thrice_expanded_text": ahead["text"],
                 "normalized_text": text,
             },
@@ -447,7 +474,8 @@ def connect() -> OpenAI:
 
 def prepare(step: Step, model: str = MODEL, attempts: int = MAX_ATTEMPTS, client=None,
             thinking: bool | None = None, reasoning_effort: str | None = None,
-            name: str | None = None, parent: str | None = None) -> Run:
+            name: str | None = None, parent: str | None = None,
+            workers: int = WORKERS) -> Run:
     """
     Load everything the step needs and return it ready to run.
 
@@ -474,6 +502,7 @@ def prepare(step: Step, model: str = MODEL, attempts: int = MAX_ATTEMPTS, client
         source_path=source_path,
         inherited=inherited,
         attempts=attempts,
+        workers=workers,
         thinking=thinking,
         reasoning_effort=reasoning_effort,
         settings=thinking_kwargs(model, thinking, reasoning_effort),
@@ -544,41 +573,96 @@ def append_checkpoint(path: Path, entries: list[dict]) -> None:
 # the loop
 # --------------------------------------------------------------------------
 
+def process_vita(run: Run, key: tuple[int, int]) -> dict:
+    """
+    One vita, with what it cost -- the unit of work a worker takes off the queue.
+
+    The wall clock is measured here rather than around the model call, so the
+    time a vita spends waiting for the rate limit counts too: that is what makes
+    the average comparable with the 15 calls a minute the budget allows.
+    """
+    volume, nr_RG = key
+    started = time.monotonic()
+    result = run.process(volume, nr_RG)
+    if result is not None:
+        seconds = round(time.monotonic() - started, 1)
+        result["record"].setdefault("effort", {})["seconds"] = seconds
+    return {
+        "volume": volume,
+        "nr_RG": nr_RG,
+        "text": result["text"] if result else None,
+        "record": result["record"] if result else None,
+    }
+
+
 def run_batch(run: Run, done: dict, checkpoint: Path, every: int, limit: int | None) -> dict:
-    """Process every vita that is not in the checkpoint yet."""
+    """
+    Process every vita that is not in the checkpoint yet.
+
+    The vitae are independent -- each is one prompt built from files that are
+    only read -- so `--workers` hands several of them to the endpoint at once.
+    The rate limiter is shared by the threads of the process (`ratelimit` holds
+    a lock), so more workers use more of the same budget rather than multiplying
+    it. Everything that writes stays in this thread: the workers only return
+    their entry, and the checkpoint is appended as the results arrive.
+    """
     start_checkpoint(checkpoint, checkpoint_head(run))
     todo = [key for key in run.keys() if key not in done]
     if limit is not None:
         todo = todo[:limit]
     print(f"step {run.step.number}: {len(run.keys())} vitae, {len(done)} already done, "
-          f"{len(todo)} to do (model {run.model}, {describe_reasoning(run)})")
+          f"{len(todo)} to do (model {run.model}, {describe_reasoning(run)}"
+          + (f", {run.workers} at a time" if run.workers > 1 else "") + ")")
 
-    buffered = []
+    buffered: list[dict] = []
+
+    def keep(entry: dict) -> None:
+        done[(entry["volume"], entry["nr_RG"])] = entry
+        buffered.append(entry)
+
+    pool = ThreadPoolExecutor(max_workers=run.workers)
+    futures = [pool.submit(process_vita, run, key) for key in todo]
+    collected: set = set()
     try:
-        for number, (volume, nr_RG) in enumerate(todo, start=1):
-            result = run.process(volume, nr_RG)
-            entry = {
-                "volume": volume,
-                "nr_RG": nr_RG,
-                "text": result["text"] if result else None,
-                "record": result["record"] if result else None,
-            }
-            buffered.append(entry)
-            done[(volume, nr_RG)] = entry
-            errors = len(result["record"]["errors"]) if result else 0
-            print(f"  [{number}/{len(todo)}] {volume}/{nr_RG}"
-                  + (" -- nothing to do" if result is None else "")
+        for number, future in enumerate(as_completed(futures), start=1):
+            collected.add(future)
+            entry = future.result()
+            keep(entry)
+            errors = len(entry["record"]["errors"]) if entry["record"] else 0
+            tries = (entry["record"] or {}).get("effort", {}).get("tries", 1)
+            print(f"  [{number}/{len(todo)}] {entry['volume']}/{entry['nr_RG']}"
+                  + (" -- nothing to do" if entry["record"] is None else "")
+                  + (f" -- {tries} tries" if tries > 1 else "")
                   + (f" -- {errors} error(s)" if errors else ""))
             if len(buffered) >= every:
                 append_checkpoint(checkpoint, buffered)
-                buffered = []
+                buffered.clear()
     except KeyboardInterrupt:
+        # what has not started is dropped; what is in flight is finished and
+        # kept, because those answers are paid for and the process would wait
+        # for the threads at exit anyway
+        for pending in futures:
+            pending.cancel()
+        in_flight = sum(1 for f in futures if f.running())
+        if in_flight:
+            print(f"\ninterrupted -- finishing the {in_flight} vitae already in flight")
+        pool.shutdown(wait=True)
+        for future in futures:
+            if future.done() and not future.cancelled() and future not in collected:
+                keep(future.result())
         append_checkpoint(checkpoint, buffered)
         raise SystemExit(
             f"\ninterrupted -- {len(done)} vitae are in {checkpoint}; "
             f"continue with `python run_step.py {run.step.number} "
             f"--run {run.name} --resume`"
         )
+    except BaseException:
+        for pending in futures:
+            pending.cancel()
+        append_checkpoint(checkpoint, buffered)  # keep the answers already paid for
+        pool.shutdown(wait=False)
+        raise
+    pool.shutdown(wait=True)
     append_checkpoint(checkpoint, buffered)
     return done
 
@@ -653,6 +737,56 @@ def count_abbreviations(texts: pl.DataFrame) -> int:
     return sum(value for value in counts.row(0) if value is not None)
 
 
+def effort_section(run: Run, results: list[dict]) -> list[str]:
+    """
+    What the run cost: answers per vita, seconds per answer, and what that is
+    in calls a minute against the budget.
+
+    A step can be slow for three reasons that look identical from the outside --
+    the model is slow, the endpoint is overloaded, or the model keeps answering
+    in a shape that cannot be read and every vita costs several answers. The
+    three are separated here, because the fix differs: wait, add workers, or
+    mend the prompt.
+    """
+    efforts = [result["effort"] for result in results if result.get("effort")]
+    if not efforts:
+        return []
+    tries = [effort["tries"] for effort in efforts]
+    seconds = [effort["seconds"] for effort in efforts if effort.get("seconds") is not None]
+    retried = [count for count in tries if count > 1]
+    unreadable = sum(1 for effort in efforts if not effort.get("readable", True))
+    waited_out = sum(effort.get("server_retries", 0) for effort in efforts)
+
+    rows = [
+        ("vitae the model answered for", str(len(efforts))),
+        ("answers", f"{sum(tries)}, {sum(tries) / len(tries):.2f} per vita"),
+    ]
+    if retried:
+        rows.append(("vitae that took more than one",
+                     f"{len(retried)}, at worst {max(retried)} answers"))
+    if unreadable:
+        rows.append(("vitae with no readable answer at all", str(unreadable)))
+    if seconds:
+        rows.append(("seconds per vita", f"{mean(seconds):.1f} on average, "
+                                         f"{median(seconds):.1f} median, "
+                                         f"{max(seconds):.1f} at worst"))
+        per_answer = sum(seconds) / sum(tries)
+        rows.append(("seconds per answer", f"{per_answer:.1f}"))
+        rows.append(("answers a minute", f"about {60 / per_answer * run.workers:.1f} at "
+                                         f"{run.workers} vita(e) at a time, of the "
+                                         f"{CALLS_PER_MINUTE} the rate limit allows"))
+    if waited_out:
+        rows.append(("server errors waited out", str(waited_out)))
+
+    return (["", "## Effort", "",
+             "What the run cost. A vita takes a second answer only when the model's "
+             "reply cannot be read as JSON at all, so several answers per vita is a "
+             "matter for the prompt, while a long time at one answer per vita is the "
+             "model or the endpoint.", "",
+             "| | |", "| --- | --- |"]
+            + [f"| {what} | {value} |" for what, value in rows])
+
+
 def render_report(run: Run, expanded: pl.DataFrame, results: list[dict]) -> str:
     """The counts the notebooks used to print at the end of a batch."""
     step = run.step
@@ -666,6 +800,7 @@ def render_report(run: Run, expanded: pl.DataFrame, results: list[dict]) -> str:
         f"- abbreviations in the input: {count_abbreviations(run.source)}",
         f"- abbreviations in the output: {count_abbreviations(expanded)}",
     ]
+    lines += effort_section(run, results)
 
     tiers = Counter(detail["tier"] for result in results for detail in result.get("details", []))
     if tiers:
@@ -743,7 +878,13 @@ def main() -> None:
                         help=f"parse attempts per vita (default: {MAX_ATTEMPTS})")
     parser.add_argument("--checkpoint-every", type=int, default=CHECKPOINT_EVERY,
                         help=f"flush after this many vitae (default: {CHECKPOINT_EVERY})")
+    parser.add_argument("--workers", type=int, default=WORKERS,
+                        help="how many vitae to have in flight at once; they share the "
+                             f"rate limit of {CALLS_PER_MINUTE} calls a minute "
+                             f"(default: {WORKERS})")
     arguments = parser.parse_args()
+    if arguments.workers < 1:
+        raise SystemExit("--workers takes at least 1")
 
     try:  # a setting this model has no way of taking, before anything is loaded
         thinking_kwargs(arguments.model, arguments.thinking, arguments.reasoning_effort)
@@ -766,7 +907,8 @@ def main() -> None:
         run = prepare(step, arguments.model, arguments.attempts,
                       thinking=arguments.thinking,
                       reasoning_effort=arguments.reasoning_effort,
-                      name=name, parent=arguments.parent)
+                      name=name, parent=arguments.parent,
+                      workers=arguments.workers)
     except (LookupError, ValueError) as error:
         raise SystemExit(str(error))
 

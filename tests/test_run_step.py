@@ -5,14 +5,17 @@ Test suite for the runner of steps 2-4.
 The per-step work is tested by tests_multiple_choice.py, tests_expand_rest.py
 and tests_normalize.py; what is tested here is the loop around them:
 
-- the retry on an unparseable model answer
+- the retry on an unparseable model answer, and the count of what it cost
 - the thinking settings, from the arguments to the log line
+- the workers: several vitae in flight at once, all of them recorded
 - the checkpoint: what it records, that a resumed run skips it, and that it
   knows which model wrote it
 - the assembly of the output CSV, including the vitae with nothing to do
 - the report counts
 """
 
+
+import threading
 
 import polars as pl
 import pytest
@@ -27,6 +30,7 @@ from run_step import (
     checkpoint_head,
     assemble,
     describe_reasoning,
+    process_vita,
     read_checkpoint,
     read_checkpoint_head,
     render_report,
@@ -54,8 +58,8 @@ SOURCE = pl.DataFrame(
 STEP = Step(2, "twice", "a prompt", lambda run: None)
 
 
-def make_run(process) -> Run:
-    run = Run(step=STEP, model="a-model", name="a-run", source=SOURCE,
+def make_run(process, workers: int = 1) -> Run:
+    run = Run(step=STEP, model="a-model", name="a-run", source=SOURCE, workers=workers,
               ids=SOURCE.select("volume", "nr_RG").unique().sort(by="*"))
     run.process = process
     return run
@@ -86,11 +90,52 @@ class TestAsk:
 
         import run_step
         run_step.call_chat_ai = call
-        choices, _, errors = ask(None, "m", "system", "user",
-                                 lambda content: (None, None, [{"message": "no JSON"}]), 3)
+        choices, _, errors, effort = ask(None, "m", "system", "user",
+                                        lambda content: (None, None, [{"message": "no JSON"}]), 3)
         assert choices is None  # the caller leaves the text alone
         assert len(calls) == 3
         assert errors == [{"message": "no JSON"}]
+        assert effort == {"tries": 3, "server_retries": 0, "readable": False}
+
+
+class TestWhatAnAnswerCost:
+    """What `ask` reports about itself, so a slow step can be diagnosed."""
+
+    def answers(self, contents: list[str], retries: int = 0) -> dict:
+        """Ask with a model that gives these answers in turn."""
+        replies = iter(contents)
+
+        def call(client, model, system, user, settings=None):
+            return {"choices": [{"message": {"content": next(replies)}}],
+                    "retries": retries}
+
+        import run_step
+        run_step.call_chat_ai = call
+        parse = lambda content: (({1: "a"}, None, []) if content == "ok"
+                                 else (None, None, [{"message": "no JSON"}]))
+        return ask(None, "m", "system", "user", parse, 5)[3]
+
+    def test_an_answer_at_the_first_try_costs_one(self):
+        assert self.answers(["ok"])["tries"] == 1
+
+    def test_every_unreadable_answer_is_counted(self):
+        effort = self.answers(["sorry", "sorry", "ok"])
+        assert effort["tries"] == 3
+        assert effort["readable"] is True
+
+    def test_the_server_errors_waited_out_are_counted_too(self):
+        # a slow endpoint and a model that cannot keep to the format are both
+        # slow, and only these two numbers tell them apart
+        effort = self.answers(["sorry", "ok"], retries=2)
+        assert (effort["tries"], effort["server_retries"]) == (2, 4)
+
+    def test_a_vita_is_timed(self):
+        run = make_run(lambda volume, nr: {"text": "t", "record": {"errors": []}})
+        entry = process_vita(run, (2, 370))
+        assert entry["record"]["effort"]["seconds"] >= 0
+
+    def test_a_vita_with_nothing_to_do_is_not_timed(self):
+        assert process_vita(make_run(lambda volume, nr: None), (2, 370))["record"] is None
 
 
 class TestDescribeReasoning:
@@ -148,6 +193,44 @@ class TestCheckpoint:
 
         run_batch(make_run(process), {}, tmp_path / "step2.jsonl", every=10, limit=1)
         assert seen == [(2, 370)]
+
+
+class TestWorkers:
+    """Several vitae in flight at once, and every one of them recorded."""
+
+    def test_every_vita_is_processed_and_checkpointed(self, tmp_path):
+        path = tmp_path / "step2.jsonl"
+        run = make_run(lambda volume, nr: {"text": f"{volume}/{nr}",
+                                           "record": {"errors": []}}, workers=3)
+        done = run_batch(run, {}, path, every=10, limit=None)
+        assert set(done) == {(2, 370), (2, 371), (3, 12)}
+        assert set(read_checkpoint(path)) == set(done)
+
+    def test_the_vitae_really_do_overlap(self, tmp_path):
+        # every vita waits for the other two, which can only be reached if all
+        # three are in flight together -- a sequential loop deadlocks and the
+        # barrier breaks instead of the test hanging
+        together = threading.Barrier(3, timeout=10)
+
+        def process(volume, nr):
+            together.wait()
+            return {"text": "t", "record": {"errors": []}}
+
+        run = make_run(process, workers=3)
+        done = run_batch(run, {}, tmp_path / "step2.jsonl", every=10, limit=None)
+        assert len(done) == 3
+
+    def test_a_worker_that_raises_keeps_what_is_already_paid_for(self, tmp_path):
+        path = tmp_path / "step2.jsonl"
+
+        def process(volume, nr):
+            if (volume, nr) == (3, 12):
+                raise RuntimeError("the endpoint gave up")
+            return {"text": "t", "record": {"errors": []}}
+
+        with pytest.raises(RuntimeError):
+            run_batch(make_run(process), {}, path, every=10, limit=None)
+        assert set(read_checkpoint(path)) == {(2, 370), (2, 371)}
 
 
 class TestAssemble:
@@ -230,3 +313,35 @@ class TestReport:
 
     def test_the_model_is_named(self, run):
         assert "`a-model`" in render_report(run, SOURCE, [])
+
+    def test_the_tries_per_vita_are_averaged(self, run):
+        results = [{"errors": [], "effort": {"tries": 1, "server_retries": 0,
+                                             "readable": True, "seconds": 10.0}},
+                   {"errors": [], "effort": {"tries": 3, "server_retries": 0,
+                                             "readable": True, "seconds": 30.0}}]
+        report = render_report(run, SOURCE, results)
+        assert "| answers | 4, 2.00 per vita |" in report
+        assert "| vitae that took more than one | 1, at worst 3 answers |" in report
+        assert "| seconds per answer | 10.0 |" in report
+
+    def test_the_pace_is_stated_against_the_rate_limit(self, run):
+        results = [{"errors": [], "effort": {"tries": 1, "server_retries": 0,
+                                             "readable": True, "seconds": 60.0}}]
+        assert "about 1.0 at 1 vita(e) at a time" in render_report(run, SOURCE, results)
+
+    def test_the_server_errors_are_only_mentioned_where_there_were_any(self, run):
+        quiet = [{"errors": [], "effort": {"tries": 1, "server_retries": 0,
+                                           "readable": True, "seconds": 1.0}}]
+        assert "server errors waited out" not in render_report(run, SOURCE, quiet)
+        noisy = [{"errors": [], "effort": {"tries": 1, "server_retries": 4,
+                                           "readable": True, "seconds": 1.0}}]
+        assert "| server errors waited out | 4 |" in render_report(run, SOURCE, noisy)
+
+    def test_a_run_from_before_the_counting_has_no_effort_section(self, run):
+        assert "## Effort" not in render_report(run, SOURCE, [{"errors": []}])
+
+    def test_more_workers_are_more_answers_a_minute(self, run):
+        results = [{"errors": [], "effort": {"tries": 1, "server_retries": 0,
+                                             "readable": True, "seconds": 60.0}}]
+        run.workers = 5
+        assert "about 5.0 at 5 vita(e) at a time" in render_report(run, SOURCE, results)

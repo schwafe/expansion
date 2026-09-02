@@ -57,6 +57,7 @@ python run_step.py 4 --resume              # continue an interrupted run
 python run_step.py 2 --model qwen3.8-27b --no-thinking
 python run_step.py 2 --model qwen3.8-27b --reasoning-effort low
 python run_step.py 4 --model qwen3.8-27b --from gemma-4-31b-it   # only step 4 anew
+python run_step.py 2 --workers 5           # five vitae in flight at once
 ```
 
 **Runs.** A step is worth running with several models, and the interesting comparisons mix them — one model for the choices, another for the grammar — so the output of a step is not one file but one per run:
@@ -101,6 +102,25 @@ Every family wants this asked differently, and **ignores what it does not know w
 The entries were checked against the endpoint by asking one small arithmetic question per model and setting and counting the completion tokens, which is the only reliable signal — the wall clock says nothing, since the same request can take 0.1s or 90s depending on the load. Thinking off against on: `gemma-4-31b-it` 4 → 225 tokens, `qwen3.8-27b` 4 → 50, `deepseek-v4-flash-0731` 2 → 49, `mistral-medium-3.5-128b` 4 (`none`) → 152 (`high`), `openai-gpt-oss-120b` 20 (`low`) → 45 (`medium`) → 84 (`high`). Only `glm-4.7` answers with the same 3 tokens whatever it is asked, so that deployment seems to have its thinking switched off for good. The levels are worth less than the switch: on deepseek and on qwen3.8 they differ from each other only within the noise of a question this small.
 
 **Checkpoints.** A run is 150+ model calls at 15 calls a minute, so it has to survive being interrupted. Every vita is appended to `data/checkpoints/<run>/step<n>.jsonl` as it is finished (flushed every ten by default, `--checkpoint-every` to change it), and `--resume` processes only what is missing. The first line records the run, the model and its settings, so a resume with anything else is refused rather than interleaved into one file. The CSV and the JSON dump are written only once every vita is done, so an interrupted or `--limit`ed run never overwrites a complete output with a partial one.
+
+**Workers.** The vitae are independent — each is one prompt built from files that are only read — so `--workers N` hands several of them to the endpoint at once. The rate limiter is shared by the threads of the process (`ratelimit` holds a lock), so more workers use more of the same 15 calls a minute rather than multiplying the budget; everything that writes stays in the main thread, which only collects what the workers return. A model that answers in a minute leaves 14 of the 15 calls unused, and five workers turn that into five. On Ctrl+C the vitae already in flight are finished and checkpointed — those answers are paid for — and only what has not started is dropped.
+
+**Was it slow, or was it the prompt?** A step can be slow for three reasons that look identical from the outside: the model is slow, the endpoint is overloaded, or the model keeps answering in a shape that cannot be read, so every vita costs several answers. Each vita therefore records what it cost — how many answers it took, how many server errors were waited out inside them, and its wall clock — and `step<n>_report.md` adds them up:
+
+```
+## Effort
+| | |
+| --- | --- |
+| vitae the model answered for | 154 |
+| answers | 166, 1.08 per vita |
+| vitae that took more than one | 11, at worst 4 answers |
+| seconds per vita | 62.4 on average, 58.0 median, 180.2 at worst |
+| seconds per answer | 57.8 |
+| answers a minute | about 1.0 at 1 vita(e) at a time, of the 15 the rate limit allows |
+| server errors waited out | 3 |
+```
+
+More than one answer per vita is a matter for the prompt; a long time at one answer per vita is the model or the endpoint, and that is what `--workers` is for.
 
 **What a run leaves behind.** In `data/runs/<run>/`: the CSV for the next step, a dump of every decision (`step<n>.json`) that also records the model, its thinking settings, the prompt and the file the step read — so the evaluation and the TEI header can state where an expansion comes from instead of having to be told — `step<n>_report.md` with the acceptance tiers, the errors and the most frequent changes, and the manifest tying the chain together.
 
