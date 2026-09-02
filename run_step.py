@@ -25,8 +25,9 @@ another run, so only the step being tried has to be run again. What produced
 what is in `data/runs/<run>/manifest.json`; `runs.py` holds the layout.
 
 **Workers.** The vitae are independent, so `--workers N` has several of them in
-flight at once. The threads share the process's rate limit rather than
-multiplying it, and everything that writes stays in the main thread. A vita the
+flight at once, started half a second apart -- all of them asking together is
+what the endpoint refuses. The threads share the process's rate limit rather
+than multiplying it, and everything that writes stays in the main thread. A vita the
 endpoint never answered for -- a read timeout is routine once several requests
 are queued there -- is not a result: it is left out of the checkpoint and asked
 for again by `--resume`, rather than being written out unexpanded. What a run
@@ -105,6 +106,7 @@ MODEL = "gemma-4-31b-it"
 MAX_ATTEMPTS = 5  # parse attempts per vita before it is left unexpanded
 CHECKPOINT_EVERY = 10
 WORKERS = 1  # vitae in flight at once; they share the rate limit, not multiply it
+STAGGER = 0.5  # seconds between the first call of one worker and the next
 MAX_FAILURES = 10  # vitae the endpoint may fail on before the batch gives up
 CALLS_PER_MINUTE = 15  # what helper_functions limits the process to
 
@@ -629,7 +631,8 @@ def run_batch(run: Run, done: dict, checkpoint: Path, every: int, limit: int | N
         todo = todo[:limit]
     print(f"step {run.step.number}: {len(run.keys())} vitae, {len(done)} already done, "
           f"{len(todo)} to do (model {run.model}, {describe_reasoning(run)}"
-          + (f", {run.workers} at a time" if run.workers > 1 else "") + ")")
+          + (f", {run.workers} at a time, started {STAGGER}s apart"
+             if run.workers > 1 else "") + ")")
 
     buffered: list[dict] = []
     failures: list[tuple[tuple[int, int], str]] = []
@@ -641,6 +644,7 @@ def run_batch(run: Run, done: dict, checkpoint: Path, every: int, limit: int | N
     pool = ThreadPoolExecutor(max_workers=run.workers)
     queue: dict = {}  # the futures in flight or waiting for a worker, by vita
     waiting = iter(todo)
+    started = 0
 
     def fill() -> None:
         """
@@ -649,11 +653,21 @@ def run_batch(run: Run, done: dict, checkpoint: Path, every: int, limit: int | N
         What is never submitted needs no cancelling, so a batch that stops early
         -- interrupted, or given up on -- leaves nothing behind but the handful
         of answers it is already waiting for.
+
+        The workers start `STAGGER` apart. All of them asking at once is what
+        the endpoint refuses -- a burst of 429s that then retry together, in
+        waves -- while the same number of calls spread over a few seconds goes
+        through. Only the first call of each worker is held back: from then on
+        they are spread out by the answers they are waiting for.
         """
+        nonlocal started
         while len(queue) < run.workers + 1:
             key = next(waiting, None)
             if key is None:
                 return
+            if 0 < started < run.workers:
+                time.sleep(STAGGER)
+            started += 1
             queue[pool.submit(process_vita, run, key)] = key
 
     def harvest(future, progress: str = "") -> None:

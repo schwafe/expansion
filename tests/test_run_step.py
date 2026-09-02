@@ -64,6 +64,12 @@ SOURCE = pl.DataFrame(
 STEP = Step(2, "twice", "a prompt", lambda run: None)
 
 
+@pytest.fixture(autouse=True)
+def no_stagger(monkeypatch):
+    """The batches here answer instantly, so nothing has to be spread out."""
+    monkeypatch.setattr(run_step, "STAGGER", 0)
+
+
 def make_run(process, workers: int = 1) -> Run:
     run = Run(step=STEP, model="a-model", name="a-run", source=SOURCE, workers=workers,
               ids=SOURCE.select("volume", "nr_RG").unique().sort(by="*"))
@@ -218,6 +224,32 @@ class TestWorkers:
         done = run_batch(run, {}, path, every=10, limit=None)
         assert set(done) == {(2, 370), (2, 371), (3, 12)}
         assert set(read_checkpoint(path)) == set(done)
+
+    def test_the_workers_do_not_all_start_at_once(self, tmp_path, monkeypatch):
+        # fifteen calls arriving together is what the endpoint refuses, and the
+        # first call of each worker is the only one that needs holding back
+        monkeypatch.setattr(run_step, "STAGGER", 0.25)
+        waits = []
+        monkeypatch.setattr(run_step.time, "sleep", waits.append)
+        run = make_run(lambda volume, nr: {"text": "t", "record": {"errors": []}}, workers=3)
+        run_batch(run, {}, tmp_path / "step2.jsonl", every=10, limit=None)
+        assert waits == [0.25, 0.25]  # three workers, and the first one waits for nothing
+
+    def test_only_the_first_call_of_a_worker_is_held_back(self, tmp_path, monkeypatch):
+        monkeypatch.setattr(run_step, "STAGGER", 0.25)
+        waits = []
+        monkeypatch.setattr(run_step.time, "sleep", waits.append)
+        run = make_run(lambda volume, nr: {"text": "t", "record": {"errors": []}}, workers=2)
+        run_batch(run, {}, tmp_path / "step2.jsonl", every=10, limit=None)
+        assert waits == [0.25]  # the third vita follows an answer, not a start
+
+    def test_one_worker_starts_straight_away(self, tmp_path, monkeypatch):
+        monkeypatch.setattr(run_step, "STAGGER", 0.25)
+        waits = []
+        monkeypatch.setattr(run_step.time, "sleep", waits.append)
+        run_batch(make_run(lambda volume, nr: None), {}, tmp_path / "step2.jsonl",
+                  every=10, limit=None)
+        assert waits == []
 
     def test_the_vitae_really_do_overlap(self, tmp_path):
         # every vita waits for the other two, which can only be reached if all
