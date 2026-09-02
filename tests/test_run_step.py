@@ -75,7 +75,7 @@ class TestAsk:
     def test_the_first_parseable_answer_is_taken(self):
         calls = []
 
-        def call(client, model, system, user, settings=None):
+        def call(client, model, system, user, settings=None, label=""):
             calls.append(settings)
             return {"choices": [{"message": {"content": "{}"}}]}
 
@@ -90,7 +90,7 @@ class TestAsk:
     def test_an_unparseable_answer_is_retried_and_then_given_up_on(self):
         calls = []
 
-        def call(client, model, system, user, settings=None):
+        def call(client, model, system, user, settings=None, label=""):
             calls.append(user)
             return {"choices": [{"message": {"content": "sorry"}}]}
 
@@ -110,16 +110,17 @@ class TestWhatAnAnswerCost:
     def answers(self, contents: list[str], retries: int = 0) -> dict:
         """Ask with a model that gives these answers in turn."""
         replies = iter(contents)
+        self.labels = []
 
-        def call(client, model, system, user, settings=None):
+        def call(client, model, system, user, settings=None, label=""):
+            self.labels.append(label)
             return {"choices": [{"message": {"content": next(replies)}}],
                     "retries": retries}
 
-        import run_step
         run_step.call_chat_ai = call
         parse = lambda content: (({1: "a"}, None, []) if content == "ok"
                                  else (None, None, [{"message": "no JSON"}]))
-        return ask(None, "m", "system", "user", parse, 5)[3]
+        return ask(None, "m", "system", "user", parse, 5, label="2/370")[3]
 
     def test_an_answer_at_the_first_try_costs_one(self):
         assert self.answers(["ok"])["tries"] == 1
@@ -134,6 +135,12 @@ class TestWhatAnAnswerCost:
         # slow, and only these two numbers tell them apart
         effort = self.answers(["sorry", "ok"], retries=2)
         assert (effort["tries"], effort["server_retries"]) == (2, 4)
+
+    def test_the_vita_is_named_to_whatever_does_the_waiting(self):
+        # with ten vitae in flight, one retried five times and five retried
+        # once print the same five lines unless they say which vita they are
+        self.answers(["sorry", "ok"])
+        assert self.labels == ["2/370", "2/370"]
 
     def test_a_vita_is_timed(self):
         run = make_run(lambda volume, nr: {"text": "t", "record": {"errors": []}})

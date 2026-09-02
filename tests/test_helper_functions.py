@@ -164,7 +164,7 @@ class TestWaitingOutTheEndpoint:
     answered -- and giving up on it would throw away a whole vita's work.
     """
 
-    def answer(self, monkeypatch, failures: list, max_retries: int = 3):
+    def answer(self, monkeypatch, failures: list, max_retries: int = 3, label: str = ""):
         """Call through `call_chat_ai` with an endpoint that fails like this."""
         remaining, calls, waits = list(failures), [], []
 
@@ -178,7 +178,7 @@ class TestWaitingOutTheEndpoint:
         monkeypatch.setattr(helper_functions.time, "sleep", waits.append)
         try:
             response = call_chat_ai(None, "m", "system", "user", max_retries=max_retries,
-                                    retry_wait=5)
+                                    retry_wait=5, label=label)
         finally:
             self.calls, self.waits = len(calls), waits
         return response
@@ -202,6 +202,14 @@ class TestWaitingOutTheEndpoint:
 
     def test_an_answer_at_the_first_try_says_it_waited_for_nothing(self, monkeypatch):
         assert self.answer(monkeypatch, [])["retries"] == 0
+
+    def test_the_waiting_says_what_it_is_waiting_for(self, monkeypatch, capsys):
+        self.answer(monkeypatch, [APITimeoutError(request=None)], label="2/370")
+        assert "2/370: server error (APITimeoutError)" in capsys.readouterr().out
+
+    def test_without_a_caller_to_name_the_line_still_reads(self, monkeypatch, capsys):
+        self.answer(monkeypatch, [APITimeoutError(request=None)])
+        assert "server error (APITimeoutError), retrying in 5s (1/3)" in capsys.readouterr().out
 
 
 if __name__ == "__main__":

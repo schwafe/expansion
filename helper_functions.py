@@ -325,7 +325,7 @@ def _call_chat_ai_once(client: OpenAI, model: str, system_prompt: str, user_prom
     )
     return chat_completion.model_dump()
 
-def call_chat_ai(client: OpenAI, model: str, system_prompt: str, user_prompt: str, settings: dict | None = None, max_retries: int = 5, retry_wait: float = 5):
+def call_chat_ai(client: OpenAI, model: str, system_prompt: str, user_prompt: str, settings: dict | None = None, max_retries: int = 5, retry_wait: float = 5, label: str = ""):
     """
     One answer from the model, waiting out the errors that are worth waiting out.
 
@@ -333,6 +333,10 @@ def call_chat_ai(client: OpenAI, model: str, system_prompt: str, user_prompt: st
     before it arrived. A step that is slow because the endpoint is overloaded
     then looks different in the report from one that is slow because the model
     is, which is not something the wall clock alone can tell.
+
+    `label` names what this call is for -- with several vitae in flight the
+    waiting is otherwise anonymous, and one vita being retried five times looks
+    exactly like five vitae being retried once.
     """
     for retry in range(max_retries + 1):
         try:
@@ -358,5 +362,6 @@ def call_chat_ai(client: OpenAI, model: str, system_prompt: str, user_prompt: st
                 raise
             waiting = retry_wait * (retry + 1)
             reason = getattr(e, "status_code", None) or type(e).__name__
-            print(f"server error ({reason}), retrying in {waiting}s ({retry + 1}/{max_retries})")
+            print(f"  {label + ': ' if label else ''}server error ({reason}), "
+                  f"retrying in {waiting}s ({retry + 1}/{max_retries})")
             time.sleep(waiting)

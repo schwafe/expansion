@@ -192,7 +192,7 @@ NORMALIZE_PROMPT = """**Role:** You are a historian specializing in medieval chu
 # --------------------------------------------------------------------------
 
 def ask(client, model: str, system_prompt: str, user_prompt: str, parse, attempts: int,
-        settings: dict | None = None):
+        settings: dict | None = None, label: str = ""):
     """
     Call the model until its answer parses, then hand the answer to the caller.
 
@@ -202,6 +202,9 @@ def ask(client, model: str, system_prompt: str, user_prompt: str, parse, attempt
     occurrence. After the last attempt the unparseable result is returned as it
     is and the caller leaves the text alone.
 
+    `label` says which vita is being asked about, for the lines the waiting
+    prints: with several vitae in flight they are otherwise anonymous.
+
     Returns what it cost as a fourth element, because a step that is slow
     because every vita takes several answers is a prompt problem, while one
     that is slow at a single answer per vita is the model or the endpoint --
@@ -210,7 +213,8 @@ def ask(client, model: str, system_prompt: str, user_prompt: str, parse, attempt
     parsed = (None, None, [{"message": "No attempt was made"}])
     effort = {"tries": 0, "server_retries": 0}
     for _ in range(attempts):
-        response = call_chat_ai(client, model, system_prompt, user_prompt, settings)
+        response = call_chat_ai(client, model, system_prompt, user_prompt, settings,
+                                label=label)
         effort["tries"] += 1
         effort["server_retries"] += response.get("retries", 0)
         parsed = parse(response["choices"][0]["message"]["content"])
@@ -312,7 +316,7 @@ def prepare_candidates(run: Run) -> None:
 
         choices, _, errors, effort = ask(
             run.client, run.model, run.step.prompt, ahead["prompt"], parse, run.attempts,
-            run.settings,
+            run.settings, label=f"{volume}/{nr_RG}",
         )
         text = multiple_choice.apply_choices(ahead["text"], occurrences, choices or {})
         return {
@@ -369,7 +373,7 @@ def prepare_rest(run: Run) -> None:
         choices, details, errors, effort = ask(
             run.client, run.model, run.step.prompt, ahead["prompt"],
             lambda content: expand_rest.parse_expansions(content, occurrences, candidates),
-            run.attempts, run.settings,
+            run.attempts, run.settings, label=f"{volume}/{nr_RG}",
         )
         text = multiple_choice.apply_choices(ahead["text"], occurrences, choices or {})
         return {
@@ -447,7 +451,7 @@ def prepare_normalize(run: Run) -> None:
         choices, details, errors, effort = ask(
             run.client, run.model, run.step.prompt, ahead["prompt"],
             lambda content: normalize.parse_forms(content, occurrences, forms),
-            run.attempts, run.settings,
+            run.attempts, run.settings, label=f"{volume}/{nr_RG}",
         )
         text = multiple_choice.apply_choices(ahead["text"], occurrences, choices or {})
         return {
