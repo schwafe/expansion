@@ -18,9 +18,12 @@ belongs to both readings, which is why the rule names <choice> rather than the
 elements alone.
 
 `@resp` names the step that decided the expansion, so the rule-based expansions
-can be told from the model-chosen ones without re-running anything; the steps
-are declared in the teiHeader. An abbreviation the pipeline never resolved is a
-bare <abbr> with no <expan> -- present in both readings and easy to list.
+can be told from the model-chosen ones without re-running anything. The steps
+are declared in the teiHeader, each with the model that ran it and what was
+asked of its thinking, read from the manifest of the run being published -- a
+run may mix models, so this cannot be a constant in here. An abbreviation the
+pipeline never resolved is a bare <abbr> with no <expan> -- present in both
+readings and easy to list.
 
 The pairing of abbreviation and expansion reuses the alignment of `evaluate.py`:
 the abbreviated source is aligned with the expanded text at word level, which
@@ -59,7 +62,8 @@ import polars as pl
 
 import runs
 from evaluate import (DATA_DIR, REVIEW_DIR, SOURCE, TOKEN, align,
-                      build_anchor_index, is_abbreviation, stages)
+                      build_anchor_index, describe_settings, is_abbreviation,
+                      stages)
 
 OUTPUT = DATA_DIR / "rg_expanded.xml"
 REPORT = REVIEW_DIR / "tei_report.md"
@@ -75,15 +79,13 @@ RESP_OF_STAGE = {
     "normalized": "step4",
 }
 
-# what the teiHeader says about each step. The model names are the MODEL
-# constants of the notebooks that produced the stage -- keep them in sync with
-# expanding_candidates.ipynb, expanding_rest.ipynb and normalizing.ipynb.
-RESPONSIBILITY = [
-    ("step1", "expansion by rule from the Abkürzungsverzeichnis", None),
-    ("step2", "choice among the candidates of the Abkürzungsverzeichnis", "gemma-4-31b-it"),
-    ("step3", "choice among candidates mined from the RG", "gemma-4-31b-it"),
-    ("step4", "normalisation of the inflection", "gemma-4-31b-it"),
-]
+# what the teiHeader says each step did; who did it comes from the manifest
+WHAT_EACH_STEP_DID = {
+    1: "expansion by rule from the Abkürzungsverzeichnis",
+    2: "choice among the candidates of the Abkürzungsverzeichnis",
+    3: "choice among candidates mined from the RG",
+    4: "normalisation of the inflection",
+}
 
 # punctuation an expansion may add without the source having it
 PUNCTUATION = re.compile(r"[,;:]*")
@@ -304,13 +306,46 @@ def element(tag: str, text: str, **attributes) -> str:
     return f"<{tag}{marked}>{text}</{tag}>"
 
 
-def header() -> str:
+def how_it_thought(entry: dict) -> str:
+    """What was asked of the model's thinking, as a phrase; empty by default."""
+    setting = describe_settings(entry)
+    if setting == "default":
+        return ""
+    if setting.startswith("effort "):
+        return f", with reasoning effort {setting.removeprefix('effort ')}"
+    return f", with thinking {setting}"
+
+
+def responsibility(run: str) -> list[tuple[str, str, str | None]]:
+    """
+    What the teiHeader declares about each step: what it did, and who did it.
+
+    The models are read from the run's manifest rather than named here, because
+    a run may mix them -- one model for the choices, another for the grammar --
+    and because a step may have been inherited from another run altogether. Only
+    the steps the run actually reached are declared, which is also exactly the
+    set of @resp values the markup can use.
+    """
+    declared = []
+    for number, entry in runs.chain(run):
+        what = WHAT_EACH_STEP_DID[number]
+        if entry.get("model") is None:  # step 1 applies rules, no model involved
+            declared.append((f"step{number}", what, None))
+            continue
+        what += how_it_thought(entry)
+        if entry.get("run") and entry["run"] != run:
+            what += f" (taken from the run {entry['run']})"
+        declared.append((f"step{number}", what, entry["model"]))
+    return declared
+
+
+def header(run: str) -> str:
     """The teiHeader, including what each step did and which model did it."""
     statements = "\n".join(
         f'   <respStmt xml:id="{ident}"><resp>{escape(what)}</resp>'
         + (f"<name>{escape(who)}</name>" if who else "")
         + "</respStmt>"
-        for ident, what, who in RESPONSIBILITY
+        for ident, what, who in responsibility(run)
     )
     return f"""\
  <teiHeader>
@@ -331,7 +366,9 @@ def header() -> str:
       &lt;choice&gt; yields the expanded text. An &lt;abbr&gt; outside a
       &lt;choice&gt; is an abbreviation that was not resolved; it belongs to
       both readings.</p>
-     <p>The @resp of an &lt;expan&gt; names the step that decided it.</p>
+     <p>The @resp of an &lt;expan&gt; names the step that decided it. The
+      steps are those of the run {escape(run)}; a step names the model that
+      ran it, where a model was involved.</p>
     </normalization>
    </editorialDecl>
   </encodingDesc>
@@ -360,7 +397,7 @@ def row_text(row: dict) -> str:
     return row["header_no_tags"] or row["regest_no_tags"] or ""
 
 
-def build(source_texts: dict, stages: dict, anchors, known) -> tuple[str, dict]:
+def build(source_texts: dict, stages: dict, anchors, known, run: str) -> tuple[str, dict]:
     """The whole document, plus the counts the report needs."""
     names = list(stages)
     final = names[-1]
@@ -416,7 +453,7 @@ def build(source_texts: dict, stages: dict, anchors, known) -> tuple[str, dict]:
     document = (
         '<?xml version="1.0" encoding="UTF-8"?>\n'
         f'<TEI xmlns="{TEI_NS}">\n'
-        f"{header()}\n"
+        f"{header(run)}\n"
         " <text>\n  <body>\n"
         f"{divisions}\n"
         "  </body>\n </text>\n</TEI>\n"
@@ -464,7 +501,7 @@ def to_tei(output: Path, write: bool, run: str) -> dict:
     anchors = build_anchor_index(*GLOSSARY)
     known = known_abbreviations(*GLOSSARY)
 
-    document, info = build(source_texts, stage_texts, anchors, known)
+    document, info = build(source_texts, stage_texts, anchors, known, run)
     report = render_report(info, output)
     print(report)
 

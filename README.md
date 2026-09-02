@@ -206,7 +206,14 @@ Every stage of the workflow produces a text in which the abbreviations have been
 - the text of the RG — drop the `<expan>` of every `<choice>`
 - the expanded text — drop the `<abbr>` of every `<choice>`
 
-An `<abbr>` that stands outside a `<choice>` is an abbreviation the workflow did not resolve; it belongs to both readings, which is why the rule names `<choice>` rather than the elements alone. `to_tei.readings()` implements both and is what the round-trip check uses. `@resp` names the step that decided the expansion (declared in the teiHeader with the model that ran it), so the expansions made by rule can be told from the ones a model chose without re-running anything. The structure follows the existing keys: `<div type="volume">` and `<div type="vita">` from volume/nr_RG, one `<head>` or `<p>` per regest with the `xml:id` taken from `id_RG_all`.
+An `<abbr>` that stands outside a `<choice>` is an abbreviation the workflow did not resolve; it belongs to both readings, which is why the rule names `<choice>` rather than the elements alone. `to_tei.readings()` implements both and is what the round-trip check uses. `@resp` names the step that decided the expansion, so the expansions made by rule can be told from the ones a model chose without re-running anything. The steps are declared in the `teiHeader`, each with the model that ran it and what was asked of its thinking, read from the manifest of the run being published — a chain may mix models, and a step it borrowed with `--from` says which run it came from:
+
+```xml
+<respStmt xml:id="step3"><resp>choice among candidates mined from the RG (taken from the run gemma-4-31b-it)</resp><name>gemma-4-31b-it</name></respStmt>
+<respStmt xml:id="step4"><resp>normalisation of the inflection, with thinking off</resp><name>qwen3.8-27b</name></respStmt>
+```
+
+Only the steps a run actually reached are declared, which is exactly the set of `@resp` values the markup can use. The structure follows the existing keys: `<div type="volume">` and `<div type="vita">` from volume/nr_RG, one `<head>` or `<p>` per regest with the `xml:id` taken from `id_RG_all`.
 
 The pairing of abbreviation and expansion reuses the alignment of `evaluate.py`. Three things it does not settle have to be decided here, because the markup has to reproduce the source character for character rather than token for token: material *between* two words that only one reading has (`aep.` → `archiepiscopus,` adds a comma) is folded into the neighbouring `<choice>`; a word ending in a period is not necessarily an abbreviation (`fecerunt.` at the end of a sentence, `236v.` as a folio mark), so a token only becomes an `<abbr>` if the glossary lists it; and several abbreviations sharing one expansion (`s.p.d.` → `sineperdatum`) become a single `<choice>`.
 

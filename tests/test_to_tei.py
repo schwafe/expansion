@@ -9,13 +9,15 @@ Covers:
   expansion adds, spacing it changes)
 - the cases the tokenizer cannot decide on its own: a sentence-final word, a
   folio mark glued to a number, several abbreviations sharing one expansion
-- the @resp attribution
+- the @resp attribution, and the responsibility statements it points at, which
+  name the model of every step as the run recorded it
 """
 
 import pytest
 
-from to_tei import (Segment, attribute, is_shelfmark, mark_up, readings,
-                    render, token_spans)
+import runs
+from to_tei import (Segment, attribute, header, is_shelfmark, mark_up,
+                    readings, render, responsibility, token_spans)
 
 KNOWN = {"eccl.", "s.", "op.", "aep.", "etc.", "d.", "p.", "mai."}
 ANCHORS = {"aep.": {"archiepiscopus"}}
@@ -146,6 +148,74 @@ class TestSegment:
 
     def test_a_choice_is_not_plain(self):
         assert not Segment("eccl.", "ecclesia").plain
+
+
+class TestResponsibility:
+    """Who the teiHeader says did what -- taken from the run, not from a constant."""
+
+    @pytest.fixture
+    def a_run(self, tmp_path, monkeypatch):
+        """A run directory to write manifests into, away from the real data/."""
+        monkeypatch.setattr(runs, "RUNS_DIR", tmp_path / "runs")
+
+        def manifest(run, steps):
+            runs.write_manifest(run, {"run": run, "steps": steps})
+
+        return manifest
+
+    def test_every_step_is_declared_with_the_model_that_ran_it(self, a_run):
+        a_run("gemma", {
+            "1": {"run": None, "model": None},
+            "2": {"run": "gemma", "model": "gemma-4-31b-it", "thinking": None},
+            "3": {"run": "gemma", "model": "gemma-4-31b-it", "thinking": None},
+        })
+        assert responsibility("gemma") == [
+            ("step1", "expansion by rule from the Abkürzungsverzeichnis", None),
+            ("step2", "choice among the candidates of the Abkürzungsverzeichnis",
+             "gemma-4-31b-it"),
+            ("step3", "choice among candidates mined from the RG", "gemma-4-31b-it"),
+        ]
+
+    def test_a_step_the_run_never_reached_is_not_declared(self, a_run):
+        a_run("gemma", {"1": {"run": None, "model": None},
+                        "2": {"run": "gemma", "model": "gemma-4-31b-it"}})
+        assert [ident for ident, _, _ in responsibility("gemma")] == ["step1", "step2"]
+
+    def test_a_chain_may_name_a_different_model_per_step(self, a_run):
+        a_run("mixed", {
+            "1": {"run": None, "model": None},
+            "2": {"run": "gemma", "model": "gemma-4-31b-it"},
+            "3": {"run": "gemma", "model": "gemma-4-31b-it"},
+            "4": {"run": "mixed", "model": "qwen3.8-27b", "reasoning_effort": "low"},
+        })
+        declared = dict((ident, (what, who)) for ident, what, who in responsibility("mixed"))
+        assert declared["step4"][1] == "qwen3.8-27b"
+        assert "reasoning effort low" in declared["step4"][0]
+        assert declared["step2"][1] == "gemma-4-31b-it"
+
+    def test_a_borrowed_step_says_where_it_came_from(self, a_run):
+        a_run("qwen", {"1": {"run": None, "model": None},
+                       "2": {"run": "gemma", "model": "gemma-4-31b-it"},
+                       "3": {"run": "qwen", "model": "qwen3.8-27b"}})
+        what = dict((ident, what) for ident, what, _ in responsibility("qwen"))
+        assert what["step2"].endswith("(taken from the run gemma)")
+        assert "taken from" not in what["step3"]  # this run produced it itself
+
+    def test_the_thinking_setting_is_stated_where_it_was_not_the_default(self, a_run):
+        a_run("nothink", {"1": {"run": None, "model": None},
+                          "2": {"run": "nothink", "model": "gemma-4-31b-it",
+                                "thinking": False}})
+        what = dict((ident, what) for ident, what, _ in responsibility("nothink"))
+        assert what["step2"].endswith("with thinking off")
+
+    def test_the_header_holds_a_statement_per_step(self, a_run):
+        a_run("gemma", {"1": {"run": None, "model": None},
+                        "2": {"run": "gemma", "model": "gemma-4-31b-it"}})
+        written = header("gemma")
+        assert '<respStmt xml:id="step2">' in written
+        assert "<name>gemma-4-31b-it</name>" in written
+        assert 'xml:id="step3"' not in written  # not run, so nothing to declare
+        assert "the run gemma" in written
 
 
 if __name__ == "__main__":
