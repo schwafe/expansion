@@ -698,13 +698,17 @@ def run_batch(run: Run, done: dict, checkpoint: Path, every: int, limit: int | N
         try:
             for future in queue:
                 future.cancel()
-            in_flight = sum(1 for future in queue if future.running())
-            if interrupted and in_flight:
-                print(f"\ninterrupted -- finishing the {in_flight} vitae already in flight")
+            outstanding = [future for future in queue if not future.cancelled()]
+            if interrupted and outstanding:
+                # they are answered or being answered, so they are kept and go
+                # on counting; what had not started is what is dropped
+                print(f"\ninterrupted -- {len(outstanding)} vitae are answered or in "
+                      "flight; waiting for them, they count too")
             pool.shutdown(wait=True)
             for future in list(queue):
                 if future.done() and not future.cancelled():
-                    harvest(future)
+                    number += 1
+                    harvest(future, f"[{number}/{len(todo)}] ")
         finally:  # a second Ctrl+C must not cost the answers already paid for
             flush()
 

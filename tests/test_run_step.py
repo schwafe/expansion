@@ -16,7 +16,9 @@ and tests_normalize.py; what is tested here is the loop around them:
 """
 
 
+import re
 import threading
+import time
 
 import polars as pl
 import pytest
@@ -265,7 +267,7 @@ class TestWhenTheEndpointGivesUp:
         assert (2, 371) not in read_checkpoint(tmp_path / "step2.jsonl")
 
     def test_a_run_of_failures_stops_the_batch(self, tmp_path, monkeypatch):
-        monkeypatch.setattr(run_step, "MAX_FAILURES", 2)
+        monkeypatch.setattr(run_step, "MAX_FAILURES", 1)
         seen = []
 
         def process(volume, nr):
@@ -273,7 +275,26 @@ class TestWhenTheEndpointGivesUp:
             raise APIError("Request timed out.", None, body=None)
 
         run_batch(make_run(process), {}, tmp_path / "step2.jsonl", every=10, limit=None)
-        assert len(seen) < 3  # the third was never asked for
+        assert len(seen) < 3  # what was never submitted is never asked for
+
+    def test_the_vitae_kept_after_an_interruption_go_on_counting(self, tmp_path, capsys):
+        # they are finished, not abandoned, so they carry the same [n/total] as
+        # every other line rather than arriving as a bare list of numbers
+        def process(volume, nr):
+            if (volume, nr) == (2, 370):
+                raise KeyboardInterrupt
+            time.sleep(0.2)
+            return {"text": "t", "record": {"errors": []}}
+
+        with pytest.raises(SystemExit):
+            run_batch(make_run(process, workers=2), {}, tmp_path / "step2.jsonl",
+                      every=10, limit=None)
+        printed = capsys.readouterr().out
+        assert "vitae are answered or in flight" in printed
+        after = printed.split("vitae are answered or in flight")[1]
+        kept = [line for line in after.splitlines() if line.startswith("  ")]
+        assert kept  # the wait was not for nothing
+        assert all(re.match(r"  \[\d+/3\] \d+/\d+", line) for line in kept), kept
 
     def test_an_interruption_still_keeps_what_is_answered(self, tmp_path):
         path = tmp_path / "step2.jsonl"
