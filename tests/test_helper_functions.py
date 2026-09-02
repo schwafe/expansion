@@ -10,6 +10,8 @@ them at every step. The rest is the per-model shape of the thinking settings,
 and which failures of the endpoint are worth another try.
 """
 
+import re
+
 import polars as pl
 import pytest
 from openai import APITimeoutError
@@ -193,7 +195,19 @@ class TestWaitingOutTheEndpoint:
         # asking again at the same pace is the one thing not to do
         self.answer(monkeypatch, [APITimeoutError(request=None),
                                   APITimeoutError(request=None)])
-        assert self.waits == [5, 10]
+        first, second = self.waits
+        assert 5 * 0.75 <= first <= 5 * 1.25
+        assert 10 * 0.75 <= second <= 10 * 1.25
+        assert second > first  # the jitter is never wide enough to undo the growth
+
+    def test_two_requests_refused_together_do_not_come_back_together(self, monkeypatch):
+        # they were refused in the same instant, so an exact wait would have
+        # them arrive in the same instant too, and be refused again
+        waits = set()
+        for _ in range(10):
+            self.answer(monkeypatch, [APITimeoutError(request=None)])
+            waits.add(self.waits[0])
+        assert len(waits) > 1
 
     def test_an_endpoint_that_never_comes_back_is_reported(self, monkeypatch):
         with pytest.raises(APITimeoutError):
@@ -209,7 +223,8 @@ class TestWaitingOutTheEndpoint:
 
     def test_without_a_caller_to_name_the_line_still_reads(self, monkeypatch, capsys):
         self.answer(monkeypatch, [APITimeoutError(request=None)])
-        assert "server error (APITimeoutError), retrying in 5s (1/3)" in capsys.readouterr().out
+        assert re.search(r"server error \(APITimeoutError\), retrying in \d\.\ds \(1/3\)",
+                         capsys.readouterr().out)
 
 
 if __name__ == "__main__":
