@@ -25,9 +25,10 @@ another run, so only the step being tried has to be run again. What produced
 what is in `data/runs/<run>/manifest.json`; `runs.py` holds the layout.
 
 **Workers.** The vitae are independent, so `--workers N` has several of them in
-flight at once, started half a second apart -- all of them asking together is
-what the endpoint refuses. The threads share the process's rate limit rather
-than multiplying it, and everything that writes stays in the main thread. A vita the
+flight at once. The threads share the process's rate limit rather than
+multiplying it, and they share it by spacing their calls four seconds apart, so
+that none of them ever ask together -- which is what the endpoint refuses.
+Everything that writes stays in the main thread. A vita the
 endpoint never answered for -- a read timeout is routine once several requests
 are queued there -- is not a result: it is left out of the checkpoint and asked
 for again by `--resume`, rather than being written out unexpanded. What a run
@@ -91,6 +92,8 @@ import multiple_choice
 import normalize
 import runs
 from helper_functions import (
+    CALLS_PER_MINUTE,
+    SPACING,
     call_chat_ai,
     check_the_model,
     determine_candidates,
@@ -112,9 +115,7 @@ MODEL = "gemma-4-31b-it"
 MAX_ATTEMPTS = 5  # parse attempts per vita before it is left unexpanded
 CHECKPOINT_EVERY = 10
 WORKERS = 1  # vitae in flight at once; they share the rate limit, not multiply it
-STAGGER = 0.5  # seconds between the first call of one worker and the next
 MAX_FAILURES = 10  # vitae the endpoint may fail on before the batch gives up
-CALLS_PER_MINUTE = 15  # what helper_functions limits the process to
 
 RG_COLUMNS = ["volume", "nr_RG", "nr_suffix", "header_no_tags", "regest_no_tags", "id_RG_all"]
 
@@ -619,10 +620,12 @@ def run_batch(run: Run, done: dict, checkpoint: Path, every: int, limit: int | N
 
     The vitae are independent -- each is one prompt built from files that are
     only read -- so `--workers` hands several of them to the endpoint at once.
-    The rate limiter is shared by the threads of the process (`ratelimit` holds
-    a lock), so more workers use more of the same budget rather than multiplying
-    it. Everything that writes stays in this thread: the workers only return
-    their entry, and the checkpoint is appended as the results arrive.
+    The rate limit is kept by `helper_functions.wait_for_a_slot`, which the
+    threads share, so more workers use more of the same budget rather than
+    multiplying it -- and since it spaces the calls instead of counting them,
+    no two of them ever go out together, at the start of a run or at the edge
+    of a window. Everything that writes stays in this thread: the workers only
+    return their entry, and the checkpoint is appended as the results arrive.
 
     A vita the endpoint gave up on (after the waiting `call_chat_ai` already
     did) is not a result and is not recorded: the batch says so, carries on with
@@ -637,7 +640,7 @@ def run_batch(run: Run, done: dict, checkpoint: Path, every: int, limit: int | N
         todo = todo[:limit]
     print(f"step {run.step.number}: {len(run.keys())} vitae, {len(done)} already done, "
           f"{len(todo)} to do (model {run.model}, {describe_reasoning(run)}"
-          + (f", {run.workers} at a time, started {STAGGER}s apart"
+          + (f", {run.workers} at a time, {SPACING}s between calls"
              if run.workers > 1 else "") + ")")
 
     buffered: list[dict] = []
@@ -650,7 +653,6 @@ def run_batch(run: Run, done: dict, checkpoint: Path, every: int, limit: int | N
     pool = ThreadPoolExecutor(max_workers=run.workers)
     queue: dict = {}  # the futures in flight or waiting for a worker, by vita
     waiting = iter(todo)
-    started = 0
 
     def fill() -> None:
         """
@@ -660,20 +662,14 @@ def run_batch(run: Run, done: dict, checkpoint: Path, every: int, limit: int | N
         -- interrupted, or given up on -- leaves nothing behind but the handful
         of answers it is already waiting for.
 
-        The workers start `STAGGER` apart. All of them asking at once is what
-        the endpoint refuses -- a burst of 429s that then retry together, in
-        waves -- while the same number of calls spread over a few seconds goes
-        through. Only the first call of each worker is held back: from then on
-        they are spread out by the answers they are waiting for.
+        The workers may all start at once: their calls are spread out by
+        `helper_functions.wait_for_a_slot`, which is where the endpoint is
+        actually spoken to.
         """
-        nonlocal started
         while len(queue) < run.workers + 1:
             key = next(waiting, None)
             if key is None:
                 return
-            if 0 < started < run.workers:
-                time.sleep(STAGGER)
-            started += 1
             queue[pool.submit(process_vita, run, key)] = key
 
     def harvest(future, progress: str = "") -> None:

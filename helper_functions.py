@@ -1,5 +1,6 @@
 import random
 import re
+import threading
 import time
 from dataclasses import dataclass
 
@@ -7,9 +8,9 @@ import polars as pl
 
 from openai import (APIConnectionError, APIError, BadRequestError,
                     InternalServerError, OpenAI, RateLimitError)
-from ratelimit import limits, sleep_and_retry
 
 ONE_MINUTE = 60
+CALLS_PER_MINUTE = 15  # what the endpoint allows the key
 
 # How far a retry may fall either side of its wait. Without it the requests
 # that were refused together wait the same time and arrive together again, in
@@ -361,10 +362,39 @@ def thinking_kwargs(model: str, thinking: bool | None = None,
     return parameters
 
 
-@sleep_and_retry
-@limits(calls=15, period=ONE_MINUTE)
+SPACING = ONE_MINUTE / CALLS_PER_MINUTE  # four seconds between one call and the next
+_slots = threading.Lock()
+_next_slot = 0.0
+
+
+def wait_for_a_slot(spacing: float = SPACING) -> None:
+    """
+    Hold the call back until it is this process's turn to make one.
+
+    The limit is kept by spacing the calls rather than by counting them, which
+    is the same fifteen a minute and never a burst. Counting them lets the
+    threads through in a bunch, and then holds all of them at the edge of the
+    window and releases them together -- so the endpoint, which refuses calls
+    that arrive at the same instant, sees exactly the wave the workers were
+    started apart to avoid. Whoever asks takes the next free slot and everyone
+    else moves up, so the spreading is the same at the beginning of a run, at
+    every window edge, and for the retries after a refusal.
+
+    An idle process does not save up slots: a call that comes after a quiet
+    minute goes out at once rather than being followed by fourteen at will.
+    """
+    global _next_slot
+    with _slots:  # only for the arithmetic: the waiting happens outside it
+        now = time.monotonic()
+        mine = max(now, _next_slot)
+        _next_slot = mine + spacing
+    if mine > now:
+        time.sleep(mine - now)
+
+
 def _call_chat_ai_once(client: OpenAI, model: str, system_prompt: str, user_prompt: str,
                        settings: dict | None = None):
+    wait_for_a_slot()
     chat_completion = client.chat.completions.create(
         messages=[
             {

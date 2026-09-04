@@ -11,6 +11,8 @@ and which failures of the endpoint are worth another try.
 """
 
 import re
+import threading
+import time
 from types import SimpleNamespace
 
 import polars as pl
@@ -22,6 +24,7 @@ from helper_functions import (
     VITA_SCHEMA,
     call_chat_ai,
     check_the_model,
+    wait_for_a_slot,
     text_to_vita_df,
     thinking_kwargs,
     vita_df_to_text,
@@ -246,6 +249,56 @@ class TestTheModelIsThere:
         refusal = APIError("no listing for you", request=None, body=None)
         with pytest.raises(ValueError, match="refused to list its models"):
             check_the_model(an_endpoint(fails=refusal), "gemma-4-31b-it")
+
+
+class TestTakingTurns:
+    """
+    The rate limit kept by spacing the calls rather than counting them.
+
+    Counting lets the threads through in a bunch and then holds all of them at
+    the edge of the window and releases them together, which is the wave the
+    endpoint refuses.
+    """
+
+    @pytest.fixture(autouse=True)
+    def an_idle_process(self, monkeypatch):
+        """No slot is taken yet, and none stays taken after the test."""
+        monkeypatch.setattr(helper_functions, "_next_slot", 0.0)
+
+    def take_a_slot(self, spacing: float) -> float:
+        started = time.monotonic()
+        wait_for_a_slot(spacing)
+        return time.monotonic() - started
+
+    def test_the_first_call_of_a_quiet_process_goes_out_at_once(self):
+        assert self.take_a_slot(0.05) < 0.05
+
+    def test_the_call_after_it_waits_for_its_turn(self):
+        self.take_a_slot(0.05)
+        assert self.take_a_slot(0.05) >= 0.04
+
+    def test_no_two_threads_ever_get_the_same_turn(self):
+        # they ask in the same instant, which is what the endpoint refuses
+        taken = []
+        together = threading.Barrier(4, timeout=10)
+
+        def ask():
+            together.wait()
+            wait_for_a_slot(0.05)
+            taken.append(time.monotonic())
+
+        threads = [threading.Thread(target=ask) for _ in range(4)]
+        for thread in threads:
+            thread.start()
+        for thread in threads:
+            thread.join()
+        taken.sort()
+        assert all(later - earlier >= 0.04 for earlier, later in zip(taken, taken[1:]))
+
+    def test_a_quiet_minute_does_not_save_up_turns(self):
+        # otherwise the wait would be followed by a burst of everything it saved
+        helper_functions._next_slot = time.monotonic() - 60
+        assert self.take_a_slot(0.05) < 0.05
 
 
 class TestWaitingOutTheEndpoint:
