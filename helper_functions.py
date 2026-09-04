@@ -262,8 +262,7 @@ STYLES: dict[str, ThinkingStyle] = {
     # no switch: the level alone says whether to think, and it is a parameter
     "mistral-medium-3.5": ThinkingStyle(efforts=("none", "high"), effort_parameter=True,
                                         on="high", off="none"),
-    "openai-gpt-oss": ThinkingStyle(efforts=("low", "medium", "high"), effort_parameter=True,
-                                    on="high"),
+    "openai-gpt-oss": ThinkingStyle(efforts=("low", "medium", "high"), effort_parameter=True),
     # and these do not think at all, so there is nothing to ask of them; they
     # are in the table because a model that is missing from it cannot be run
     "apertus": ThinkingStyle(reasons=False),
@@ -333,11 +332,14 @@ def thinking_kwargs(model: str, thinking: bool | None = None,
             template["reasoning_effort"] = reasoning_effort
 
     wants = thinking if thinking is not None else True
-    if wants and reasoning_effort is None and style.switch is not None and style.efforts:
-        # told to think and nothing else, it thinks as much as it likes, which
-        # is the deployment's to change and appears in no report
-        raise ValueError(f"{model} chooses how hard to think if it is only told to think; "
-                         f"say which level with --reasoning-effort: {'/'.join(style.efforts)}")
+    levels = [level for level in style.efforts if level != style.off]
+    if wants and reasoning_effort is None and len(levels) > 1:
+        # a model that is told to think and nothing else thinks at the level the
+        # endpoint gives it, which is nowhere in the request, nowhere in the
+        # answer and nowhere in the endpoint's documentation
+        raise ValueError(f"{model} thinks at one of {'/'.join(levels)}, and which one it is "
+                         "when it is not told is the endpoint's to decide and says so "
+                         "nowhere; name the level with --reasoning-effort")
     if style.switch is not None:
         template[style.switch] = wants
     elif thinking is not None:

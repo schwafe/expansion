@@ -152,12 +152,20 @@ class TestThinkingKwargs:
             thinking_kwargs("mistral-medium-3.5-128b", thinking=False, reasoning_effort="high")
 
     def test_a_model_with_levels_is_not_only_told_to_think(self):
-        # "thinking on" leaves the level to the model, and the report would
+        # "thinking on" leaves the level to the endpoint, and the report would
         # then say the run thought, but not how much
-        with pytest.raises(ValueError, match="say which level"):
+        with pytest.raises(ValueError, match="name the level"):
             thinking_kwargs("qwen3.8-27b", thinking=True)
         with pytest.raises(ValueError, match="low/high/max"):
             thinking_kwargs("deepseek-v4-flash-0731", thinking=True)
+        with pytest.raises(ValueError, match="low/medium/high"):
+            thinking_kwargs("openai-gpt-oss-120b", thinking=True)
+
+    def test_a_family_with_one_level_to_think_at_needs_no_naming(self):
+        """mistral thinks at `high` or not at all, so `--thinking` says it."""
+        assert thinking_kwargs("mistral-medium-3.5-128b", thinking=True) == {
+            "reasoning_effort": "high"
+        }
 
     def test_a_model_without_levels_is_told_to_think_and_that_is_all_there_is(self):
         assert thinking_kwargs("gemma-4-31b-it", thinking=True) == {

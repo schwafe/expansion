@@ -56,9 +56,10 @@ Usage:
 take minutes per call and rarely changes the answer, since every step is a
 choice from a list. `--no-thinking` turns it off, `--reasoning-effort` sets how
 much of it there is, and one of the two has to be given -- the level itself
-where the model has levels, since a model that is only told to think thinks as
-much as it likes. What a model does when it is not told is the deployment's to
-change, so a run that left it at that would not say what it did. Every
+wherever there is more than one to think at, since a request that only switches
+the thinking on is answered at whatever level the endpoint gives it. What a
+model does when it is not told is the endpoint's to change and is published
+nowhere, so a run that left it at that would not say what it did. Every
 family takes these differently and ignores what it does not know without a
 word, so the request is built from the table in `helper_functions.STYLES` and
 anything the model cannot do is refused before the run starts -- as is a model
