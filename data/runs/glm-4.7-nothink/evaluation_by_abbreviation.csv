@@ -1,0 +1,424 @@
+abbreviation,occurrences,word_accuracy,form_accuracy,no_gold_label,most_frequent_error,gold_variants,potential_gain
+eccl.,401,0.8354,0.4638,0,ecclesia,"ecclesia, ecclesiam, ecclesiarum, ecclesie, ecclesiis",215.0162
+d.,157,0.7197,0.0318,2,dictus,"d., data, dicta, dictam, dictarum",152.0074
+s.,252,0.9405,0.5119,4,sanctus,"s., sacri, sancte, sancti, sine",123.0012
+o.,132,0.9773,0.2576,0,ordo,"obitum, obstante, obstantibus, ordinis",97.9968
+op.,110,1.0,0.1636,0,opidum,"opidi, opido, opidorum, opidum",92.004
+an.,84,1.0,0.0,0,annus,"anni, annis, annorum, annos, annum",84.0
+b.,83,0.9398,0.0,1,beatus,"b., beate",83.0
+par.,150,0.9867,0.54,0,parochialis,"parente, parochialem, parochiales, parochiali, parochialibus",69.0
+mai.,58,0.8103,0.0,13,maius,"mai., maii, maiorem, maiores, maiori",58.0
+mon.,86,1.0,0.3372,0,monasterium,"monasteria, monasterii, monasteriis, monasterio, monasteriorum",57.000800000000005
+can.,72,0.9306,0.25,0,canonicatus,"canonicas, canonicatibus, canonicatu, canonicatum, canonicatus",54.0
+supplic.,50,0.04,0.0,2,supplicatio,"supplic., supplicante, supplicantibus, supplicat, supplicationis",50.0
+conc.,46,0.3043,0.0435,0,concessio,"concedant, conceditur, concessa, concessarum, concesserunt",43.999
+m.,83,0.9157,0.494,0,marca,"mandati, mandato, mandatum, marcarum, minorum",41.998
+preb.,60,1.0,0.3333,0,prebenda,"prebenda, prebendam, prebendarum, prebendas, prebende",40.002
+conf.,42,0.881,0.0952,1,confirmatio,"conf., confessorem, confirmata, confirmati, confirmatio",38.0016
+dec.,53,0.9434,0.3774,22,december,"dec., decani, decano, decanus, decembris",32.997800000000005
+ss.,32,1.0,0.0,0,sancti,"sanctarum, sanctorum",32.0
+iul.,29,1.0,0.0,15,iulius,"iul., iulii",29.0
+vac.,29,0.8966,0.1034,0,vacante,"vacante, vacantes, vacantibus, vacantis, vacantium",26.0014
+Cist.,24,0.875,0.0,0,Cisterciensium,Cisterciensis,24.0
+Camin.,48,1.0,0.5,0,Caminensis,"Caminensem, Caminensi, Caminensibus, Caminensis, Caminensium",24.0
+oct.,23,1.0,0.0,6,october,"oct., octobris",23.0
+ep.,28,1.0,0.2857,0,episcopus,"episcopi, episcopo, episcopum, episcopus",20.0004
+febr.,20,1.0,0.0,9,februarius,"febr., februarii",20.0
+iun.,20,1.0,0.0,4,iunius,"iun., iunii, iuniorem, iunioris",20.0
+min.,19,1.0,0.0,0,minor,"minores, minori, minoribus, minoris, minorum",19.0
+mart.,19,1.0,0.0,8,martius,"mart., martii, martiris, martirum",19.0
+ian.,19,1.0,0.0,13,ianuarius,"ian., ianuarii",19.0
+Misnen.,92,1.0,0.8043,1,Misnensis,"Misnen., Misnensem, Misnenses, Misnensi, Misnensibus",18.004399999999997
+Brandenburg.,42,1.0,0.5714,1,Brandenburgensis,"Brandenburg., Brandenburgensem, Brandenburgensi, Brandenburgensis, Brandenburgensium",18.0012
+sept.,18,1.0,0.0,3,september,"sept., septembris",18.0
+alt.,40,1.0,0.575,0,altare,"altare, altari, altaris",17.0
+nov.,17,1.0,0.0,7,november,"nov., novembris",17.0
+fr.,17,0.1765,0.0,0,frater,"fratrem, fratres, fratrum",17.0
+archidiac.,18,0.3333,0.0556,0,archidiaconus,"archidiaconatu, archidiaconatus, archidiaconi, archidiacono, archidiaconus",16.999200000000002
+Magdeburg.,43,1.0,0.6047,0,Magdeburgensis,"Magdeburgensem, Magdeburgenses, Magdeburgensi, Magdeburgensibus, Magdeburgensis",16.997899999999998
+rect.,24,1.0,0.3333,0,rector,"rector, rectore, rectorem, rectori, rectoris",16.0008
+confess.,16,0.25,0.0,0,confessor,"confessionale, confessionali, confessiones, confessionibus, confessorem",16.0
+relax.,21,1.0,0.2381,0,relaxatio,"relaxatio, relaxatione, relaxationis",15.9999
+interd.,17,0.8824,0.1176,0,interdictum,"interdicti, interdictis, interdicto, interdictum",15.0008
+Zwerin.,48,1.0,0.6875,0,Zwerinensis,"Zwerinensem, Zwerinensi, Zwerinensibus, Zwerinensis",15.0
+v.,15,0.9333,0.0,138,virgo,"v., virginis",15.0
+vicar.,23,1.0,0.3913,0,vicaria,"vicaria, vicariam, vicarie, vicariis",14.0001
+aug.,14,1.0,0.0,5,augustus,"aug., augusti",14.0
+virg.,13,1.0,0.0,0,virgo,virginis,13.0
+monial.,13,1.0,0.0,0,monialis,monialium,13.0
+cler.,16,1.0,0.1875,0,clericus,"clerici, clerico, clericorum, clericum, clericus",13.0
+indulg.,183,0.9891,0.9344,0,indulgentia,"indulgentia, indulgentiam, indulgentiarum, indulgentias, indulgentie",12.004799999999998
+off.,17,1.0,0.2941,0,officium,"officia, officii, officio, officium",12.0003
+Gustrowen.,12,0.0,0.0,0,"","Gustrowensem, Gustrowensi, Gustrowensis",12.0
+litig.,11,0.9091,0.0,0,litigare,"litigat, litigiosis",11.0
+abb.,22,0.9545,0.5,0,abbas,"abbas, abbate, abbates, abbati, abbatibus",11.0
+prov.,18,0.8333,0.3889,0,provisio,"providit, provincia, provisio, provisione, provisum",10.9998
+plen.,10,0.0,0.0,0,plenus,plenaria,10.0
+decb.,10,1.0,0.0,0,december,decembris,10.0
+civit.,10,1.0,0.0,0,civitas,"civitate, civitatem, civitatis",10.0
+presb.,13,1.0,0.2308,0,presbiter,"presbiter, presbiteri, presbitero, presbiterorum, presbiterum",9.9996
+capel.,28,1.0,0.6429,0,capella,"capella, capellam, capelle",9.9988
+dioc.,362,1.0,0.9724,1,diocesis,"dioc., diocesi, diocesibus, diocesis, diocesium",9.991199999999985
+disp.,11,0.8182,0.1818,0,dispensatio,"dispensatio, dispensatione, dispensationis",9.0002
+R.,18,0.9444,0.5,1,Romanum,"R., Romane, Romani, Romanorum, regem",9.0
+nunc.,9,1.0,0.0,0,nuncupatus,"nuncupata, nuncupatum",9.0
+Par.,9,0.0,0.0,0,"",Parochialis,9.0
+ap.,9,0.5556,0.0,0,apostolicus,"apostoli, apostolice, apostolici, apostolicum, apostolorum",9.0
+incorp.,13,0.9231,0.3077,0,incorporatio,"incorporata, incorporatio, incorporatione, incorporationis, incorporationum",8.9999
+Halberstad.,92,1.0,0.9022,0,Halberstadensis,"Halberstadensem, Halberstadensi, Halberstadensis",8.9976
+Nuemburg.,45,1.0,0.8222,4,Nuemburgensis,"Nuemburg., Nuemburgensi, Nuemburgensibus, Nuemburgensis, Nuemburgensium",8.000999999999998
+I.,12,1.0,0.3333,3,Imperium,"I., imperator, imperatore, imperatorem, imperii",8.0004
+com.,12,0.8333,0.3333,0,comes,"comes, comite, comitem, comitibus, comitum",8.0004
+fam.,11,0.4545,0.2727,0,familiaritas,"familiaribus, familiaris, familiarium",8.000300000000001
+val.,8,0.875,0.0,1,valere,"val., valeant, valeat",8.0
+colleg.,14,1.0,0.4286,0,collegiata,"collegiata, collegiatam, collegiate, collegiatis",7.9996
+port.,9,1.0,0.2222,0,portatile,"portatile, portatili",7.0002
+bapt.,7,1.0,0.0,0,baptista,baptiste,7.0
+fund.,7,0.0,0.0,0,fundator,"fundata, fundatum, fundavit",7.0
+rem.,11,1.0,0.4545,0,remissio,"remissio, remissione",6.0005
+fl.,6,1.0,0.0,0,florenus,"florenis, florenorum, florenos",6.0
+incompat.,6,0.0,0.0,0,incompatibilitas,"incompatibilia, incompatibilibus",6.0
+S.,6,1.0,0.0,7,Sacrum,"S., sacri",6.0
+Reval.,6,0.0,0.0,0,Revaliensis,Revalensis,6.0
+prep.,10,1.0,0.4,0,prepositus,"prepositi, preposito, prepositum, prepositus",6.0
+litt.,6,1.0,0.0,0,littere,"litterarum, litteras, litteris",6.0
+Capel.,6,0.0,0.0,0,"",Capella,6.0
+Dyminen.,6,0.0,0.0,0,"","Dyminensi, Dyminensis",6.0
+prebend.,6,1.0,0.0,0,prebendatus,"prebendati, prebendatos",6.0
+ev.,6,0.1667,0.0,0,evangelista,evangeliste,6.0
+annat.,6,0.0,0.0,0,"","annata, annatis",6.0
+Abb.,6,0.0,0.0,0,"",Abbas,6.0
+Prep.,6,0.0,0.0,0,"",Prepositus,6.0
+procons.,6,0.0,0.0,0,"",proconsules,6.0
+hosp.,16,1.0,0.625,0,hospitale,"hospitale, hospitali, hospitalia, hospitalibus, hospitalis",6.0
+privil.,7,0.4286,0.1429,0,privilegium,"privilegii, privilegiorum, privilegium",5.9997
+capit.,18,1.0,0.6667,0,capitulum,"capituli, capitulo, capitulum",5.9994000000000005
+dom.,18,1.0,0.7222,0,domus,"dominorum, dominus, domo, domui, domum",5.000400000000001
+benef.,7,0.8571,0.2857,1,beneficium,"benef., beneficia, beneficio, beneficium",5.0001
+al.,7,0.8571,0.2857,0,alius,"alia, alias, aliis, aliorum",5.0001
+perp.,7,1.0,0.2857,0,perpetuus,"perpetua, perpetuis, perpetuo, perpetuus",5.0001
+Prem.,5,1.0,0.0,0,Premonstratensium,Premonstratensis,5.0
+expect.,5,0.0,0.0,0,gratia expectativa,"expectatione, expectativa, expectativam, expectative",5.0
+diac.,5,1.0,0.0,0,diaconus,diaconi,5.0
+ref.,16,1.0,0.6875,0,reformatio,"reformatio, reformatione",5.0
+cann.,5,0.0,0.0,0,"",canonici,5.0
+ord.,5,0.6,0.0,0,ordo,"ordines, ordinis",5.0
+gen.,5,1.0,0.0,0,genus,genere,5.0
+Stolpen.,5,0.0,0.0,0,"","Stolpensi, Stolpensis",5.0
+vicarr.,5,0.0,0.0,0,"",vicariarum,5.0
+Magnopolen.,5,0.0,0.0,0,"","Magnopolensi, Magnopolensis",5.0
+civ.,5,1.0,0.0,0,civitas,"civitate, civitatibus, civitatis, civium",5.0
+suprad.,5,1.0,0.0,0,supradictus,"supradicta, supradictas, supradicte, supradicto",5.0
+red.,5,0.0,0.0,0,"",redituum,5.0
+utr.,5,0.0,0.0,0,utrius,"utriusque, utroque",5.0
+mil.,6,0.8333,0.1667,0,militaris,"miles, militari, milium",4.9998000000000005
+reserv.,6,0.5,0.3333,0,reservatio,"reservata, reservatione, reservatis",4.0002
+scolastr.,6,1.0,0.3333,0,scolastria,"scolastria, scolastrie",4.0002
+ordin.,6,0.8333,0.3333,0,ordinarius,"ordinaria, ordinarii",4.0002
+herem.,4,0.0,0.0,0,"",heremitarum,4.0
+cass.,4,0.25,0.0,0,cassatio,"cassatione, cassatum",4.0
+omn.,4,1.0,0.0,0,omnes,"omnibus, omnium",4.0
+temp.,4,0.75,0.0,0,tempus,tempore,4.0
+sen.,5,1.0,0.2,0,senior,"senior, seniore, senioris",4.0
+nob.,5,1.0,0.2,0,nobilis,"nobiles, nobili, nobilibus, nobilis",4.0
+resign.,5,0.8,0.2,0,resignatio,resignationem,4.0
+gr.,4,1.0,0.0,0,gratia,"gratiam, gratie",4.0
+el.,5,0.4,0.2,0,eligere,"electus, eligendi",4.0
+iur.,4,1.0,0.0,0,iuris,iure,4.0
+Corp.,4,0.0,0.0,0,"",Corporis,4.0
+exten.,4,0.0,0.0,0,extensio,extensione,4.0
+Conc.,4,0.0,0.0,0,"",Concessum,4.0
+surrog.,4,1.0,0.0,0,surrogatio,"surrogatione, surrogationis",4.0
+aep.,7,1.0,0.4286,0,archiepiscopus,"archiepiscopo, archiepiscopos, archiepiscopum, archiepiscopus",3.9998
+c.,32,0.9062,0.9062,0,cura,"cum, cura",3.0016
+e.,22,0.8636,0.8636,2,"","e., expectatione, extra",3.000799999999999
+lic.,37,1.0,0.9189,0,licentia,"licentia, licentie",3.0006999999999984
+Aug.,18,0.8333,0.8333,0,"",Augustini,3.0005999999999995
+conserv.,13,1.0,0.7692,0,conservator,"conservatoria, conservatoriis",3.0004
+Bremen.,10,1.0,0.7,0,Bremensis,"Bremensi, Bremensis",3.0000000000000004
+Terdon.,3,0.0,0.0,0,"",Terdonensis,3.0
+decr.,3,1.0,0.0,0,decretum,decretorum,3.0
+ux.,5,1.0,0.4,0,uxor,"uxor, uxore",3.0
+fruct.,4,1.0,0.25,0,fructus,"fructibus, fructus",3.0
+Hamburg.,3,0.0,0.0,0,"",Hamburgensis,3.0
+Lubic.,8,1.0,0.625,0,Lubicensis,"Lubicensem, Lubicensi, Lubicensis",3.0
+Erford.,3,0.0,0.0,0,"",Erfordensi,3.0
+constit.,3,0.6667,0.0,1,constitutio,"constit., constitui, constituitur, constitutione",3.0
+corp.,3,1.0,0.0,0,corpus,corporis,3.0
+Brunswicen.,3,0.0,0.0,2,"","Brunswicen., Brunswicensi, Brunswicensibus",3.0
+vic.,4,1.0,0.25,0,vicarius,"vicario, vicarios, vicarium, vicarius",3.0
+vacat.,3,1.0,0.0,0,vacaturus,"vacantis, vacatura",3.0
+artic.,3,1.0,0.0,0,articulus,articulo,3.0
+fil.,4,1.0,0.25,0,filius,"filialis, filium",3.0
+Noveciv.,3,0.0,0.0,0,"",Novecivitatis,3.0
+Rom.,3,1.0,0.0,0,Romanus,"Romane, Romanorum",3.0
+appl.,3,0.3333,0.0,0,apostoli,"apostolorum, applicata",3.0
+sec.,3,1.0,0.0,0,secularis,seculares,3.0
+revoc.,6,1.0,0.5,0,revocatio,"revocatio, revocatione, revocationem, revocationis",3.0
+prom.,3,0.0,0.0,0,promotio,promovendo,3.0
+Bebracen.,3,0.0,0.0,0,"",Bebracensis,3.0
+dd.,3,1.0,0.0,0,dicti,"dictorum, dictos",3.0
+celebr.,3,1.0,0.0,0,celebrare,"celebrandi, celebrari",3.0
+A.,3,0.0,0.0,1,"","A., Aldenburg, Augustini",3.0
+decl.,3,1.0,0.0,0,declaratio,declaratione,3.0
+elig.,3,1.0,0.0,0,eligere,eligendi,3.0
+prorog.,4,1.0,0.25,0,prorogatio,"prorogatio, prorogatione",3.0
+J.,3,0.0,0.0,1,"","J., Johanne",3.0
+concil.,3,1.0,0.0,0,concilium,concilii,3.0
+Merseburg.,15,1.0,0.8,0,Merseburgensis,"Merseburgensem, Merseburgenses, Merseburgensi, Merseburgensis",2.999999999999999
+p.,63,0.9524,0.9524,4,prebenda,"p., per, puri",2.9987999999999984
+doct.,3,1.0,0.3333,0,doctor,"doctor, doctore",2.0001
+cam.,3,1.0,0.3333,0,camera,"camera, camere",2.0001
+approb.,3,0.6667,0.3333,0,approbatio,"approbatio, approbatione, approbet",2.0001
+laic.,3,0.3333,0.3333,0,"","laicorum, laicus",2.0001
+scolast.,3,1.0,0.3333,0,scolasticus,"scolastico, scolasticum, scolasticus",2.0001
+instit.,3,0.3333,0.3333,0,institutio,"instituendi, institutam, institutio",2.0001
+exec.,3,1.0,0.3333,0,executor,"executor, executores",2.0001
+acc.,2,0.0,0.0,0,acceptatio,"acceptare, acceptavit",2.0
+Stendalien.,2,0.0,0.0,0,"","Stendaliensi, Stendaliensis",2.0
+Parchimen.,2,0.0,0.0,0,"","Parchimensi, Parchimensis",2.0
+maior.,2,1.0,0.0,0,maior,maiorem,2.0
+Eccl.,2,0.0,0.0,0,"",Ecclesia,2.0
+excom.,2,0.0,0.0,0,excommunicatio,excommunicatorum,2.0
+transl.,2,1.0,0.0,0,translatio,translationis,2.0
+coll.,2,1.0,0.0,0,collatio,"collatione, collationem",2.0
+Norenbergen.,2,0.0,0.0,0,"",Norenbergensi,2.0
+pres.,2,1.0,0.0,1,presens,"pres., presente",2.0
+script.,2,0.0,0.0,0,scriptus,scriptoris,2.0
+Colon.,2,1.0,0.0,0,Coloniensis,"Coloniensem, Coloniensium",2.0
+resid.,2,1.0,0.0,0,residere,"residendo, residentia",2.0
+diocc.,2,0.0,0.0,0,"",diocesium,2.0
+pont.,2,1.0,0.0,0,pontificalia,pontificalibus,2.0
+pec.,2,1.0,0.0,0,pecunia,pecuniis,2.0
+capp.,2,0.0,0.0,0,"","capellani, capellanis",2.0
+sent.,2,1.0,0.0,0,sententia,sententie,2.0
+cur.,2,0.0,0.0,0,Romana curia,curia,2.0
+Basil.,2,0.0,0.0,0,Basileensis,"Basiliensi, Basiliensis",2.0
+Lincopen.,2,0.0,0.0,0,"",Lincopensis,2.0
+card.,8,1.0,0.75,0,cardinalis,"cardinalem, cardinali, cardinalis",2.0
+res.,4,1.0,0.5,0,resignatio,resignationem,2.0
+Osnaburg.,8,1.0,0.75,2,Osnaburgensis,"Osnaburg., Osnaburgensi, Osnaburgensis",2.0
+auct.,2,1.0,0.0,0,auctoritas,auctoritate,2.0
+assec.,4,0.5,0.5,0,assecutus,"assecutionem, assecutus",2.0
+erig.,2,1.0,0.0,0,erigere,erigendi,2.0
+Tangermunden.,2,0.0,0.0,0,"","Tangermundensi, Tangermundensis",2.0
+mag.,2,1.0,0.0,0,magister,"magistro, magistrum",2.0
+Hamburgen.,2,0.0,0.0,0,"",Hamburgensis,2.0
+succoll.,2,1.0,0.0,0,succollector,"succollectores, succollectoris",2.0
+Sleswic.,2,1.0,0.0,0,Sleswicensis,Sleswicensi,2.0
+E.,2,1.0,0.0,3,Ecclesia,"E., ecclesie",2.0
+Precept.,2,0.0,0.0,0,"",Preceptor,2.0
+cellerar.,2,0.0,0.0,0,"","cellerario, cellerarius",2.0
+reg.,2,1.0,0.0,0,regularis,regularium,2.0
+immed.,2,1.0,0.0,0,immediatus,immediate,2.0
+recip.,2,1.0,0.0,0,recipere,"recipi, recipiendi",2.0
+epp.,2,1.0,0.0,0,episcopi,episcopis,2.0
+prepos.,4,0.75,0.5,0,prepositura,"prepositura, prepositure",2.0
+Stetinen.,2,0.0,0.0,0,"","Stetinensis, Stetinensium",2.0
+statut.,2,1.0,0.0,0,statutum,statutis,2.0
+fact.,2,1.0,0.0,1,factus,"fact., facta, facte",2.0
+absol.,2,0.5,0.0,0,absolutio,"absolutione, absolvendi",2.0
+martir.,2,1.0,0.0,0,martir,martiris,2.0
+Liptzen.,2,0.0,0.0,1,"","Liptzen., Liptzensis",2.0
+Magunt.,5,0.6,0.6,25,Maguntinensis,"Magunt., Maguntine, Maguntino, Maguntinos",2.0
+bb.,2,1.0,0.0,0,beati,beatorum,2.0
+SS.,2,0.0,0.0,0,"",Sanctorum,2.0
+a.,2,0.0,0.0,0,"","anno, argenti",2.0
+dim.,2,0.0,0.0,0,dimissio,"dimissionem, dimisso",2.0
+Razeburg.,17,1.0,0.8824,0,Razeburgensis,"Razeburgensem, Razeburgensi, Razeburgensis",1.9992000000000005
+Rigen.,1,1.0,0.0,0,Rigensis,Rigensi,1.0
+prothon.,1,1.0,0.0,0,prothonotarius,prothonotarium,1.0
+Magd.,1,0.0,0.0,0,"",Magdalene,1.0
+art.,1,1.0,0.0,0,artes,artibus,1.0
+Hildesem.,8,1.0,0.875,0,Hildesemensis,"Hildesemensi, Hildesemensis",1.0
+Abba.,1,0.0,0.0,0,"",Abbatissa,1.0
+eccles.,1,1.0,0.0,0,ecclesiasticus,ecclesiastico,1.0
+Embecen.,1,0.0,0.0,0,"",Embecensis,1.0
+Bononien.,1,0.0,0.0,0,"",Bononiensem,1.0
+Verden.,2,1.0,0.5,0,Verdensis,"Verdensi, Verdensis",1.0
+pleban.,1,1.0,0.0,0,plebanus,plebania,1.0
+Diminen.,1,0.0,0.0,0,"",Diminensis,1.0
+collect.,1,1.0,0.0,0,collector,collectoris,1.0
+Kempnicen.,1,0.0,0.0,0,"",Kempnicensi,1.0
+spect.,2,1.0,0.5,0,spectare,"spectans, spectante",1.0
+Constant.,2,1.0,0.5,0,Constantiensis,"Constantiense, Constantiensis",1.0
+abbrev.,1,0.0,0.0,0,litterarum apostolicarum abbreviator,abbreviatoris,1.0
+matrim.,1,0.0,0.0,0,"",matrimonio,1.0
+Luneborgen.,1,0.0,0.0,0,"",Luneborgensibus,1.0
+Lubuc.,1,1.0,0.0,0,Lubucensis,Lubucensi,1.0
+legit.,1,0.0,0.0,0,"",legitimo,1.0
+Colleg.,1,0.0,0.0,0,"",Collegiata,1.0
+Gothen.,1,0.0,0.0,0,"",Gothensis,1.0
+Rostoccen.,1,0.0,0.0,0,"",Rostoccensis,1.0
+Pozauien.,1,0.0,0.0,0,"",Pozauiensis,1.0
+Virg.,1,0.0,0.0,0,"",Virginis,1.0
+paup.,1,0.0,0.0,0,paupertas,"pauper, pauperum",1.0
+pertin.,1,1.0,0.0,0,pertinere,pertinentis,1.0
+relig.,1,1.0,0.0,0,religiosus,religiosas,1.0
+tit.,1,1.0,0.0,0,titulus,tituli,1.0
+Havelberg.,16,1.0,0.9375,0,Havelbergensis,"Havelbergensi, Havelbergensis",1.0
+Erforden.,1,0.0,0.0,0,"",Erfordensis,1.0
+Vng.,1,0.0,0.0,0,"",Vngarie,1.0
+march.,1,0.0,0.0,0,"",marchione,1.0
+Ferrarien.,1,0.0,0.0,0,"",Ferrariensem,1.0
+Luben.,1,0.0,0.0,0,"",Lubense,1.0
+Venet.,1,0.0,0.0,0,"",Venetiarum,1.0
+stud.,1,1.0,0.0,0,studium,studii,1.0
+scol.,1,0.0,0.0,0,scolasticus,scolares,1.0
+cap.,2,0.5,0.5,1,capitulum,"cap., capellanos, capellanus",1.0
+consil.,1,0.0,0.0,0,"",consiliariis,1.0
+opid.,1,0.0,0.0,0,opidum,opidanis,1.0
+feb.,1,1.0,0.0,0,februarius,februarii,1.0
+Tirasonen.,1,0.0,0.0,0,"",Tirasonensem,1.0
+transf.,1,0.0,0.0,0,"",transferendo,1.0
+iurisdict.,1,0.0,0.0,0,"",iurisdictione,1.0
+B.,1,0.0,0.0,14,"","B., Besekow",1.0
+Goslarien.,1,0.0,0.0,0,"",Goslariensis,1.0
+confic.,1,0.0,0.0,0,conficere,conficiendis,1.0
+kalend.,1,0.0,0.0,0,"",kalendarum,1.0
+Stetin.,1,0.0,0.0,0,"",Stetinensis,1.0
+Mag.,1,0.0,0.0,0,"",Magister,1.0
+Lipczen.,1,0.0,0.0,0,"",Lipczensi,1.0
+Luneborg.,1,0.0,0.0,0,"",Luneborgensi,1.0
+Ciczen.,1,0.0,0.0,0,"",Ciczensis,1.0
+cant.,1,1.0,0.0,0,cantor,cantorem,1.0
+Citzen.,1,0.0,0.0,0,"",Citzensi,1.0
+iubil.,1,0.0,0.0,0,"",iubilei,1.0
+assign.,2,1.0,0.5,0,assignare,"assignandi, assignatio",1.0
+Brunswic.,1,0.0,0.0,2,"","Brunswic., Brunswicensi, Brunswicensis.",1.0
+evoc.,1,1.0,0.0,0,evocare,evocandi,1.0
+visit.,1,0.0,0.0,0,visitatio,visitandi,1.0
+Sagan.,1,0.0,0.0,0,"",Saganensi,1.0
+sacram.,1,0.0,0.0,0,"",sacramentum,1.0
+Op.,1,0.0,0.0,0,"",Opidum,1.0
+f.,1,0.0,0.0,0,"",fratrum,1.0
+Lucan.,1,0.0,0.0,0,"",Lucano,1.0
+dign.,1,1.0,0.0,0,dignitas,dignitates,1.0
+Hamborg.,1,0.0,0.0,0,"",Hamborgensis,1.0
+Rosticen.,1,0.0,0.0,0,"",Rosticensi,1.0
+Nuremberg.,1,0.0,0.0,0,"",Nurembergensis,1.0
+solv.,1,1.0,0.0,0,solvere,solvit,1.0
+committ.,1,1.0,0.0,0,committere,committitur,1.0
+Nurenburg.,1,0.0,0.0,0,"",Nurenburgensis,1.0
+Hosp.,1,0.0,0.0,0,"",Hospitale,1.0
+instr.,1,1.0,0.0,0,instrumentum,instrumenti,1.0
+exist.,1,1.0,0.0,0,existere,existit,1.0
+sed.,1,1.0,0.0,0,sedes,sedis,1.0
+present.,1,1.0,0.0,0,presentatio,presentationem,1.0
+F.,1,0.0,0.0,0,"",Fridericum,1.0
+Ottonien.,1,0.0,0.0,0,"",Ottoniensis,1.0
+capitul.,1,0.0,0.0,0,"",capitulari,1.0
+monach.,1,1.0,0.0,0,monachus,monachi,1.0
+perm.,1,1.0,0.0,0,permutatio,permutationis,1.0
+Franckforden.,1,0.0,0.0,0,"",Franckfordensi,1.0
+presbb.,1,0.0,0.0,0,"",presbiteros,1.0
+supradd.,1,0.0,0.0,0,"",supradictorum,1.0
+subiect.,1,1.0,0.0,0,subiectus,subiecta,1.0
+kal.,1,0.0,0.0,0,"",kalendas,1.0
+procur.,1,1.0,0.0,0,procurator,procuratorem,1.0
+decc.,1,0.0,0.0,0,"",decani,1.0
+Gostrowen.,1,0.0,0.0,0,"",Gostrowensi,1.0
+Cytzen.,1,0.0,0.0,0,"",Cytzensis,1.0
+decan.,1,0.0,0.0,0,"",decanatu,1.0
+frr.,1,0.0,0.0,0,"",fratrum,1.0
+eccll.,1,0.0,0.0,0,"",ecclesias,1.0
+Rostockcen.,1,0.0,0.0,0,"",Rostockcensis,1.0
+ingr.,1,1.0,0.0,0,ingressus,ingrediendi,1.0
+temporal.,1,1.0,0.0,0,temporalis,temporali,1.0
+prebb.,1,0.0,0.0,0,"",prebende,1.0
+Johannesabb.,1,0.0,0.0,0,"",Johannesabbas,1.0
+Vetericiv.,1,0.0,0.0,0,"",Vetericivitate,1.0
+acol.,1,1.0,0.0,0,acolitus,acolitum,1.0
+imper.,1,0.0,0.0,0,imperialis,imperatorum,1.0
+provin.,1,1.0,0.0,0,provincia,provincie,1.0
+consul.,1,1.0,0.0,0,consul,consulibus,1.0
+deput.,1,1.0,0.0,0,deputatus,deputandi,1.0
+lim.,1,0.0,0.0,0,limina,limites,1.0
+loc.,1,1.0,0.0,0,locus,loco,1.0
+succollect.,1,0.0,0.0,0,"",succollectoris,1.0
+patron.,10,1.0,0.9,0,patronus,"patronatus, patronis",0.9999999999999998
+fac.,3,0.6667,0.6667,0,facultas,"faciunt, facultas",0.9999000000000001
+ann.,3,1.0,0.6667,0,annata,"annata, annatarum",0.9999000000000001
+Trever.,3,1.0,0.6667,0,Treverensis,"Treverensem, Treverensis",0.9999000000000001
+Bamberg.,9,1.0,0.8889,0,Bambergensis,"Bambergensi, Bambergensis",0.9998999999999998
+subdiac.,1,1.0,1.0,0,"",subdiaconus,0.0
+abba.,5,1.0,1.0,0,"",abbatissa,0.0
+Ratisbon.,1,1.0,1.0,0,"",Ratisbonensis,0.0
+M.,0,0.0,0.0,8,"",M.,0.0
+wic.,0,0.0,0.0,1,"",wic.,0.0
+oblig.,6,1.0,1.0,0,"",obligatio,0.0
+sup.,42,1.0,1.0,0,"",super,0.0
+K.,0,0.0,0.0,1,"",K.,0.0
+univ.,6,1.0,1.0,0,"",universitas,0.0
+n.,39,1.0,1.0,2,"","n., non",0.0
+publ.,0,0.0,0.0,1,"",publ.,0.0
+vs.,0,0.0,0.0,29,"",vs.,0.0
+exempt.,1,1.0,1.0,0,"",exemptio,0.0
+fecerunt.,0,0.0,0.0,1,"",fecerunt.,0.0
+conv.,3,1.0,1.0,0,"",conventus,0.0
+nom.,0,0.0,0.0,1,"",nom.,0.0
+Eistet.,2,1.0,1.0,0,"",Eistetensis,0.0
+Cz.,0,0.0,0.0,1,"",Cz.,0.0
+l.,0,0.0,0.0,1,"",l.,0.0
+observ.,1,1.0,1.0,0,"",observantia,0.0
+D.,0,0.0,0.0,3,"",D.,0.0
+rs.,0,0.0,0.0,33,"",rs.,0.0
+facult.,2,1.0,1.0,0,"",facultas,0.0
+H.,0,0.0,0.0,8,"",H.,0.0
+desup.,1,1.0,1.0,0,"",desuper,0.0
+Balthasari.,0,0.0,0.0,1,"",Balthasari.,0.0
+Roskild.,1,1.0,1.0,0,"",Roskildensis,0.0
+Ben.,16,1.0,1.0,0,"",Benedicti,0.0
+T.,0,0.0,0.0,7,"",T.,0.0
+med.,1,1.0,1.0,0,"",medicina,0.0
+Patav.,1,1.0,1.0,0,"",Pataviensis,0.0
+not.,1,1.0,1.0,0,"",notarius,0.0
+Leod.,3,1.0,1.0,0,"",Leodiensis,0.0
+N.,0,0.0,0.0,12,"",N.,0.0
+patr.,3,1.0,1.0,0,"",patronatus,0.0
+rss.,0,0.0,0.0,7,"",rss.,0.0
+Wilsnacen.,0,0.0,0.0,1,"",Wilsnacen.,0.0
+Asscherleven.,0,0.0,0.0,1,"",Asscherleven.,0.0
+tab.,0,0.0,0.0,1,"",tab.,0.0
+retin.,1,1.0,1.0,0,"",retinere,0.0
+apr.,26,1.0,1.0,15,"","apr., aprilis",0.0
+restit.,2,1.0,1.0,0,"",restitutio,0.0
+P.,0,0.0,0.0,2,"",P.,0.0
+IV.,0,0.0,0.0,2,"",IV.,0.0
+beneff.,1,1.0,1.0,0,"",beneficia,0.0
+pred.,6,1.0,1.0,0,"",predicatorum,0.0
+C.,0,0.0,0.0,3,"",C.,0.0
+W.,0,0.0,0.0,6,"",W.,0.0
+Stendal.,0,0.0,0.0,1,"",Stendal.,0.0
+Herbip.,4,1.0,1.0,0,"",Herbipolensis,0.0
+assig.,0,0.0,0.0,1,"",assig.,0.0
+Nouwen.,0,0.0,0.0,1,"",Nouwen.,0.0
+r.,0,0.0,0.0,40,"",r.,0.0
+episc.,1,1.0,1.0,0,"",episcopalis,0.0
+L.,0,0.0,0.0,4,"",L.,0.0
+Wysmarien.,0,0.0,0.0,1,"",Wysmarien.,0.0
+V.,0,0.0,0.0,4,"",V.,0.0
+Wismer.,0,0.0,0.0,1,"",Wismer.,0.0
+Wratislav.,1,1.0,1.0,0,"",Wratislaviensis,0.0
+iudic.,0,0.0,0.0,1,"",iudic.,0.0
+arg.,32,1.0,1.0,0,"",argenti,0.0
+secr.,2,1.0,1.0,0,"",secretarius,0.0
+vss.,0,0.0,0.0,11,"",vss.,0.0
+XXIII.,0,0.0,0.0,1,"",XXIII.,0.0
+pens.,1,1.0,1.0,0,"",pensio,0.0
+Sunden.,0,0.0,0.0,1,"",Sunden.,0.0
+IX.,0,0.0,0.0,1,"",IX.,0.0
+fragm.,1,1.0,1.0,0,"",fragmentum,0.0
+etc.,0,0.0,0.0,48,"",etc.,0.0
+mort.,3,1.0,1.0,0,"",mortis,0.0
+O.,0,0.0,0.0,12,"",O.,0.0
+II.,0,0.0,0.0,4,"",II.,0.0
+div.,2,1.0,1.0,0,"",divina,0.0
+Aquileg.,1,1.0,1.0,0,"",Aquilegensis,0.0
+iuri.,0,0.0,0.0,1,"",iuri.,0.0
+G.,0,0.0,0.0,2,"",G.,0.0
+quond.,11,1.0,1.0,0,"",quondam,0.0
+unac.,1,1.0,1.0,0,"",unacum,0.0
+quib.,18,1.0,1.0,0,"",quibus,0.0
+U.,0,0.0,0.0,1,"",U.,0.0
+sacerd.,1,1.0,1.0,0,"",sacerdotalis,0.0

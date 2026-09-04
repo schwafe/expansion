@@ -1,0 +1,34 @@
+{
+  "run": "deepseek-v4-flash-0731-nothink",
+  "steps": {
+    "1": {
+      "run": null,
+      "model": null,
+      "output": "data/step1.csv"
+    },
+    "2": {
+      "run": "deepseek-v4-flash-0731-nothink",
+      "model": "deepseek-v4-flash-0731",
+      "thinking": false,
+      "reasoning_effort": null,
+      "prompt_sha1": "7a878caba03c67a50cbc3b9c868559efee3d7cc2",
+      "input": "data/step1.csv",
+      "output": "data/runs/deepseek-v4-flash-0731-nothink/step2.csv",
+      "dump": "data/runs/deepseek-v4-flash-0731-nothink/step2.json",
+      "vitae": 156,
+      "written": "2026-09-02T12:30:27+00:00"
+    },
+    "3": {
+      "run": "deepseek-v4-flash-0731-nothink",
+      "model": "deepseek-v4-flash-0731",
+      "thinking": false,
+      "reasoning_effort": null,
+      "prompt_sha1": "f001a951e54e9049e73e70ff8ffae9231370e1b1",
+      "input": "data/runs/deepseek-v4-flash-0731-nothink/step2.csv",
+      "output": "data/runs/deepseek-v4-flash-0731-nothink/step3.csv",
+      "dump": "data/runs/deepseek-v4-flash-0731-nothink/step3.json",
+      "vitae": 156,
+      "written": "2026-09-04T11:23:09+00:00"
+    }
+  }
+}

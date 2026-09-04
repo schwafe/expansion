@@ -1,6 +1,15 @@
-# Evaluation against the gold labels
+# Evaluation of `gemma-4-31b-it-nothink` against the gold labels
 
 Gold: `data/to_compare_with/fable_expanded.csv` -- 156 of 156 vitae scored (the rest are missing from a pipeline stage).
+
+## What produced this
+
+| step | model | thinking | run | read | written |
+| --- | --- | --- | --- | --- | --- |
+| step 1 | rule (`expand_simple.py`) | | | | |
+| step 2 | `gemma-4-31b-it` | off | `gemma-4-31b-it-nothink` | `data/step1.csv` | 2026-09-02T09:57:04+00:00 |
+| step 3 | `gemma-4-31b-it` | off | `gemma-4-31b-it-nothink` | `data/runs/gemma-4-31b-it-nothink/step2.csv` | unrecorded |
+| step 4 | `gemma-4-31b-it` | off | `gemma-4-31b-it-nothink` | `data/runs/gemma-4-31b-it-nothink/step3.csv` | unrecorded |
 
 ## Accuracy per stage
 
@@ -8,8 +17,8 @@ Word accuracy asks whether the right word was chosen (steps 1-3), form accuracy 
 
 | stage | scoreable | expanded | word accuracy | form accuracy | exact | orthographic | wrong form | wrong form? | wrong word | not expanded |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| step 1 (rule) | 4967 |  60.5% |  59.0% |  32.7% | 1606 | 18 | 1253 | 54 | 73 | 1963 |
-| step 2 (candidates) | 4967 |  93.6% |  87.9% |  43.4% | 2124 | 33 | 2060 | 150 | 283 | 317 |
+| step 1 (rule) | 4967 |  59.7% |  58.8% |  32.6% | 1599 | 18 | 1251 | 54 | 45 | 2000 |
+| step 2 (candidates) | 4967 |  94.1% |  89.1% |  43.8% | 2145 | 33 | 2097 | 152 | 246 | 294 |
 | step 3 (mined) | 4967 |  99.2% |  92.9% |  46.4% | 2264 | 39 | 2108 | 202 | 316 | 38 |
 | step 4 (normalized) | 4967 |  99.2% |  92.9% |  64.8% | 2915 | 305 | 1191 | 201 | 317 | 38 |
 
@@ -26,9 +35,9 @@ Which step produced the expansion that is finally in the text.
 
 | step | expansions | word accuracy | form accuracy |
 | --- | ---: | ---: | ---: |
-| step 1 (rule) | 2107 |  97.4% |  71.0% |
-| step 2 (candidates) | 930 |  84.6% |  55.6% |
-| step 3 (mined) | 276 |  88.0% |  52.5% |
+| step 1 (rule) | 2083 |  98.3% |  71.5% |
+| step 2 (candidates) | 912 |  86.0% |  56.6% |
+| step 3 (mined) | 328 |  76.8% |  46.3% |
 | step 4 (normalized) | 1616 |  94.6% |  65.8% |
 
 ## Candidate coverage
@@ -37,13 +46,14 @@ Steps 2 and 3 do not invent an expansion, they choose one from a list, so an err
 
 | step | expansions | word accuracy | ceiling | choice accuracy | errors | candidate misses |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| step 2 (candidates) | 918 |  84.4% |  94.1% |  89.7% | 143 | 54 (38%) |
-| step 3 (mined) | 276 |  88.0% |  61.6% |  92.9% | 33 | 21 (64%) |
+| step 2 (candidates) | 900 |  85.8% |  94.0% |  91.3% | 128 | 54 (42%) |
+| step 3 (mined) | 272 |  87.9% |  61.0% |  92.8% | 33 | 21 (64%) |
 
 - step 2 (candidates): the candidate misses are mostly `supplic.` (45), `exten.` (4), `ap.` (2), `abbrev.` (1), `s.` (1).
 - step 2 (candidates): 12 expansions have no recorded list (a multi-word abbreviation is offered under its whole key, not under its parts) and are left out of this table.
 - step 3 (mined): the candidate misses are mostly `Terdon.` (3), `Erford.` (3), `Par.` (3), `Liptzen.` (2), `Conc.` (2).
 - step 3 (mined): 85 of its right answers were not in its list at all -- the step may expand freely as long as the expansion extends the abbreviation, so for it the list is a hint, not a limit.
+- step 3 (mined): 56 expansions have no recorded list (a multi-word abbreviation is offered under its whole key, not under its parts) and are left out of this table.
 - A candidate counts as covering the gold under the same yardstick as the rest of the report, so a candidate the lemma check cannot connect to the gold form -- verbs above all, which the glossary gives no paradigm -- is counted as a miss although it is in truth the right word. The candidate miss column is therefore an upper bound.
 
 ## Worst abbreviations
@@ -104,23 +114,13 @@ The full list is in `evaluation_mismatches.csv`.
 - 2/5209 `fr.`: gold **fratrum**, system **frater** (step 1 (rule)) -- _L 90 273 confraternitas fr. kalend. conf. 1 aug._
 - 2/6133 `Sagan.`: gold **Saganensi**, system **Sagani** (step 3 (mined)) -- _marchioni Moravie et duci Sagan. discussionem sup. concordia inter_
 - 2/6133 `Luben.`: gold **Lubense**, system **Lubencii** (step 3 (mined)) -- _d. mon. et mon. Luben. d. o. Wratislav. dioc._
-- 2/6177 `fund.`: gold **fundata**, system **fundatio** (step 2 (candidates)) -- _dioc. capella s. Georgii fund. a Giselberto Dobberkow decr._
-- 2/6177 `fund.`: gold **fundata**, system **fundatio** (step 2 (candidates)) -- _dioc. capella s. Georgii fund. a Giselberto Dobberkow decr._
+- 2/6177 `fund.`: gold **fundata**, system **fundatio** (step 3 (mined)) -- _dioc. capella s. Georgii fund. a Giselberto Dobberkow decr._
+- 2/6177 `fund.`: gold **fundata**, system **fundatio** (step 3 (mined)) -- _dioc. capella s. Georgii fund. a Giselberto Dobberkow decr._
 - 2/6177 `m.`: gold **mandatum**, system **memoria** (step 2 (candidates)) -- _in eccl. s. Nicolai m. quod Johannes Schymming rect._
 - 2/6177 `fund.`: gold **fundatum**, system **fundatio** (step 2 (candidates)) -- _bonis d. mon. est fund. 22 mart. 1403 L_
 - 3/1990 `constit.`: gold **constitui**, system **constitutionem** (step 4 (normalized)) -- _in colleg. eccl. fecerat constit. cum par. eccl. s._
 - 3/1990 `incorp.`: gold **incorporata**, system **incorporatio** (step 2 (candidates)) -- _dicti castri in ipsa incorp. ac par. eccl. in_
 - 3/1990 `instit.`: gold **instituendi**, system **institutione** (step 4 (normalized)) -- _marchione Brandenburg. ac iuris instit. prep. et can. ac_
-- 3/1990 `dec.`: gold **decano**, system **decanatus** (step 2 (candidates)) -- _can. ac Visitationis pro dec. eccl. s. Nicolai in_
+- 3/1990 `dec.`: gold **decano**, system **decanatus** (step 3 (mined)) -- _can. ac Visitationis pro dec. eccl. s. Nicolai in_
 - 3/1990 `supplic.`: gold **supplicante**, system **supplicatione** (step 4 (normalized)) -- _castro Halberstad. dioc. m. supplic. Sigismundo Rom. et Vng._
-- 3/1990 `incorp.`: gold **incorporationis**, system **incorporare** (step 2 (candidates)) -- _Rom. et Vng. rege incorp. maioris preb. eccl. s._
-- 3/1990 `d.`: gold **dicte**, system **datum** (step 2 (candidates)) -- _n. o. statut. eccl. d. 5 ian. 1415 L_
-- 4/277 `A.`: gold **Aldenburg**, system **A.** (None) -- _s. Georgii in castro A. Nuemburg. dioc. in colleg._
-- 4/277 `A.`: gold **Aldenburg**, system **A.** (None) -- _magistra etc. mon. in A. o. Prem. Trever. dioc._
-- 4/1168 `B.`: gold **Besekow**, system **B.** (None) -- _eccl. b. Marie op. B. Misnen. dioc. de indulg._
-- 4/1307 `expect.`: gold **expectatione**, system **expectativa** (step 2 (candidates)) -- _dioc. de can. sub expect. preb. Nuemburg. necnon s._
-- 4/1307 `utr.`: gold **utroque**, system **utrius** (step 2 (candidates)) -- _cler. Magunt. dioc. ex utr. de mil. gen. de_
-- 4/1307 `gen.`: gold **genere**, system **generalis** (step 2 (candidates)) -- _ex utr. de mil. gen. de benef. s. e._
-- 4/1399 `ap.`: gold **apostoli**, system **apostolici** (step 4 (normalized)) -- _Marie conceptionis Anne Andree ap. ac omn. SS. in_
-- 4/2980 `Nuremberg.`: gold **Nurembergensis**, system **Nuremberge** (step 3 (mined)) -- _Brandenburg. elector ac burggravius Nuremberg. de insigniis pont. pro_
 - ...

@@ -1,0 +1,22 @@
+{
+  "run": "openai-gpt-oss-120b-low",
+  "steps": {
+    "1": {
+      "run": null,
+      "model": null,
+      "output": "data/step1.csv"
+    },
+    "2": {
+      "run": "openai-gpt-oss-120b-low",
+      "model": "openai-gpt-oss-120b",
+      "thinking": null,
+      "reasoning_effort": "low",
+      "prompt_sha1": "7a878caba03c67a50cbc3b9c868559efee3d7cc2",
+      "input": "data/step1.csv",
+      "output": "data/runs/openai-gpt-oss-120b-low/step2.csv",
+      "dump": "data/runs/openai-gpt-oss-120b-low/step2.json",
+      "vitae": 156,
+      "written": "2026-09-04T10:00:41+00:00"
+    }
+  }
+}

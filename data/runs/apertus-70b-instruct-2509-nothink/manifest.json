@@ -1,0 +1,22 @@
+{
+  "run": "apertus-70b-instruct-2509-nothink",
+  "steps": {
+    "1": {
+      "run": null,
+      "model": null,
+      "output": "data/step1.csv"
+    },
+    "2": {
+      "run": "apertus-70b-instruct-2509-nothink",
+      "model": "apertus-70b-instruct-2509",
+      "thinking": false,
+      "reasoning_effort": null,
+      "prompt_sha1": "7a878caba03c67a50cbc3b9c868559efee3d7cc2",
+      "input": "data/step1.csv",
+      "output": "data/runs/apertus-70b-instruct-2509-nothink/step2.csv",
+      "dump": "data/runs/apertus-70b-instruct-2509-nothink/step2.json",
+      "vitae": 156,
+      "written": "2026-09-04T10:38:06+00:00"
+    }
+  }
+}

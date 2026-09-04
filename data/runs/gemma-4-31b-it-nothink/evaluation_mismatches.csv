@@ -183,7 +183,7 @@ volume,nr_RG,abbreviation,gold,system,verdict,step,candidate_miss,candidates,ver
 9,2155,cap.,cap.,capitulo,no_gold_label,step 4 (normalized),"","",no_gold_label,no_gold_label,no_gold_label,cap.,capitulum,capitulum,rectori et 27 suo cap. vicariis et choralibus donavit
 4,2980,conf.,conf.,confirmatio,no_gold_label,step 2 (candidates),yes,confirmare; confirmatio,no_gold_label,no_gold_label,no_gold_label,conf.,confirmatio,confirmatio,op. Nouwen. Brandenburg. dioc. conf. remissionem debitorum et exemtionem
 2,913,constit.,constit.,constitutione,no_gold_label,step 4 (normalized),"","",no_gold_label,no_gold_label,no_gold_label,constit.,constitutio,constitutio,in d. op. publ. constit. Provide attendentes a Bonifatio
-5,2286,d.,d.,d.,no_gold_label,"","","",no_gold_label,no_gold_label,no_gold_label,d.,d.,d.,notabilibus prope muros s. d. 25 sept. 30 heretici
+5,2286,d.,d.,d.,no_gold_label,step 3 (mined),"","",no_gold_label,no_gold_label,no_gold_label,d.,die,d.,notabilibus prope muros s. d. 25 sept. 30 heretici
 5,3472,d.,d.,"",no_gold_label,"","","",no_gold_label,no_gold_label,no_gold_label,d.,"","",uberiori indulg. s. p. d. S 397 51 r.
 2,370,dec.,dec.,december,no_gold_label,step 2 (candidates),yes,decanatus; decanus; december,no_gold_label,no_gold_label,no_gold_label,dec.,december,december,315 189 conserv. 17 dec. 1396 L 45 122
 2,370,dec.,dec.,december,no_gold_label,step 2 (candidates),yes,decanatus; decanus; december,no_gold_label,no_gold_label,no_gold_label,dec.,december,december,se vocatum incarceraverunt 21 dec. 1396 V 315 164
@@ -210,54 +210,54 @@ volume,nr_RG,abbreviation,gold,system,verdict,step,candidate_miss,candidates,ver
 8,4669,dioc.,dioc.,diocesis,no_gold_label,step 1 (rule),"","",no_gold_label,no_gold_label,no_gold_label,diocesis,diocesis,diocesis,s. Thome martir. N. dioc. conf. sent. laudi s.
 4,1307,e.,e.,expectatione,no_gold_label,step 1 (rule),"","",no_gold_label,no_gold_label,no_gold_label,expectatione,expectatione,expectatione,dioc. de benef. s. e. p. pro Thoma de
 4,1307,e.,e.,expectatione,no_gold_label,step 1 (rule),"","",no_gold_label,no_gold_label,no_gold_label,expectatione,expectatione,expectatione,gen. de benef. s. e. p. pro Frederico Clepe
-2,370,etc.,etc.,prepositus decanus et canonici,no_gold_label,step 1 (rule),"","",no_gold_label,no_gold_label,no_gold_label,prepositus decanus et canonici,prepositus decanus et canonici,prepositus decanus et canonici,Albertus aep. etc. Magdeburg et cives civ.
-2,370,etc.,etc.,et cetera,no_gold_label,step 2 (candidates),yes,et capitulum; et cetera; et conventus,no_gold_label,no_gold_label,no_gold_label,etc.,et cetera,et cetera,accedentes aurum et argentum etc. rapuerunt et Michaelem de
-2,913,etc.,etc.,et capitulo,no_gold_label,step 4 (normalized),"","",no_gold_label,no_gold_label,no_gold_label,etc.,et capitulum,et capitulum,L 10 231 procons. etc. op. Halberstad. dioc. m.
-2,913,etc.,etc.,capitulum et singuli canonici,no_gold_label,step 1 (rule),"","",no_gold_label,no_gold_label,no_gold_label,capitulum et singuli canonici,capitulum et singuli canonici,capitulum et singuli canonici,79 224 mensa dec. etc. eccl. s. Blasii Halberstad.
-2,913,etc.,etc.,et capitulo,no_gold_label,step 4 (normalized),"","",no_gold_label,no_gold_label,no_gold_label,etc.,et capitulum,et capitulum,Brunswic procons. etc. op. Halberstad. dioc. privil.
-2,913,etc.,etc.,et capitulo,no_gold_label,step 4 (normalized),"","",no_gold_label,no_gold_label,no_gold_label,etc.,et capitulum,et capitulum,L 12 139 procons. etc. op. Halberstad. dioc. m.
-2,913,etc.,etc.,et capitulo,no_gold_label,step 4 (normalized),"","",no_gold_label,no_gold_label,no_gold_label,etc.,et capitulum,et capitulum,1390 R 103 procons. etc. op. Halberstad. dioc. revoc.
-2,2495,etc.,etc.,et capituli,no_gold_label,step 4 (normalized),"","",no_gold_label,no_gold_label,no_gold_label,etc.,et capitulum,et capitulum,op. Bremen. dioc. procons. etc. de alt. port. pro
-2,2495,etc.,etc.,et capituli,no_gold_label,step 4 (normalized),"","",no_gold_label,no_gold_label,no_gold_label,etc.,et capitulum,et capitulum,op. Bremen. dioc. procons. etc. de alt. port. in
-2,6133,etc.,etc.,et conventui,no_gold_label,step 4 (normalized),"","",no_gold_label,no_gold_label,no_gold_label,et conventus,et conventus,et conventus,Novacella abb. etc. mon. o. Cist. Misnen.
-2,6133,etc.,etc.,et conventui,no_gold_label,step 4 (normalized),"","",no_gold_label,no_gold_label,no_gold_label,et conventus,et conventus,et conventus,L 100 260 abb. etc. mon. o. Cist. Misnen.
-2,6133,etc.,etc.,et conventui,no_gold_label,step 4 (normalized),"","",no_gold_label,no_gold_label,no_gold_label,et conventus,et conventus,et conventus,L 91 95 abb. etc. mon. o. Cist. Misnen.
-2,7829,etc.,etc.,et conventus,no_gold_label,step 2 (candidates),yes,et capitulum; et cetera; et conventus,no_gold_label,no_gold_label,no_gold_label,etc.,et conventus,et conventus,donata p. priorem provincialem etc. o. herem. s. Aug.
-4,277,etc.,etc.,et conventus,no_gold_label,step 2 (candidates),yes,et capitulum; et cetera; et conventus,no_gold_label,no_gold_label,no_gold_label,etc.,et conventus,et conventus,169 264 v. magistra etc. mon. in A. o.
-4,2980,etc.,etc.,et cetera,no_gold_label,step 2 (candidates),yes,et capitulum; et cetera; et conventus,no_gold_label,no_gold_label,no_gold_label,etc.,et cetera,et cetera,Brandenburg. sup. electione vicarii etc. 30 apr. 1428 S
-4,2980,etc.,etc.,et conventui,no_gold_label,step 4 (normalized),"","",no_gold_label,no_gold_label,no_gold_label,etc.,et conventus,et conventus,Agneta sorore sua abba. etc. mon. curie Regnitz o.
-4,2980,etc.,etc.,et cetera,no_gold_label,step 2 (candidates),yes,et capitulum; et cetera; et conventus,no_gold_label,no_gold_label,no_gold_label,etc.,et cetera,et cetera,expulsionem excom. pro consul. etc. Noveciv. Brandenburg. de indulg.
-4,2980,etc.,etc.,et cetera,no_gold_label,step 2 (candidates),yes,et capitulum; et cetera; et conventus,no_gold_label,no_gold_label,no_gold_label,etc.,et cetera,et cetera,253 v. et proconsules etc. op. Nouwen. Brandenburg. dioc.
-4,3100,etc.,etc.,et cetera,no_gold_label,step 2 (candidates),yes,et capitulum; et cetera; et conventus,no_gold_label,no_gold_label,no_gold_label,etc.,et cetera,et cetera,Merseburg. presentatis p. rect. etc. studii Liptzen. conferantur 20
-4,3100,etc.,etc.,et cetera,no_gold_label,step 2 (candidates),yes,et capitulum; et cetera; et conventus,no_gold_label,no_gold_label,no_gold_label,etc.,et cetera,et cetera,Thuringie et marchio Misnen. etc. et Katherina uxor de
-4,3877,etc.,etc.,et conventui,no_gold_label,step 4 (normalized),"","",no_gold_label,no_gold_label,no_gold_label,et conventus,et conventus,et conventus,Gronhagen abb. etc. mon. s. Nicolai o.
-4,11069,etc.,etc.,et capitulum,no_gold_label,step 2 (candidates),yes,et capitulum; et cetera; et conventus,no_gold_label,no_gold_label,no_gold_label,etc.,et capitulum,et capitulum,Cist. Merseburg. dioc. abba. etc. de conf. incorp. par.
-4,14862,etc.,etc.,et cetera,no_gold_label,step 2 (candidates),yes,et capitulum; et cetera; et conventus,no_gold_label,no_gold_label,no_gold_label,etc.,et cetera,et cetera,dioc. de conf. indulg. etc. concessarum p. Bonifatium IX
-4,14862,etc.,etc.,et conventui,no_gold_label,step 4 (normalized),"","",no_gold_label,no_gold_label,no_gold_label,et conventus,et conventus,et conventus,esu carnium pro abb. etc. o. s. Ben. et
-4,14862,etc.,etc.,decano et canonici,no_gold_label,step 4 (normalized),"","",no_gold_label,no_gold_label,no_gold_label,decanus et canonici,decanus et canonici,decanus et canonici,carnium conserv. pro prep. etc. eccl. in castro Aldenburg
-5,6853,etc.,etc.,prepositus decanus et canonici,no_gold_label,step 1 (rule),"","",no_gold_label,no_gold_label,no_gold_label,prepositus decanus et canonici,prepositus decanus et canonici,prepositus decanus et canonici,val. Johannes Hofemann ep. etc. eccl. M. cuius mensa
-5,6853,etc.,etc.,et cetera,no_gold_label,step 2 (candidates),yes,et capitulum; et cetera; et conventus,no_gold_label,no_gold_label,no_gold_label,etc.,et cetera,et cetera,ducibus ac marchionibus Misnen. etc. supplic. de indulg. ad
-5,6853,etc.,etc.,et conventu,no_gold_label,step 4 (normalized),"","",no_gold_label,no_gold_label,no_gold_label,et conventus,et conventus,et conventus,2000 fl. ab abb. etc. mon. Celle s. Marie
-5,7372,etc.,etc.,capitulum et singuli canonici,no_gold_label,step 1 (rule),"","",no_gold_label,no_gold_label,no_gold_label,capitulum et singuli canonici,capitulum et singuli canonici,capitulum et singuli canonici,quo processu ipsi dec. etc. appellaverunt de revoc. d.
-5,7372,etc.,etc.,capitulum et singuli canonici,no_gold_label,step 1 (rule),"","",no_gold_label,no_gold_label,no_gold_label,capitulum et singuli canonici,capitulum et singuli canonici,capitulum et singuli canonici,quo processu ipsi dec. etc. appellaverunt dec. et capit.
-5,8513,etc.,etc.,et cetera,no_gold_label,step 2 (candidates),yes,et capitulum; et cetera; et conventus,no_gold_label,no_gold_label,no_gold_label,etc.,et cetera,et cetera,d. ord. et proconsulum etc. 18 nov. 1438 S
-6,5255,etc.,etc.,capitulum et singuli canonici,no_gold_label,step 1 (rule),"","",no_gold_label,no_gold_label,no_gold_label,capitulum et singuli canonici,capitulum et singuli canonici,capitulum et singuli canonici,434 97 rs. dec. etc. eccl. s. Nicolai Halberstad.
-6,5255,etc.,etc.,capitulum et singuli canonici,no_gold_label,step 1 (rule),"","",no_gold_label,no_gold_label,no_gold_label,capitulum et singuli canonici,capitulum et singuli canonici,capitulum et singuli canonici,26 193 vs. dec. etc. eccl. s. Nicolai Halberstad.
-6,5255,etc.,etc.,capitulum et singuli canonici,no_gold_label,step 1 (rule),"","",no_gold_label,no_gold_label,no_gold_label,capitulum et singuli canonici,capitulum et singuli canonici,capitulum et singuli canonici,434 97 r. dec. etc. eccl. s. Nicolai Halberstad.
-6,5255,etc.,etc.,capitulum et singuli canonici,no_gold_label,step 1 (rule),"","",no_gold_label,no_gold_label,no_gold_label,capitulum et singuli canonici,capitulum et singuli canonici,capitulum et singuli canonici,434 97 v. dec. etc. eccl. s. Nicolai Halberstad.
-7,432,etc.,etc.,et capitulum,no_gold_label,step 2 (candidates),yes,et capitulum; et cetera; et conventus,no_gold_label,no_gold_label,no_gold_label,etc.,et capitulum,et capitulum,Choryn Abb. etc. mon. o. Cist. Brandenburg.
-7,2477,etc.,etc.,et capitulum,no_gold_label,step 2 (candidates),yes,et capitulum; et cetera; et conventus,no_gold_label,no_gold_label,no_gold_label,etc.,et capitulum,et capitulum,Quedelingborch Abba. etc. mon. monial. in Muntzinseberge
-7,2487,etc.,etc.,et capitulum,no_gold_label,step 2 (candidates),yes,et capitulum; et cetera; et conventus,no_gold_label,no_gold_label,no_gold_label,etc.,et capitulum,et capitulum,502 53 rs. Abb. etc. mon. ss. Petri et
-7,2487,etc.,etc.,et capitulum,no_gold_label,step 2 (candidates),yes,et capitulum; et cetera; et conventus,no_gold_label,no_gold_label,no_gold_label,etc.,et capitulum,et capitulum,Regalis Lutter Abb. etc. mon. ss. Petri et
-8,324,etc.,etc.,et capitulum,no_gold_label,step 2 (candidates),yes,et capitulum; et cetera; et conventus,no_gold_label,no_gold_label,no_gold_label,etc.,et capitulum,et capitulum,Aschersleven Asscherleven. Prep. etc. mon. monial. b. Marie
-8,547,etc.,etc.,et capitulum,no_gold_label,step 2 (candidates),yes,et capitulum; et cetera; et conventus,no_gold_label,no_gold_label,no_gold_label,etc.,et capitulum,et capitulum,Brun wic. Brunswicen. Prep. etc. eccl. s. Ciriaci e.
-8,547,etc.,etc.,et capitulum,no_gold_label,step 2 (candidates),yes,et capitulum; et cetera; et conventus,no_gold_label,no_gold_label,no_gold_label,etc.,et capitulum,et capitulum,A 24 r. Abb. etc. mon. s. Egidii R.
-8,2974,etc.,etc.,et capitulo,no_gold_label,step 4 (normalized),"","",no_gold_label,no_gold_label,no_gold_label,etc.,et capitulum,et capitulum,Johannesabb. etc. mon. s. Nicolai in
-8,4669,etc.,etc.,et capitulum,no_gold_label,step 2 (candidates),yes,et capitulum; et cetera; et conventus,no_gold_label,no_gold_label,no_gold_label,etc.,et capitulum,et capitulum,537 226 r. Prep. etc. eccl. N. de statuendo
-8,4669,etc.,etc.,et capitulum,no_gold_label,step 2 (candidates),yes,et capitulum; et cetera; et conventus,no_gold_label,no_gold_label,no_gold_label,etc.,et capitulum,et capitulum,Nuemburg. Prep. etc. eccl. N. de conserv.
-8,4669,etc.,etc.,et capitulum,no_gold_label,step 2 (candidates),yes,et capitulum; et cetera; et conventus,no_gold_label,no_gold_label,no_gold_label,etc.,et capitulum,et capitulum,537 226 rs. Abb. etc. mon. s. Thome martir.
-8,5760,etc.,etc.,et capitulum,no_gold_label,step 2 (candidates),yes,et capitulum; et cetera; et conventus,no_gold_label,no_gold_label,no_gold_label,etc.,et capitulum,et capitulum,Weymelburg Abb. etc. mon. s. Ciriaci in
-9,6302,etc.,etc.,et conventus,no_gold_label,step 1 (rule),"","",no_gold_label,no_gold_label,no_gold_label,et conventus,et conventus,et conventus,Nuemburg. dioc. supplic. abb. etc. mon. s. Georgii in
+2,370,etc.,etc.,prepositus decanus et canonici,no_gold_label,step 3 (mined),"","",no_gold_label,no_gold_label,no_gold_label,etc.,etc.,prepositus decanus et canonici,Albertus aep. etc. Magdeburg et cives civ.
+2,370,etc.,etc.,et cetera,no_gold_label,step 3 (mined),"","",no_gold_label,no_gold_label,no_gold_label,etc.,etc.,et cetera,accedentes aurum et argentum etc. rapuerunt et Michaelem de
+2,913,etc.,etc.,et capitulo,no_gold_label,step 4 (normalized),"","",no_gold_label,no_gold_label,no_gold_label,etc.,etc.,et capitulum,L 10 231 procons. etc. op. Halberstad. dioc. m.
+2,913,etc.,etc.,capitulum et singuli canonici,no_gold_label,step 3 (mined),"","",no_gold_label,no_gold_label,no_gold_label,etc.,etc.,capitulum et singuli canonici,79 224 mensa dec. etc. eccl. s. Blasii Halberstad.
+2,913,etc.,etc.,et capitulo,no_gold_label,step 4 (normalized),"","",no_gold_label,no_gold_label,no_gold_label,etc.,etc.,et capitulum,Brunswic procons. etc. op. Halberstad. dioc. privil.
+2,913,etc.,etc.,et capitulo,no_gold_label,step 4 (normalized),"","",no_gold_label,no_gold_label,no_gold_label,etc.,etc.,et capitulum,L 12 139 procons. etc. op. Halberstad. dioc. m.
+2,913,etc.,etc.,et capitulo,no_gold_label,step 4 (normalized),"","",no_gold_label,no_gold_label,no_gold_label,etc.,etc.,et capitulum,1390 R 103 procons. etc. op. Halberstad. dioc. revoc.
+2,2495,etc.,etc.,et capituli,no_gold_label,step 4 (normalized),"","",no_gold_label,no_gold_label,no_gold_label,etc.,etc.,et capitulum,op. Bremen. dioc. procons. etc. de alt. port. pro
+2,2495,etc.,etc.,et capituli,no_gold_label,step 4 (normalized),"","",no_gold_label,no_gold_label,no_gold_label,etc.,etc.,et capitulum,op. Bremen. dioc. procons. etc. de alt. port. in
+2,6133,etc.,etc.,et conventui,no_gold_label,step 4 (normalized),"","",no_gold_label,no_gold_label,no_gold_label,etc.,etc.,et conventus,Novacella abb. etc. mon. o. Cist. Misnen.
+2,6133,etc.,etc.,et conventui,no_gold_label,step 4 (normalized),"","",no_gold_label,no_gold_label,no_gold_label,etc.,etc.,et conventus,L 100 260 abb. etc. mon. o. Cist. Misnen.
+2,6133,etc.,etc.,et conventui,no_gold_label,step 4 (normalized),"","",no_gold_label,no_gold_label,no_gold_label,etc.,etc.,et conventus,L 91 95 abb. etc. mon. o. Cist. Misnen.
+2,7829,etc.,etc.,et conventus,no_gold_label,step 3 (mined),"","",no_gold_label,no_gold_label,no_gold_label,etc.,etc.,et conventus,donata p. priorem provincialem etc. o. herem. s. Aug.
+4,277,etc.,etc.,et conventus,no_gold_label,step 3 (mined),"","",no_gold_label,no_gold_label,no_gold_label,etc.,etc.,et conventus,169 264 v. magistra etc. mon. in A. o.
+4,2980,etc.,etc.,et cetera,no_gold_label,step 3 (mined),"","",no_gold_label,no_gold_label,no_gold_label,etc.,etc.,et cetera,Brandenburg. sup. electione vicarii etc. 30 apr. 1428 S
+4,2980,etc.,etc.,et conventui,no_gold_label,step 4 (normalized),"","",no_gold_label,no_gold_label,no_gold_label,etc.,etc.,et conventus,Agneta sorore sua abba. etc. mon. curie Regnitz o.
+4,2980,etc.,etc.,et cetera,no_gold_label,step 3 (mined),"","",no_gold_label,no_gold_label,no_gold_label,etc.,etc.,et cetera,expulsionem excom. pro consul. etc. Noveciv. Brandenburg. de indulg.
+4,2980,etc.,etc.,et cetera,no_gold_label,step 3 (mined),"","",no_gold_label,no_gold_label,no_gold_label,etc.,etc.,et cetera,253 v. et proconsules etc. op. Nouwen. Brandenburg. dioc.
+4,3100,etc.,etc.,et cetera,no_gold_label,step 3 (mined),"","",no_gold_label,no_gold_label,no_gold_label,etc.,etc.,et cetera,Merseburg. presentatis p. rect. etc. studii Liptzen. conferantur 20
+4,3100,etc.,etc.,et cetera,no_gold_label,step 3 (mined),"","",no_gold_label,no_gold_label,no_gold_label,etc.,etc.,et cetera,Thuringie et marchio Misnen. etc. et Katherina uxor de
+4,3877,etc.,etc.,et conventui,no_gold_label,step 4 (normalized),"","",no_gold_label,no_gold_label,no_gold_label,etc.,etc.,et conventus,Gronhagen abb. etc. mon. s. Nicolai o.
+4,11069,etc.,etc.,et capitulum,no_gold_label,step 3 (mined),"","",no_gold_label,no_gold_label,no_gold_label,etc.,etc.,et capitulum,Cist. Merseburg. dioc. abba. etc. de conf. incorp. par.
+4,14862,etc.,etc.,et cetera,no_gold_label,step 3 (mined),"","",no_gold_label,no_gold_label,no_gold_label,etc.,etc.,et cetera,dioc. de conf. indulg. etc. concessarum p. Bonifatium IX
+4,14862,etc.,etc.,et conventui,no_gold_label,step 4 (normalized),"","",no_gold_label,no_gold_label,no_gold_label,etc.,etc.,et conventus,esu carnium pro abb. etc. o. s. Ben. et
+4,14862,etc.,etc.,decano et canonici,no_gold_label,step 4 (normalized),"","",no_gold_label,no_gold_label,no_gold_label,etc.,etc.,decanus et canonici,carnium conserv. pro prep. etc. eccl. in castro Aldenburg
+5,6853,etc.,etc.,prepositus decanus et canonici,no_gold_label,step 3 (mined),"","",no_gold_label,no_gold_label,no_gold_label,etc.,etc.,prepositus decanus et canonici,val. Johannes Hofemann ep. etc. eccl. M. cuius mensa
+5,6853,etc.,etc.,et cetera,no_gold_label,step 3 (mined),"","",no_gold_label,no_gold_label,no_gold_label,etc.,etc.,et cetera,ducibus ac marchionibus Misnen. etc. supplic. de indulg. ad
+5,6853,etc.,etc.,et conventu,no_gold_label,step 4 (normalized),"","",no_gold_label,no_gold_label,no_gold_label,etc.,etc.,et conventus,2000 fl. ab abb. etc. mon. Celle s. Marie
+5,7372,etc.,etc.,capitulum et singuli canonici,no_gold_label,step 3 (mined),"","",no_gold_label,no_gold_label,no_gold_label,etc.,etc.,capitulum et singuli canonici,quo processu ipsi dec. etc. appellaverunt de revoc. d.
+5,7372,etc.,etc.,capitulum et singuli canonici,no_gold_label,step 3 (mined),"","",no_gold_label,no_gold_label,no_gold_label,etc.,etc.,capitulum et singuli canonici,quo processu ipsi dec. etc. appellaverunt dec. et capit.
+5,8513,etc.,etc.,et cetera,no_gold_label,step 3 (mined),"","",no_gold_label,no_gold_label,no_gold_label,etc.,etc.,et cetera,d. ord. et proconsulum etc. 18 nov. 1438 S
+6,5255,etc.,etc.,capitulum et singuli canonici,no_gold_label,step 3 (mined),"","",no_gold_label,no_gold_label,no_gold_label,etc.,etc.,capitulum et singuli canonici,434 97 rs. dec. etc. eccl. s. Nicolai Halberstad.
+6,5255,etc.,etc.,capitulum et singuli canonici,no_gold_label,step 3 (mined),"","",no_gold_label,no_gold_label,no_gold_label,etc.,etc.,capitulum et singuli canonici,26 193 vs. dec. etc. eccl. s. Nicolai Halberstad.
+6,5255,etc.,etc.,capitulum et singuli canonici,no_gold_label,step 3 (mined),"","",no_gold_label,no_gold_label,no_gold_label,etc.,etc.,capitulum et singuli canonici,434 97 r. dec. etc. eccl. s. Nicolai Halberstad.
+6,5255,etc.,etc.,capitulum et singuli canonici,no_gold_label,step 3 (mined),"","",no_gold_label,no_gold_label,no_gold_label,etc.,etc.,capitulum et singuli canonici,434 97 v. dec. etc. eccl. s. Nicolai Halberstad.
+7,432,etc.,etc.,et capitulum,no_gold_label,step 3 (mined),"","",no_gold_label,no_gold_label,no_gold_label,etc.,etc.,et capitulum,Choryn Abb. etc. mon. o. Cist. Brandenburg.
+7,2477,etc.,etc.,et capitulum,no_gold_label,step 3 (mined),"","",no_gold_label,no_gold_label,no_gold_label,etc.,etc.,et capitulum,Quedelingborch Abba. etc. mon. monial. in Muntzinseberge
+7,2487,etc.,etc.,et capitulum,no_gold_label,step 3 (mined),"","",no_gold_label,no_gold_label,no_gold_label,etc.,etc.,et capitulum,502 53 rs. Abb. etc. mon. ss. Petri et
+7,2487,etc.,etc.,et capitulum,no_gold_label,step 3 (mined),"","",no_gold_label,no_gold_label,no_gold_label,etc.,etc.,et capitulum,Regalis Lutter Abb. etc. mon. ss. Petri et
+8,324,etc.,etc.,et capitulum,no_gold_label,step 3 (mined),"","",no_gold_label,no_gold_label,no_gold_label,etc.,etc.,et capitulum,Aschersleven Asscherleven. Prep. etc. mon. monial. b. Marie
+8,547,etc.,etc.,et capitulum,no_gold_label,step 3 (mined),"","",no_gold_label,no_gold_label,no_gold_label,etc.,etc.,et capitulum,Brun wic. Brunswicen. Prep. etc. eccl. s. Ciriaci e.
+8,547,etc.,etc.,et capitulum,no_gold_label,step 3 (mined),"","",no_gold_label,no_gold_label,no_gold_label,etc.,etc.,et capitulum,A 24 r. Abb. etc. mon. s. Egidii R.
+8,2974,etc.,etc.,et capitulo,no_gold_label,step 4 (normalized),"","",no_gold_label,no_gold_label,no_gold_label,etc.,etc.,et capitulum,Johannesabb. etc. mon. s. Nicolai in
+8,4669,etc.,etc.,et capitulum,no_gold_label,step 3 (mined),"","",no_gold_label,no_gold_label,no_gold_label,etc.,etc.,et capitulum,537 226 r. Prep. etc. eccl. N. de statuendo
+8,4669,etc.,etc.,et capitulum,no_gold_label,step 3 (mined),"","",no_gold_label,no_gold_label,no_gold_label,etc.,etc.,et capitulum,Nuemburg. Prep. etc. eccl. N. de conserv.
+8,4669,etc.,etc.,et capitulum,no_gold_label,step 3 (mined),"","",no_gold_label,no_gold_label,no_gold_label,etc.,etc.,et capitulum,537 226 rs. Abb. etc. mon. s. Thome martir.
+8,5760,etc.,etc.,et capitulum,no_gold_label,step 3 (mined),"","",no_gold_label,no_gold_label,no_gold_label,etc.,etc.,et capitulum,Weymelburg Abb. etc. mon. s. Ciriaci in
+9,6302,etc.,etc.,et conventus,no_gold_label,step 3 (mined),"","",no_gold_label,no_gold_label,no_gold_label,etc.,etc.,et conventus,Nuemburg. dioc. supplic. abb. etc. mon. s. Georgii in
 2,913,fact.,fact.,facta,no_gold_label,step 4 (normalized),"","",no_gold_label,no_gold_label,no_gold_label,factus,factus,factus,a Bonifatio VIII papa fact. 7 mai. 1400 L
 2,370,febr.,febr.,februarius,no_gold_label,step 1 (rule),"","",no_gold_label,no_gold_label,no_gold_label,februarius,februarius,februarius,Ballionibus de Perusia 10 febr. 1397 V 315 187
 2,2411,febr.,febr.,februarius,no_gold_label,step 1 (rule),"","",no_gold_label,no_gold_label,no_gold_label,februarius,februarius,februarius,o. Misnen. dioc. 26 febr. 1400 L 80 88
@@ -429,8 +429,8 @@ volume,nr_RG,abbreviation,gold,system,verdict,step,candidate_miss,candidates,ver
 9,6302,rss.,rss.,rss.,no_gold_label,"","","",no_gold_label,no_gold_label,no_gold_label,rss.,rss.,rss.,vs L 652 37 rss.
 4,1307,s.,s.,sub,no_gold_label,step 1 (rule),"","",no_gold_label,no_gold_label,no_gold_label,sub,sub,sub,Magunt. dioc. de benef. s. e. p. pro Thoma
 4,1307,s.,s.,sub,no_gold_label,step 1 (rule),"","",no_gold_label,no_gold_label,no_gold_label,sub,sub,sub,mil. gen. de benef. s. e. p. pro Frederico
-5,2286,s.,s.,s.,no_gold_label,"","","",no_gold_label,no_gold_label,no_gold_label,s.,s.,s.,edificiis notabilibus prope muros s. d. 25 sept. 30
-5,3472,s.,s.,sineperdatum,no_gold_label,step 2 (candidates),yes,sanctus; sine; soluta; solutus; sub; super,no_gold_label,no_gold_label,no_gold_label,s.,sineperdatum,sineperdatum,r de uberiori indulg. s. p. d. S 397
+5,2286,s.,s.,s.,no_gold_label,step 3 (mined),"","",no_gold_label,no_gold_label,no_gold_label,s.,sub,s.,edificiis notabilibus prope muros s. d. 25 sept. 30
+5,3472,s.,s.,sineperdatum,no_gold_label,step 3 (mined),"","",no_gold_label,no_gold_label,no_gold_label,s.,superperdatum,sineperdatum,r de uberiori indulg. s. p. d. S 397
 2,2322,sept.,sept.,september,no_gold_label,step 1 (rule),"","",no_gold_label,no_gold_label,no_gold_label,september,september,september,Hamburg. Bremen. dioc. 15 sept. 1395 L 36 198
 3,171,sept.,sept.,september,no_gold_label,step 1 (rule),"","",no_gold_label,no_gold_label,no_gold_label,september,september,september,dioc. de indulg. 17 sept. 1409 L 136 103
 3,1969,sept.,sept.,september,no_gold_label,step 1 (rule),"","",no_gold_label,no_gold_label,no_gold_label,september,september,september,dioc. de indulg. 10 sept. 1411 L 158 106
@@ -641,20 +641,20 @@ volume,nr_RG,abbreviation,gold,system,verdict,step,candidate_miss,candidates,ver
 9,1746,Tirasonen.,Tirasonensem,Tirasonen.,not_expanded,"","","",not_expanded,not_expanded,not_expanded,Tirasonen.,Tirasonen.,Tirasonen.,componendum ad Petrum ep. Tirasonen. bulla sup. indulto quod
 4,6189,a.,anno,a.,not_expanded,"","","",not_expanded,not_expanded,not_expanded,a.,a.,a.,data III kal. febr. a. I 23 S 167
 5,7397,a.,argenti,a.,not_expanded,"","","",not_expanded,not_expanded,not_expanded,a.,a.,a.,d. eccl. 4 m. a. p. qui in oblationibus
-5,2286,b.,beate,b.,not_expanded,"","","",not_expanded,not_expanded,not_expanded,b.,b.,b.,Nicolai et Katherine et b. Marie necnon capel. in
-5,2286,d.,dicti,d.,not_expanded,"","","",not_expanded,not_expanded,not_expanded,d.,d.,d.,s. Jacobi e. m. d. op. de indulg. 19
-9,5330,d.,dicto,d.,not_expanded,"","","",not_expanded,not_expanded,not_expanded,d.,d.,d.,d. marchionis qui in d. op. de consensu ordinarii
-9,5330,d.,dictis,d.,not_expanded,"","","",not_expanded,not_expanded,not_expanded,d.,d.,d.,de conc. ut in d. causis divina exerceri possint
-9,5330,d.,dicti,d.,not_expanded,"","","",not_expanded,not_expanded,not_expanded,d.,d.,d.,d. op. in dominio d. marchionis qui in d.
-9,5330,d.,dicto,d.,not_expanded,"","","",not_expanded,not_expanded,not_expanded,d.,d.,d.,auct. ordin. suppositum supplic. d. marchione de conc. ut
-9,5330,d.,dicti,d.,not_expanded,"","","",not_expanded,not_expanded,not_expanded,d.,d.,d.,burgemagistro consulibus et universitate d. op. in dominio d.
+5,2286,b.,beate,b.,not_expanded,step 3 (mined),"","",not_expanded,wrong_form,not_expanded,b.,beatus,b.,Nicolai et Katherine et b. Marie necnon capel. in
+5,2286,d.,dicti,d.,not_expanded,step 3 (mined),"","",not_expanded,wrong_form,not_expanded,d.,dictus,d.,s. Jacobi e. m. d. op. de indulg. 19
+9,5330,d.,dicto,d.,not_expanded,step 3 (mined),"","",not_expanded,wrong_form,not_expanded,d.,dictus,d.,d. marchionis qui in d. op. de consensu ordinarii
+9,5330,d.,dictis,d.,not_expanded,step 3 (mined),"","",not_expanded,wrong_form,not_expanded,d.,dictus,d.,de conc. ut in d. causis divina exerceri possint
+9,5330,d.,dicti,d.,not_expanded,step 3 (mined),"","",not_expanded,wrong_form,not_expanded,d.,dictus,d.,d. op. in dominio d. marchionis qui in d.
+9,5330,d.,dicto,d.,not_expanded,step 3 (mined),"","",not_expanded,wrong_word,not_expanded,d.,dominus,d.,auct. ordin. suppositum supplic. d. marchione de conc. ut
+9,5330,d.,dicti,d.,not_expanded,step 3 (mined),"","",not_expanded,wrong_form,not_expanded,d.,dictus,d.,burgemagistro consulibus et universitate d. op. in dominio d.
 4,3100,e.,extra,e.,not_expanded,"","","",not_expanded,not_expanded,not_expanded,e.,e.,e.,eccl. b. Marie v. e. op. Githan Merseburg. dioc.
 4,6189,e.,expectatione,e.,not_expanded,"","","",not_expanded,not_expanded,not_expanded,e.,e.,e.,40 de can. s. e. preb. Zwerin. et Camin.
 4,12022,e.,extra,e.,not_expanded,"","","",not_expanded,not_expanded,not_expanded,e.,e.,e.,Ortrand capella b. Marie e. op. Misnen. dioc. indulg.
 4,2980,f.,fratrum,f.,not_expanded,"","","",not_expanded,not_expanded,not_expanded,f.,f.,f.,Eusebii legatum domo o. f. m. Brandenburg. sup. electione
-5,2286,s.,sancti,s.,not_expanded,"","","",not_expanded,not_expanded,not_expanded,s.,s.,s.,necnon capel. in hosp. s. Spiritus et s. Jacobi
-5,2286,s.,sancte,s.,not_expanded,"","","",not_expanded,not_expanded,not_expanded,s.,s.,s.,Nicolao de Albergatis card. s. Crucis qui faciat prout
-5,2286,s.,sancti,s.,not_expanded,"","","",not_expanded,not_expanded,not_expanded,s.,s.,s.,hosp. s. Spiritus et s. Jacobi e. m. d.
+5,2286,s.,sancti,s.,not_expanded,step 3 (mined),"","",not_expanded,wrong_form,not_expanded,s.,sanctus,s.,necnon capel. in hosp. s. Spiritus et s. Jacobi
+5,2286,s.,sancte,s.,not_expanded,step 3 (mined),"","",not_expanded,wrong_form,not_expanded,s.,sanctus,s.,Nicolao de Albergatis card. s. Crucis qui faciat prout
+5,2286,s.,sancti,s.,not_expanded,step 3 (mined),"","",not_expanded,wrong_form,not_expanded,s.,sanctus,s.,hosp. s. Spiritus et s. Jacobi e. m. d.
 8,547,E.,ecclesie,Ecclesiae,orthographic,step 4 (normalized),"","",wrong_form,wrong_form,wrong_form,Ecclesia,Ecclesia,Ecclesia,mon. s. Egidii R. E. immed. subiecti B. Halberstad.
 9,5702,E.,ecclesie,Ecclesiae,orthographic,step 4 (normalized),"","",wrong_form,wrong_form,wrong_form,Ecclesia,Ecclesia,Ecclesia,can. iuxta morem R. E. dicere valeant 15 mai.
 5,1601,I.,imperii,Imperii,orthographic,step 4 (normalized),"","",wrong_form,wrong_form,wrong_form,Imperium,Imperium,Imperium,ac electore S. R. I. supplic. de indulg. 23
@@ -1119,9 +1119,9 @@ volume,nr_RG,abbreviation,gold,system,verdict,step,candidate_miss,candidates,ver
 2,6133,abb.,abbas,abbati,wrong_form,step 4 (normalized),"","",exact,exact,exact,abbas,abbas,abbas,1402 L 100 260 abb. etc. mon. o. Cist.
 4,2980,abb.,abbatibus,abbati,wrong_form,step 4 (normalized),"","",not_expanded,wrong_form,wrong_form,abb.,abbas,abbas,de rem. plen. pro abb. et monachis supradd. mon.
 4,2980,abb.,abbate,abbati,wrong_form,step 4 (normalized),"","",not_expanded,wrong_form,wrong_form,abb.,abbas,abbas,benedicendi res sacras pro abb. mon. in Wiltzburg o.
-4,3877,abb.,abbas,abbati,wrong_form,step 4 (normalized),"","",exact,exact,exact,abbas,abbas,abbas,Gronhagen abb. etc. mon. s. Nicolai
+4,3877,abb.,abbas,abbati,wrong_form,step 4 (normalized),"","",not_expanded,exact,exact,abb.,abbas,abbas,Gronhagen abb. etc. mon. s. Nicolai
 4,6189,abb.,abbas,abbati,wrong_form,step 4 (normalized),"","",not_expanded,exact,exact,abb.,abbas,abbas,Verden. et Sleswic. et abb. mon. in Dargun o.
-4,14862,abb.,abbatibus,abbati,wrong_form,step 4 (normalized),"","",wrong_form,wrong_form,wrong_form,abbas,abbas,abbas,prep. esu carnium pro abb. etc. o. s. Ben.
+4,14862,abb.,abbatibus,abbati,wrong_form,step 4 (normalized),"","",not_expanded,wrong_form,wrong_form,abb.,abbas,abbas,prep. esu carnium pro abb. etc. o. s. Ben.
 5,6853,abb.,abbate,abbati,wrong_form,step 4 (normalized),"","",wrong_form,wrong_form,wrong_form,abbas,abbas,abbas,mutuum 2000 fl. ab abb. etc. mon. Celle s.
 5,6853,abb.,abbates,abbati,wrong_form,step 4 (normalized),"","",wrong_form,wrong_form,wrong_form,abbas,abbas,abbas,271 31 vs exec. abb. mon. Veteriscelle ac mon.
 9,6302,abb.,abbate,abbatis,wrong_form,step 4 (normalized),"","",wrong_form,wrong_form,wrong_form,abbas,abbas,abbas,C. Nuemburg. dioc. supplic. abb. etc. mon. s. Georgii
@@ -1133,7 +1133,7 @@ volume,nr_RG,abbreviation,gold,system,verdict,step,candidate_miss,candidates,ver
 2,370,aep.,archiepiscopos,archiepiscopo,wrong_form,step 4 (normalized),"","",wrong_form,wrong_form,wrong_form,archiepiscopus,archiepiscopus,archiepiscopus,inter Ludovicum et Adolfum aep. Magunt. facta a Cristiano
 5,1954,aep.,archiepiscopum,archiepiscopo,wrong_form,step 4 (normalized),"","",wrong_form,wrong_form,wrong_form,archiepiscopus,archiepiscopus,archiepiscopus,ad Conradum de Daun aep. Magunt. Theodericum de Moers
 5,1954,aep.,archiepiscopum,archiepiscopo,wrong_form,step 4 (normalized),"","",wrong_form,wrong_form,wrong_form,archiepiscopus,archiepiscopus,archiepiscopus,Magunt. Theodericum de Moers aep. Colon. Fredericum I. marchionem
-9,1746,al.,alia,alias,wrong_form,step 2 (candidates),no,alias; alius,not_expanded,wrong_form,wrong_form,al.,alias,alias,H. Magdeburg. dioc. inter al. referentes quod iuxta statuta
+9,1746,al.,alia,alias,wrong_form,step 3 (mined),"","",not_expanded,wrong_form,wrong_form,al.,alius,alias,H. Magdeburg. dioc. inter al. referentes quod iuxta statuta
 9,2155,al.,aliorum,aliae,wrong_form,step 4 (normalized),"","",not_expanded,wrong_form,wrong_form,al.,alius,alius,Georgii s. Catherine et al. ss. de novo erexerunt
 2,2495,alt.,altari,altare,wrong_form,step 1 (rule),"","",wrong_form,wrong_form,wrong_form,altare,altare,altare,dioc. procons. etc. de alt. port. in castro Rizebutel
 2,2495,alt.,altari,altare,wrong_form,step 1 (rule),"","",wrong_form,wrong_form,wrong_form,altare,altare,altare,dioc. procons. etc. de alt. port. pro turri Nigeo
@@ -1297,7 +1297,7 @@ volume,nr_RG,abbreviation,gold,system,verdict,step,candidate_miss,candidates,ver
 8,4104,com.,comite,comitis,wrong_form,step 4 (normalized),"","",not_expanded,wrong_form,wrong_form,com.,comes,comes,Halberstad. dioc. supplic. Gunthero com. in Manszfelt pres. in
 8,5719,com.,comite,comitis,wrong_form,step 4 (normalized),"","",not_expanded,wrong_form,wrong_form,com.,comes,comes,com. situm supplic. Gunthero com. in Manszfelt pres. in
 8,5719,com.,comitum,comitis,wrong_form,step 4 (normalized),"","",not_expanded,wrong_form,wrong_form,com.,comes,comes,in dominio temporal. dd. com. situm supplic. Gunthero com.
-9,3474,com.,comitum,comites,wrong_form,step 4 (normalized),"","",not_expanded,wrong_form,wrong_form,com.,comes,comes,dioc. in qua dd. com. sepulture existunt 9 ian.
+9,3474,com.,comitum,comites,wrong_form,step 4 (normalized),"","",not_expanded,wrong_word,wrong_form,com.,communis,comes,dioc. in qua dd. com. sepulture existunt 9 ian.
 4,2980,conc.,concessionis,concessio,wrong_form,step 2 (candidates),no,concedere; concessio,not_expanded,wrong_form,wrong_form,conc.,concessio,concessio,159 7 v. ref. conc. ingr. mon. monial. curie
 5,6853,conc.,concessit,concesse,wrong_form,step 4 (normalized),"","",not_expanded,wrong_form,wrong_form,conc.,concedere,concedere,Nicolaus Ziegenbock ep. Misnen. conc. ut sicut cann. prebend.
 5,6853,conc.,concessit,concesse,wrong_form,step 4 (normalized),"","",not_expanded,wrong_form,wrong_form,conc.,concedere,concedere,Nicolaus Ziegenbock ep. Misnen. conc. ut sicut cann. prebend.
@@ -1367,7 +1367,7 @@ volume,nr_RG,abbreviation,gold,system,verdict,step,candidate_miss,candidates,ver
 6,554,d.,dicti,dictae,wrong_form,step 4 (normalized),"","",not_expanded,wrong_form,wrong_form,d.,dictus,dictus,dioc. ad mon. monial. d. op. spect. supplic. Ulrico
 6,568,d.,dictum,dicti,wrong_form,step 4 (normalized),"","",not_expanded,wrong_form,wrong_form,d.,dictus,dictus,ad mon. fund. p. d. marchionem loco Wilchenack Havelberg.
 6,568,d.,dictis,dicte,wrong_form,step 4 (normalized),"","",not_expanded,wrong_form,wrong_form,d.,dictus,dictus,suppressio o. Prem. in d. eccl. cuius persone transferantur
-6,1073,d.,dicte,dicti,wrong_form,step 4 (normalized),"","",not_expanded,wrong_form,wrong_form,d.,dictus,dictus,Margareta ux. ac rect. d. par. eccl. de relax.
+6,1073,d.,dicte,dicti,wrong_form,step 4 (normalized),"","",not_expanded,wrong_word,wrong_form,d.,dominus,dictus,Margareta ux. ac rect. d. par. eccl. de relax.
 8,324,d.,dictos,dicti,wrong_form,step 4 (normalized),"","",not_expanded,wrong_form,wrong_form,d.,dictus,dictus,eccl. s. Stephani intra d. muros cuius eccl. rect.
 8,547,d.,dictum,dicti,wrong_form,step 4 (normalized),"","",not_expanded,wrong_form,wrong_form,d.,dictus,dictus,V. conc. ut extra d. op. ad aliqua iudicia
 8,2974,d.,dictum,dicto,wrong_form,step 4 (normalized),"","",not_expanded,wrong_form,wrong_form,d.,dictus,dictus,eccl. s. Nicolai prope d. mon. conc. ad 20
@@ -1623,7 +1623,7 @@ volume,nr_RG,abbreviation,gold,system,verdict,step,candidate_miss,candidates,ver
 4,3705,hosp.,hospitalia,hospitali,wrong_form,step 4 (normalized),"","",not_expanded,wrong_form,wrong_form,hosp.,hospitale,hospitale,Spiritus op. Razeburg. dioc. hosp. s. Spiritus et s.
 4,14897,hosp.,hospitale,hospitali,wrong_form,step 4 (normalized),"","",not_expanded,exact,exact,hosp.,hospitale,hospitale,Wilsnalk hosp. s. Spiritus ac capella
 4,14897,hosp.,hospitale,hospitali,wrong_form,step 4 (normalized),"","",not_expanded,exact,exact,hosp.,hospitale,hospitale,1426 S 201 248 hosp. s. Spiritus ac capella
-5,2286,hosp.,hospitalibus,hospitali,wrong_form,step 3 (mined),no,hospitali; hospes; hospitii; hospiti; hospitio; hospitale; hospitibus; hospitalaria; hospitalarius; hospitalis,not_expanded,not_expanded,wrong_form,hosp.,hosp.,hospitali,Marie necnon capel. in hosp. s. Spiritus et s.
+5,2286,hosp.,hospitalibus,hospitali,wrong_form,step 3 (mined),no,hospitali; hospes; hospitii; hospiti; hospitio; hospitale; hospitibus; hospitalaria; hospitalarius; hospitalis,not_expanded,wrong_form,wrong_form,hosp.,hospitale,hospitali,Marie necnon capel. in hosp. s. Spiritus et s.
 4,3100,ian.,ianuarii,ianuarius,wrong_form,step 1 (rule),"","",wrong_form,wrong_form,wrong_form,ianuarius,ianuarius,ianuarius,evocando pro subditis 6 ian. 1421 S 150 120
 4,3100,ian.,ianuarii,ianuarius,wrong_form,step 1 (rule),"","",wrong_form,wrong_form,wrong_form,ianuarius,ianuarius,ianuarius,studii Liptzen. conferantur 20 ian. 1421 L 212 135
 4,3705,ian.,ianuarii,ianuarius,wrong_form,step 1 (rule),"","",wrong_form,wrong_form,wrong_form,ianuarius,ianuarius,ianuarius,Margarethe de indulg. 29 ian. 1420 S 138 153
@@ -1676,8 +1676,8 @@ volume,nr_RG,abbreviation,gold,system,verdict,step,candidate_miss,candidates,ver
 8,4732,iur.,iure,iuris,wrong_form,step 1 (rule),"","",wrong_form,wrong_form,wrong_form,iuris,iuris,iuris,Salgast d. dioc. de iur. patron. dom. de Anhalt
 9,1835,iur.,iure,iuris,wrong_form,step 1 (rule),"","",wrong_form,wrong_form,wrong_form,iuris,iuris,iuris,in d. eccl. de iur. patron. laic. 3 m.
 9,1835,iur.,iure,iuris,wrong_form,step 1 (rule),"","",wrong_form,wrong_form,wrong_form,iuris,iuris,iuris,Wysbu Lincopen. dioc. de iur. patron. laic. 4 m.
-9,1835,laic.,laicorum,laici,wrong_form,step 4 (normalized),"","",not_expanded,wrong_form,wrong_form,laic.,laicus,laicus,dioc. de iur. patron. laic. 4 m. arg. vac.
-9,1835,laic.,laicorum,laici,wrong_form,step 4 (normalized),"","",not_expanded,wrong_form,wrong_form,laic.,laicus,laicus,eccl. de iur. patron. laic. 3 m. vacat. p.
+9,1835,laic.,laicorum,laici,wrong_form,step 4 (normalized),"","",not_expanded,wrong_word,wrong_form,laic.,laicalis,laicus,dioc. de iur. patron. laic. 4 m. arg. vac.
+9,1835,laic.,laicorum,laici,wrong_form,step 4 (normalized),"","",not_expanded,wrong_word,wrong_form,laic.,laicalis,laicus,eccl. de iur. patron. laic. 3 m. vacat. p.
 4,6189,lic.,licentie,licentia,wrong_form,step 2 (candidates),no,licentia; licentiatus,not_expanded,wrong_form,wrong_form,lic.,licentia,licentia,67 v. de prorog. lic. retinendi ad aliud decennium
 4,6189,lic.,licentie,licentia,wrong_form,step 2 (candidates),no,licentia; licentiatus,not_expanded,wrong_form,wrong_form,lic.,licentia,licentia,190 v. de prorog. lic. retinendi ad aliud decennium
 7,1083,litig.,litigat,litigans,wrong_form,step 4 (normalized),"","",not_expanded,wrong_form,wrong_form,litig.,litigare,litigare,S 485 238 r. litig. contra quond. Johannem Ghelen
@@ -2086,7 +2086,7 @@ volume,nr_RG,abbreviation,gold,system,verdict,step,candidate_miss,candidates,ver
 9,2155,ss.,sanctorum,sancti,wrong_form,step 1 (rule),"","",wrong_form,wrong_form,wrong_form,sancti,sancti,sancti,in Stalberge in honorem ss. Dionisii et Georgii s.
 9,6104,ss.,sanctorum,sancti,wrong_form,step 1 (rule),"","",wrong_form,wrong_form,wrong_form,sancti,sancti,sancti,Stalberg festum in honorem ss. 10000 mart. instituit indulg.
 3,1990,statut.,statutis,statuto,wrong_form,step 4 (normalized),"","",not_expanded,wrong_form,wrong_form,statut.,statutum,statutum,Halberstad. dioc. n. o. statut. eccl. d. 5 ian.
-3,1990,statut.,statutis,statuto,wrong_form,step 4 (normalized),"","",not_expanded,wrong_form,wrong_form,statut.,statutum,statutum,dioc. de disp. a statut. super resid. 8 nov.
+3,1990,statut.,statutis,statuto,wrong_form,step 4 (normalized),"","",not_expanded,not_expanded,wrong_form,statut.,statut.,statutum,dioc. de disp. a statut. super resid. 8 nov.
 4,6189,succoll.,succollectoris,succollector,wrong_form,step 1 (rule),"","",wrong_form,wrong_form,wrong_form,succollector,succollector,succollector,in favorem Detlevi Suem succoll. instrumentum insertum est 8
 4,14862,suprad.,supradicta,supradictae,wrong_form,step 4 (normalized),"","",wrong_form,wrong_form,wrong_form,supradictus,supradictus,supradictus,d. marchionis conserv. pro suprad. eccl. iure conferendi can.
 5,9465,suprad.,supradictas,supradictis,wrong_form,step 4 (normalized),"","",wrong_form,wrong_form,wrong_form,supradictus,supradictus,supradictus,unam hostiam consecratam apud suprad. hostias transformatas ponere quia
@@ -2319,14 +2319,14 @@ volume,nr_RG,abbreviation,gold,system,verdict,step,candidate_miss,candidates,ver
 4,8386,o.,obstantibus,obstante,wrong_form?,step 2 (candidates),no,obitus; obligatio; obstante; obstantibus; ordo,not_expanded,wrong_form?,wrong_form?,o.,obstante,obstante,Hamburg. Bremen. dioc. n. o. par. eccl. in Welsleue
 4,8386,o.,obstantibus,obstante,wrong_form?,step 2 (candidates),no,obitus; obligatio; obstante; obstantibus; ordo,not_expanded,wrong_form?,wrong_form?,o.,obstante,obstante,o. Johannis Wegerdantz n. o. vicar. in eccl. Magdeburg.
 4,8386,o.,obstantibus,obstante,wrong_form?,step 2 (candidates),no,obitus; obligatio; obstante; obstantibus; ordo,not_expanded,wrong_form?,wrong_form?,o.,obstante,obstante,o. Ludolphi Knust n. o. vicar. eccl. Magdeburg. et
-7,1083,o.,obstante,obstantibus,wrong_form?,step 2 (candidates),no,obitus; obligatio; obstante; obstantibus; ordo,not_expanded,wrong_form?,wrong_form?,o.,obstantibus,obstantibus,de mil. gen. n. o. celleraria eccl. Halberstad. 20
+7,1083,o.,obstante,obstantibus,wrong_form?,step 3 (mined),"","",not_expanded,exact,wrong_form?,o.,obstante,obstantibus,de mil. gen. n. o. celleraria eccl. Halberstad. 20
 2,7601,omn.,omnium,omnes,wrong_form?,step 1 (rule),"","",wrong_form?,wrong_form?,wrong_form?,omnes,omnes,omnes,Brandenburg. dioc. eccl. capella omn. SS. nunc. indulg. 19
 4,1399,omn.,omnium,omnes,wrong_form?,step 1 (rule),"","",wrong_form?,wrong_form?,wrong_form?,omnes,omnes,omnes,Anne Andree ap. ac omn. SS. in capella castri
 4,3100,omn.,omnium,omnes,wrong_form?,step 1 (rule),"","",wrong_form?,wrong_form?,wrong_form?,omnes,omnes,omnes,de conc. iuris patron. omn. can. et preb. ad
 5,7372,ordin.,ordinarii,ordinaria,wrong_form?,step 2 (candidates),no,ordinare; ordinaria; ordinarius,not_expanded,wrong_form?,wrong_form?,ordin.,ordinaria,ordinaria,missam conveniunt ex lic. ordin. erigerunt et dotaverunt copiose
 5,7372,ordin.,ordinarii,ordinaria,wrong_form?,step 2 (candidates),no,ordinare; ordinaria; ordinarius,not_expanded,wrong_form?,wrong_form?,ordin.,ordinaria,ordinaria,missam conveniunt ex lic. ordin. erigerunt et dotaverunt copiose
 9,1835,ordin.,ordinarii,ordinaria,wrong_form?,step 2 (candidates),no,ordinare; ordinaria; ordinarius,not_expanded,wrong_form?,wrong_form?,ordin.,ordinaria,ordinaria,possit Conc. c. consensu ordin. 18 apr. 1465 S
-9,5330,ordin.,ordinaria,ordinarii,wrong_form?,step 3 (mined),no,ordinario; ordinarii; ordinavit; ordines; ordinationem; ordinatione; ordinarius; ordinationes; ordinariis; ordinationum,not_expanded,not_expanded,wrong_form?,ordin.,ordin.,ordinarii,causis eccles. interdicto auct. ordin. suppositum supplic. d. marchione
+9,5330,ordin.,ordinaria,ordinarii,wrong_form?,step 3 (mined),no,ordinario; ordinarii; ordinavit; ordines; ordinationem; ordinatione; ordinarius; ordinationes; ordinariis; ordinationum,not_expanded,exact,wrong_form?,ordin.,ordinaria,ordinarii,causis eccles. interdicto auct. ordin. suppositum supplic. d. marchione
 4,1307,presb.,presbytero,presbiter,wrong_form?,step 1 (rule),"","",wrong_form?,wrong_form?,wrong_form?,presbiter,presbiter,presbiter,p. pro Frederico Clepe presb. plebano in Rosla Magunt.
 4,6189,presb.,presbiterum,presbiter,wrong_form?,step 1 (rule),"","",wrong_form?,wrong_form?,wrong_form?,presbiter,presbiter,presbiter,eo amoto Johannem Wunstorp presb. Lubic. item in dioc.
 4,6189,presb.,presbiterum,presbiter,wrong_form?,step 1 (rule),"","",wrong_form?,wrong_form?,wrong_form?,presbiter,presbiter,presbiter,dioc. qui Conradum Bonow presb. prothon. ad concilium Constant.
@@ -2386,8 +2386,8 @@ volume,nr_RG,abbreviation,gold,system,verdict,step,candidate_miss,candidates,ver
 2,370,Terdon.,Terdonensis,Terdonis,wrong_word,step 3 (mined),yes,Terdonis,not_expanded,not_expanded,wrong_word,Terdon.,Terdon.,Terdonis,Percipiano o. s. Ben. Terdon. dioc. nuntio et Bartholomeo
 2,370,Terdon.,Terdonensis,Terdonis,wrong_word,step 3 (mined),yes,Terdonis,not_expanded,not_expanded,wrong_word,Terdon.,Terdon.,Terdonis,Percipiano o. s. Ben. Terdon. dioc. conc. lic. quod
 2,370,Terdon.,Terdonensis,Terdonis,wrong_word,step 3 (mined),yes,Terdonis,not_expanded,not_expanded,wrong_word,Terdon.,Terdon.,Terdonis,Percipiano o. s. Ben. Terdon. dioc. ad ipsius hosp.
-4,2980,abb.,abbate,abbatissam,wrong_word,step 2 (candidates),no,abbas; abbatissam,not_expanded,wrong_word,wrong_word,abb.,abbatissam,abbatissam,de insigniis pont. pro abb. mon. in Wallerbach o.
-4,2980,abb.,abbate,abbatissam,wrong_word,step 2 (candidates),no,abbas; abbatissam,not_expanded,wrong_word,wrong_word,abb.,abbatissam,abbatissam,de insigniis pont. pro abb. mon. Fontissalutis o. Cist.
+4,2980,abb.,abbate,abbatissam,wrong_word,step 3 (mined),"","",not_expanded,wrong_form,wrong_word,abb.,abbas,abbatissam,de insigniis pont. pro abb. mon. in Wallerbach o.
+4,2980,abb.,abbate,abbatissam,wrong_word,step 3 (mined),"","",not_expanded,wrong_form,wrong_word,abb.,abbas,abbatissam,de insigniis pont. pro abb. mon. Fontissalutis o. Cist.
 4,6189,abbrev.,abbreviatoris,litterarum apostolicarum abbreviator,wrong_word,step 2 (candidates),yes,litterarum apostolicarum abbreviator,not_expanded,wrong_word,wrong_word,abbrev.,litterarum apostolicarum abbreviator,litterarum apostolicarum abbreviator,Krekenborch Creyemberg script. et abbrev. ac p. o. Johannis
 4,14862,absol.,absolvendi,absolutionis,wrong_word,step 4 (normalized),"","",not_expanded,wrong_word,wrong_word,absol.,absolutio,absolutio,Aldenburg Nuemburg. dioc. fac. absol. in casibus reserv. pro
 4,6189,acc.,acceptavit,acceptatio,wrong_word,step 2 (candidates),no,acceptare; acceptatio; acceptus; accipere,not_expanded,wrong_word,wrong_word,acc.,acceptatio,acceptatio,Bardis Zwerin. dioc. quam acc. ad present. Wartislai ducis
@@ -2413,24 +2413,24 @@ volume,nr_RG,abbreviation,gold,system,verdict,step,candidate_miss,candidates,ver
 4,8386,assec.,assecutionem,assecutus,wrong_word,step 2 (candidates),no,assecutio; assecutus,not_expanded,wrong_word,wrong_word,assec.,assecutus,assecutus,Patav. dioc. vac. p. assec. can. et sacerd. preb.
 2,370,assign.,assignandi,assignationis,wrong_word,step 4 (normalized),"","",not_expanded,wrong_word,wrong_word,assign.,assignatio,assignatio,V 315 164 m. assign. pecunias a capitulo exactas
 4,6189,can.,canonicus,canonicatus,wrong_word,step 2 (candidates),no,canonicatus; canonicus; canonissa,not_expanded,wrong_word,wrong_word,can.,canonicatus,canonicatus,presb. de mil. gen. can. et min. preb. Zwerin.
-5,7372,can.,canonicatus,canonicus,wrong_word,step 2 (candidates),no,canonicatus; canonicus; canonissa,not_expanded,wrong_word,wrong_word,can.,canonicus,canonicus,statutis d. eccl. n. can. et preb. p. scolast.
+5,7372,can.,canonicatus,canonicus,wrong_word,step 3 (mined),"","",not_expanded,exact,wrong_word,can.,canonicatus,canonicus,statutis d. eccl. n. can. et preb. p. scolast.
 7,1083,can.,canonicatibus,canonicorum,wrong_word,step 4 (normalized),"","",not_expanded,wrong_word,wrong_word,can.,canonicus,canonicus,Halberstad. et Magdeburg. eccl. can. et preb. 6 et
-7,1083,can.,canonicatu,canonicus,wrong_word,step 2 (candidates),no,canonicatus; canonicus; canonissa,not_expanded,wrong_word,wrong_word,can.,canonicus,canonicus,12 m. arg. ac can. et preb. litig. in
+7,1083,can.,canonicatu,canonicus,wrong_word,step 3 (mined),"","",not_expanded,wrong_form?,wrong_word,can.,canonicatus,canonicus,12 m. arg. ac can. et preb. litig. in
 8,324,cap.,capellanos,capitulo,wrong_word,step 4 (normalized),"","",not_expanded,wrong_word,wrong_word,cap.,capitulum,capitulum,fraternitatem Corp. Cristi p. cap. vic. altaristas et terminarios
-5,885,capit.,capitulum,singuli canonici,wrong_word,step 1 (rule),"","",wrong_word,wrong_word,wrong_word,singuli canonici,singuli canonici,singuli canonici,203 r. dec. et capit. colleg. eccl. s. Blasii
-5,7372,capit.,capitulum,singuli canonici,wrong_word,step 1 (rule),"","",wrong_word,wrong_word,wrong_word,singuli canonici,singuli canonici,singuli canonici,etc. appellaverunt dec. et capit. eccl. N. cui papa
-5,7372,capit.,capitulum,singuli canonici,wrong_word,step 1 (rule),"","",wrong_word,wrong_word,wrong_word,singuli canonici,singuli canonici,singuli canonici,Nuemburg. Nuemburg. dec. et capit. eccl. N. cuius eccl.
-5,7372,capit.,capituli,singulorum canonici,wrong_word,step 4 (normalized),"","",wrong_word,wrong_word,wrong_word,singuli canonici,singuli canonici,singuli canonici,alienationem collationis dec. et capit. predictorum 25 oct. 1435
-5,7372,capit.,capitulum,singuli canonici,wrong_word,step 1 (rule),"","",wrong_word,wrong_word,wrong_word,singuli canonici,singuli canonici,singuli canonici,223 vs. dec. et capit. eccl. N. cuius eccl.
-5,7397,capit.,capitulo,singulis canonici,wrong_word,step 4 (normalized),"","",wrong_word,wrong_word,wrong_word,singuli canonici,singuli canonici,singuli canonici,off. ipsis dec. et capit. reserv. sit conc. quod
-5,7397,capit.,capitulo,singulis canonici,wrong_word,step 4 (normalized),"","",wrong_word,wrong_word,wrong_word,singuli canonici,singuli canonici,singuli canonici,pro ipsis dec. et capit. ut persone habili in
-5,7397,capit.,capitulo,singulis canonici,wrong_word,step 4 (normalized),"","",wrong_word,wrong_word,wrong_word,singuli canonici,singuli canonici,singuli canonici,succentoria ipsis dec. et capit. reserv. sit conc. quod
-5,7397,capit.,capitulum,singuli canonici,wrong_word,step 1 (rule),"","",wrong_word,wrong_word,wrong_word,singuli canonici,singuli canonici,singuli canonici,299 rs. dec. et capit. eccl. O. quib. olim
-5,7397,capit.,capitulum,singuli canonici,wrong_word,step 1 (rule),"","",wrong_word,wrong_word,wrong_word,singuli canonici,singuli canonici,singuli canonici,74 vs. dec. et capit. eccl. O. quib. olim
-5,7397,capit.,capitulo,singulis canonici,wrong_word,step 4 (normalized),"","",wrong_word,wrong_word,wrong_word,singuli canonici,singuli canonici,singuli canonici,luminaribus ipsis dec. et capit. soluta erat nimium diminuti
-5,7397,capit.,capitulum,singuli canonici,wrong_word,step 1 (rule),"","",wrong_word,wrong_word,wrong_word,singuli canonici,singuli canonici,singuli canonici,Osnaburg. dec. et capit. eccl. O. quib. olim
-5,7397,capit.,capitulum,singuli canonici,wrong_word,step 1 (rule),"","",wrong_word,wrong_word,wrong_word,singuli canonici,singuli canonici,singuli canonici,98 r. dec. et capit. eccl. O. quib. olim
-5,7397,capit.,capitulum,singuli canonici,wrong_word,step 1 (rule),"","",wrong_word,wrong_word,wrong_word,singuli canonici,singuli canonici,singuli canonici,299 vs. dec. et capit. eccl. O. quib. olim
+5,885,capit.,capitulum,singuli canonici,wrong_word,step 3 (mined),"","",not_expanded,exact,wrong_word,capit.,capitulum,singuli canonici,203 r. dec. et capit. colleg. eccl. s. Blasii
+5,7372,capit.,capitulum,singuli canonici,wrong_word,step 3 (mined),"","",not_expanded,exact,wrong_word,capit.,capitulum,singuli canonici,etc. appellaverunt dec. et capit. eccl. N. cui papa
+5,7372,capit.,capitulum,singuli canonici,wrong_word,step 3 (mined),"","",not_expanded,exact,wrong_word,capit.,capitulum,singuli canonici,Nuemburg. Nuemburg. dec. et capit. eccl. N. cuius eccl.
+5,7372,capit.,capituli,singulorum canonici,wrong_word,step 4 (normalized),"","",not_expanded,wrong_form,wrong_word,capit.,capitulum,singuli canonici,alienationem collationis dec. et capit. predictorum 25 oct. 1435
+5,7372,capit.,capitulum,singuli canonici,wrong_word,step 3 (mined),"","",not_expanded,exact,wrong_word,capit.,capitulum,singuli canonici,223 vs. dec. et capit. eccl. N. cuius eccl.
+5,7397,capit.,capitulo,singulis canonici,wrong_word,step 4 (normalized),"","",not_expanded,wrong_form,wrong_word,capit.,capitulum,singuli canonici,off. ipsis dec. et capit. reserv. sit conc. quod
+5,7397,capit.,capitulo,singulis canonici,wrong_word,step 4 (normalized),"","",not_expanded,wrong_form,wrong_word,capit.,capitulum,singuli canonici,pro ipsis dec. et capit. ut persone habili in
+5,7397,capit.,capitulo,singulis canonici,wrong_word,step 4 (normalized),"","",not_expanded,wrong_form,wrong_word,capit.,capitulum,singuli canonici,succentoria ipsis dec. et capit. reserv. sit conc. quod
+5,7397,capit.,capitulum,singuli canonici,wrong_word,step 3 (mined),"","",not_expanded,exact,wrong_word,capit.,capitulum,singuli canonici,299 rs. dec. et capit. eccl. O. quib. olim
+5,7397,capit.,capitulum,singuli canonici,wrong_word,step 3 (mined),"","",not_expanded,exact,wrong_word,capit.,capitulum,singuli canonici,74 vs. dec. et capit. eccl. O. quib. olim
+5,7397,capit.,capitulo,singulis canonici,wrong_word,step 4 (normalized),"","",not_expanded,wrong_form,wrong_word,capit.,capitulum,singuli canonici,luminaribus ipsis dec. et capit. soluta erat nimium diminuti
+5,7397,capit.,capitulum,singuli canonici,wrong_word,step 3 (mined),"","",not_expanded,exact,wrong_word,capit.,capitulum,singuli canonici,Osnaburg. dec. et capit. eccl. O. quib. olim
+5,7397,capit.,capitulum,singuli canonici,wrong_word,step 3 (mined),"","",not_expanded,exact,wrong_word,capit.,capitulum,singuli canonici,98 r. dec. et capit. eccl. O. quib. olim
+5,7397,capit.,capitulum,singuli canonici,wrong_word,step 3 (mined),"","",not_expanded,exact,wrong_word,capit.,capitulum,singuli canonici,299 vs. dec. et capit. eccl. O. quib. olim
 5,1954,capitul.,capitulari,capitulo,wrong_word,step 3 (mined),no,capitulari; capitulo; capitularis; capituli; capitula; capitulares; capitulum; capitulorum; capitularem; capitulis,not_expanded,not_expanded,wrong_word,capitul.,capitul.,capitulo,Nuemburg. dioc. cuius mense capitul. 200 m. arg. p.
 4,8386,cass.,cassatum,cassatio,wrong_word,step 2 (candidates),no,cassare; cassatio,not_expanded,wrong_word,wrong_word,cass.,cassatio,cassatio,1421 L 210 3 cass. L 216 265 v.
 4,8386,cass.,cassatum,cassatio,wrong_word,step 2 (candidates),no,cassare; cassatio,not_expanded,wrong_word,wrong_word,cass.,cassatio,cassatio,S 246 52 v cass. quia de anno XII
@@ -2448,7 +2448,7 @@ volume,nr_RG,abbreviation,gold,system,verdict,step,candidate_miss,candidates,ver
 5,7372,conc.,concessum,concessio,wrong_word,step 2 (candidates),no,concedere; concessio,not_expanded,wrong_word,wrong_word,conc.,concessio,concessio,ex falsis causis in conc. si et inquantum ex
 5,7372,conc.,concessum,concessio,wrong_word,step 2 (candidates),no,concedere; concessio,not_expanded,wrong_word,wrong_word,conc.,concessio,concessio,revoc. c. exten. signature conc. si ex falsis causis
 5,7372,conc.,concessum,concessio,wrong_word,step 2 (candidates),no,concedere; concessio,not_expanded,wrong_word,wrong_word,conc.,concessio,concessio,copiose de locis interd. conc. de omn. in forma
-5,7372,conc.,concessit,concessio,wrong_word,step 2 (candidates),no,concedere; concessio,not_expanded,wrong_word,wrong_word,conc.,concessio,concessio,eccl. N. cui papa conc. revoc. cuiusdam unionis can.
+5,7372,conc.,concessit,concessio,wrong_word,step 3 (mined),"","",not_expanded,wrong_form,wrong_word,conc.,concedere,concessio,eccl. N. cui papa conc. revoc. cuiusdam unionis can.
 5,7397,conc.,concessum,concessio,wrong_word,step 2 (candidates),no,concedere; concessio,not_expanded,wrong_word,wrong_word,conc.,concessio,concessio,et capit. reserv. sit conc. quod n. cadat sub
 5,7397,conc.,concessa,concessio,wrong_word,step 2 (candidates),no,concedere; concessio,not_expanded,wrong_word,wrong_word,conc.,concessio,concessio,Angeli diac. card. legati conc. erat de conf. 10
 5,7397,conc.,concessa,concessio,wrong_word,step 2 (candidates),no,concedere; concessio,not_expanded,wrong_word,wrong_word,conc.,concessio,concessio,Angeli diac. card. legati conc. erat qui univerant alt.
@@ -2464,58 +2464,58 @@ volume,nr_RG,abbreviation,gold,system,verdict,step,candidate_miss,candidates,ver
 8,2974,conc.,concessarum,concessio,wrong_word,step 2 (candidates),no,concedere; concessio,not_expanded,wrong_word,wrong_word,conc.,concessio,concessio,Nicolai prope d. mon. conc. ad 20 an. fiat
 9,1835,conc.,concessa,concessio,wrong_word,step 2 (candidates),no,concedere; concessio,not_expanded,wrong_word,wrong_word,conc.,concessio,concessio,eccl. indulg. 7 an. conc. fuit de confic. litt.
 4,2980,conf.,confessorem,confirmationis,wrong_word,step 4 (normalized),"","",not_expanded,wrong_word,wrong_word,conf.,confirmatio,confirmatio,v. de lic. el. conf. pro se et familia
-5,7397,conf.,confirmata,confirmatio,wrong_word,step 2 (candidates),no,confirmare; confirmatio,not_expanded,wrong_word,wrong_word,conf.,confirmatio,confirmatio,que incorp. auct. ordin. conf. est de conf. et
+5,7397,conf.,confirmata,confirmatio,wrong_word,step 3 (mined),"","",not_expanded,wrong_form,wrong_word,conf.,confirmare,confirmatio,que incorp. auct. ordin. conf. est de conf. et
 2,2411,confess.,confessorem,confessionis,wrong_word,step 4 (normalized),"","",not_expanded,wrong_word,wrong_word,confess.,confessio,confessio,90 101 lic. el. confess. 31 mart. 1401 L
 4,2980,confess.,confessionali,confessio,wrong_word,step 2 (candidates),no,confessio; confessionale; confessor,not_expanded,wrong_word,wrong_word,confess.,confessio,confessio,J. et familia de confess. pro J. et conthorali
 4,2980,confess.,confessionali,confessione,wrong_word,step 4 (normalized),"","",not_expanded,wrong_word,wrong_word,confess.,confessio,confessio,S 112 20 de confess. interd. lic. sacram. eucharistie
 4,2980,confess.,confessorem,confessionis,wrong_word,step 4 (normalized),"","",not_expanded,wrong_word,wrong_word,confess.,confessio,confessio,lacticiniis de lic. el. confess. 16 mart. 1430 S
 4,3100,confess.,confessionali,confessio,wrong_word,step 2 (candidates),no,confessio; confessionale; confessor,not_expanded,wrong_word,wrong_word,confess.,confessio,confessio,port. interd. ante diem confess. lacticiniis etiam pro subditis
 4,14862,confess.,confessorem,confessionalis,wrong_word,step 4 (normalized),"","",not_expanded,wrong_word,wrong_word,confess.,confessionale,confessionale,rem. plen. lic. el. confess. alt. port. interd. rem.
-4,14862,confess.,confessionali,confessione,wrong_word,step 4 (normalized),"","",not_expanded,wrong_word,wrong_word,confess.,confessio,confessio,et marchio Misnen. de confess. interd. esu carnium conserv.
-4,14862,confess.,confessionale,confessio,wrong_word,step 2 (candidates),no,confessio; confessionale; confessor,not_expanded,wrong_word,wrong_word,confess.,confessio,confessio,S 141 225 v. confess. 6 oct. 1421 L
+4,14862,confess.,confessionali,confessione,wrong_word,step 4 (normalized),"","",not_expanded,wrong_form,wrong_word,confess.,confessionale,confessio,et marchio Misnen. de confess. interd. esu carnium conserv.
+4,14862,confess.,confessionale,confessio,wrong_word,step 3 (mined),"","",not_expanded,exact,wrong_word,confess.,confessionale,confessio,S 141 225 v. confess. 6 oct. 1421 L
 9,3474,confess.,confessionali,confessione,wrong_word,step 4 (normalized),"","",not_expanded,wrong_word,wrong_word,confess.,confessio,confessio,in Berbey genitor de confess. et de rem. plen.
 9,1835,confic.,conficiendis,conficere,wrong_word,step 2 (candidates),no,conficere; conficiendus,not_expanded,wrong_word,wrong_word,confic.,conficere,conficere,an. conc. fuit de confic. litt. c. clausula quod
 5,885,conserv.,conservatoria,conservando,wrong_word,step 4 (normalized),"","",not_expanded,wrong_word,wrong_word,conserv.,conservare,conservare,et Halberstad. diocc. de conserv. privil. de n. evocando
 5,885,conserv.,conservatoria,conservando,wrong_word,step 4 (normalized),"","",not_expanded,wrong_word,wrong_word,conserv.,conservare,conservare,Ben. Halberstad. dioc. de conserv. 30 iun. 1435 S
 6,5255,conserv.,conservatoriis,conservandae,wrong_word,step 4 (normalized),"","",not_expanded,wrong_word,wrong_word,conserv.,conservare,conservare,supplic. eodem de litt. conserv. 8 mart. 1449 S
-8,4669,conserv.,conservatoria,conservandi,wrong_word,step 4 (normalized),"","",not_expanded,wrong_word,wrong_word,conserv.,conservare,conservare,etc. eccl. N. de conserv. perp. fiat ad 20
+8,4669,conserv.,conservatoria,conservandi,wrong_word,step 4 (normalized),"","",not_expanded,wrong_form?,wrong_word,conserv.,conservator,conservare,etc. eccl. N. de conserv. perp. fiat ad 20
 4,14862,consil.,consiliariis,consiliarios,wrong_word,step 3 (mined),no,consiliarius; consilio; consiliarii; consilium; consiliario; consilii; consiliarium; consilia; consiliariorum; consiliis,not_expanded,not_expanded,wrong_word,consil.,consil.,consiliarios,evocando pro se pro consil. et fam. pro mon.
 3,1990,constit.,constitui,constitutionem,wrong_word,step 4 (normalized),"","",not_expanded,wrong_word,wrong_word,constit.,constitutio,constitutio,in colleg. eccl. fecerat constit. cum par. eccl. s.
 8,4104,cur.,curia,Romanae curiae,wrong_word,step 4 (normalized),"","",wrong_word,wrong_word,wrong_word,Romana curia,Romana curia,Romana curia,in Manszfelt pres. in cur. de indulg. 28 mai.
 8,5719,cur.,curia,Romanae curiae,wrong_word,step 4 (normalized),"","",wrong_word,wrong_word,wrong_word,Romana curia,Romana curia,Romana curia,in Manszfelt pres. in cur. de indulg. nom. et
-3,1990,d.,dicte,datum,wrong_word,step 2 (candidates),no,datum; dictus; dies; dominus,not_expanded,wrong_word,wrong_word,d.,datum,datum,n. o. statut. eccl. d. 5 ian. 1415 L
+3,1990,d.,dicte,datum,wrong_word,step 3 (mined),"","",not_expanded,wrong_form,wrong_word,d.,dictus,datum,n. o. statut. eccl. d. 5 ian. 1415 L
 4,2980,d.,dictum,domino,wrong_word,step 4 (normalized),"","",not_expanded,wrong_word,wrong_word,d.,dominus,dominus,contributionibus ad decennium p. d. F. concessam 23 iun.
-5,1954,d.,dicte,data,wrong_word,step 4 (normalized),"","",not_expanded,wrong_word,wrong_word,d.,datum,datum,Merseburg. approbata de conf. d. incorp. 26 apr. 1432
-5,2286,d.,dictorum,dominorum,wrong_word,step 4 (normalized),"","",not_expanded,wrong_word,wrong_word,d.,dominus,dominus,nequeant de cass. litium d. creditorum et de absol.
-5,2286,d.,dicti,domini,wrong_word,step 4 (normalized),"","",not_expanded,wrong_word,wrong_word,d.,dominus,dominus,iurati scabini et communitas d. op. quod de regno
-5,2286,d.,dicti,domini,wrong_word,step 4 (normalized),"","",not_expanded,wrong_word,wrong_word,d.,dominus,dominus,consules iurati et scabini d. op. magistercivium consules iurati
-5,2286,d.,dicti,domini,wrong_word,step 4 (normalized),"","",not_expanded,wrong_word,wrong_word,d.,dominus,dominus,consules iurati et scabini d. op. de mort. artic.
-5,2286,d.,dicti,domini,wrong_word,step 4 (normalized),"","",not_expanded,wrong_word,wrong_word,d.,dominus,dominus,par. eccl. s. Petri d. op. in festo commemorationis
+5,1954,d.,dicte,data,wrong_word,step 4 (normalized),"","",not_expanded,wrong_form,wrong_word,d.,dictus,datum,Merseburg. approbata de conf. d. incorp. 26 apr. 1432
+5,2286,d.,dictorum,dominorum,wrong_word,step 4 (normalized),"","",not_expanded,wrong_form,wrong_word,d.,dictus,dominus,nequeant de cass. litium d. creditorum et de absol.
+5,2286,d.,dicti,domini,wrong_word,step 4 (normalized),"","",not_expanded,wrong_form,wrong_word,d.,dictus,dominus,iurati scabini et communitas d. op. quod de regno
+5,2286,d.,dicti,domini,wrong_word,step 4 (normalized),"","",not_expanded,wrong_form,wrong_word,d.,dictus,dominus,consules iurati et scabini d. op. magistercivium consules iurati
+5,2286,d.,dicti,domini,wrong_word,step 4 (normalized),"","",not_expanded,wrong_form,wrong_word,d.,dictus,dominus,consules iurati et scabini d. op. de mort. artic.
+5,2286,d.,dicti,domini,wrong_word,step 4 (normalized),"","",not_expanded,wrong_form,wrong_word,d.,dictus,dominus,par. eccl. s. Petri d. op. in festo commemorationis
 6,568,d.,data,domini,wrong_word,step 4 (normalized),"","",not_expanded,wrong_word,wrong_word,d.,dominus,dominus,certarum par. eccl. s. d. febr. 1448 V 388
-6,5322,d.,dicte,dies,wrong_word,step 2 (candidates),no,datum; dictus; dies; dominus,not_expanded,wrong_word,wrong_word,d.,dies,dies,supplic. eodem de exten. d. relax. de uno festo
-3,1990,dec.,decano,decanatus,wrong_word,step 2 (candidates),no,decanatus; decanus; december,not_expanded,wrong_word,wrong_word,dec.,decanatus,decanatus,can. ac Visitationis pro dec. eccl. s. Nicolai in
+6,5322,d.,dicte,dies,wrong_word,step 3 (mined),"","",not_expanded,wrong_form,wrong_word,d.,dictus,dies,supplic. eodem de exten. d. relax. de uno festo
+3,1990,dec.,decano,decanatus,wrong_word,step 3 (mined),"","",not_expanded,wrong_form,wrong_word,dec.,decanus,decanatus,can. ac Visitationis pro dec. eccl. s. Nicolai in
 4,13431,dec.,decanus,decanatus,wrong_word,step 2 (candidates),no,decanatus; decanus; december,not_expanded,wrong_word,wrong_word,dec.,decanatus,decanatus,1418 S 116 122 dec. eccl. s. Nicolai Halberstad.
 4,13431,dec.,decanus,decanatus,wrong_word,step 2 (candidates),no,decanatus; decanus; december,not_expanded,wrong_word,wrong_word,dec.,decanatus,decanatus,1418 S 116 122 dec. eccl. s. Nicolai Halberstad.
 4,13431,dec.,decanus,decanatus,wrong_word,step 2 (candidates),no,decanatus; decanus; december,not_expanded,wrong_word,wrong_word,dec.,decanatus,decanatus,v L 295 232 dec. eccl. s. Nicolai Halberstad.
 4,13431,dec.,decanus,decanatus,wrong_word,step 2 (candidates),no,decanatus; decanus; december,not_expanded,wrong_word,wrong_word,dec.,decanatus,decanatus,1424 S 182 54 dec. eccl. s. Nicolai Halberstad.
 4,13431,dec.,decanus,decanatus,wrong_word,step 2 (candidates),no,decanatus; decanus; december,not_expanded,wrong_word,wrong_word,dec.,decanatus,decanatus,Stendal dec. eccl. s. Nicolai Halberstad.
-5,885,dec.,decanus,decanus capitulum,wrong_word,step 1 (rule),"","",wrong_word,wrong_word,wrong_word,decanus capitulum,decanus capitulum,decanus capitulum,S 309 203 r. dec. et capit. colleg. eccl.
-5,7372,dec.,decanus,decanus capitulum,wrong_word,step 1 (rule),"","",wrong_word,wrong_word,wrong_word,decanus capitulum,decanus capitulum,decanus capitulum,Nuemburg. Nuemburg. dec. et capit. eccl. N.
-5,7372,dec.,decani,decanorum capituli,wrong_word,step 4 (normalized),"","",wrong_word,wrong_word,wrong_word,decanus capitulum,decanus capitulum,decanus capitulum,eccl. et alienationem collationis dec. et capit. predictorum 25
-5,7372,dec.,decanus,decanus capitulum,wrong_word,step 1 (rule),"","",wrong_word,wrong_word,wrong_word,decanus capitulum,decanus capitulum,decanus capitulum,S 312 223 vs. dec. et capit. eccl. N.
-5,7372,dec.,decanus,decanus capitulum,wrong_word,step 1 (rule),"","",wrong_word,wrong_word,wrong_word,decanus capitulum,decanus capitulum,decanus capitulum,ipsi dec. etc. appellaverunt dec. et capit. eccl. N.
-5,7397,dec.,decanus,decanus capitulum,wrong_word,step 1 (rule),"","",wrong_word,wrong_word,wrong_word,decanus capitulum,decanus capitulum,decanus capitulum,T 4 98 r. dec. et capit. eccl. O.
-5,7397,dec.,decanus,decanus capitulum,wrong_word,step 1 (rule),"","",wrong_word,wrong_word,wrong_word,decanus capitulum,decanus capitulum,decanus capitulum,Osnaburg. dec. et capit. eccl. O.
-5,7397,dec.,decanus,decanus capitulum,wrong_word,step 1 (rule),"","",wrong_word,wrong_word,wrong_word,decanus capitulum,decanus capitulum,decanus capitulum,S 303 299 vs. dec. et capit. eccl. O.
-5,7397,dec.,decano,decano capitulo,wrong_word,step 4 (normalized),"","",wrong_word,wrong_word,wrong_word,decanus capitulum,decanus capitulum,decanus capitulum,alt. et off. ipsis dec. et capit. reserv. sit
-5,7397,dec.,decanus,decanus capitulum,wrong_word,step 1 (rule),"","",wrong_word,wrong_word,wrong_word,decanus capitulum,decanus capitulum,decanus capitulum,S 297 74 vs. dec. et capit. eccl. O.
-5,7397,dec.,decano,decano capitulo,wrong_word,step 4 (normalized),"","",wrong_word,wrong_word,wrong_word,decanus capitulum,decanus capitulum,decanus capitulum,alt. et succentoria ipsis dec. et capit. reserv. sit
-5,7397,dec.,decanus,decanus capitulum,wrong_word,step 1 (rule),"","",wrong_word,wrong_word,wrong_word,decanus capitulum,decanus capitulum,decanus capitulum,S 303 299 rs. dec. et capit. eccl. O.
-5,7397,dec.,decano,decano capitulo,wrong_word,step 4 (normalized),"","",wrong_word,wrong_word,wrong_word,decanus capitulum,decanus capitulum,decanus capitulum,novum benef. pro ipsis dec. et capit. ut persone
-5,7397,dec.,decano,decano capitulo,wrong_word,step 4 (normalized),"","",wrong_word,wrong_word,wrong_word,decanus capitulum,decanus capitulum,decanus capitulum,quam in luminaribus ipsis dec. et capit. soluta erat
+5,885,dec.,decanus,decanus capitulum,wrong_word,step 3 (mined),"","",not_expanded,exact,wrong_word,dec.,decanus,decanus capitulum,S 309 203 r. dec. et capit. colleg. eccl.
+5,7372,dec.,decanus,decanus capitulum,wrong_word,step 3 (mined),"","",not_expanded,exact,wrong_word,dec.,decanus,decanus capitulum,Nuemburg. Nuemburg. dec. et capit. eccl. N.
+5,7372,dec.,decani,decanorum capituli,wrong_word,step 4 (normalized),"","",not_expanded,wrong_form,wrong_word,dec.,decanus,decanus capitulum,eccl. et alienationem collationis dec. et capit. predictorum 25
+5,7372,dec.,decanus,decanus capitulum,wrong_word,step 3 (mined),"","",not_expanded,exact,wrong_word,dec.,decanus,decanus capitulum,S 312 223 vs. dec. et capit. eccl. N.
+5,7372,dec.,decanus,decanus capitulum,wrong_word,step 3 (mined),"","",not_expanded,exact,wrong_word,dec.,decanus,decanus capitulum,ipsi dec. etc. appellaverunt dec. et capit. eccl. N.
+5,7397,dec.,decanus,decanus capitulum,wrong_word,step 3 (mined),"","",not_expanded,exact,wrong_word,dec.,decanus,decanus capitulum,T 4 98 r. dec. et capit. eccl. O.
+5,7397,dec.,decanus,decanus capitulum,wrong_word,step 3 (mined),"","",not_expanded,exact,wrong_word,dec.,decanus,decanus capitulum,Osnaburg. dec. et capit. eccl. O.
+5,7397,dec.,decanus,decanus capitulum,wrong_word,step 3 (mined),"","",not_expanded,exact,wrong_word,dec.,decanus,decanus capitulum,S 303 299 vs. dec. et capit. eccl. O.
+5,7397,dec.,decano,decano capitulo,wrong_word,step 4 (normalized),"","",not_expanded,wrong_form,wrong_word,dec.,decanus,decanus capitulum,alt. et off. ipsis dec. et capit. reserv. sit
+5,7397,dec.,decanus,decanus capitulum,wrong_word,step 3 (mined),"","",not_expanded,exact,wrong_word,dec.,decanus,decanus capitulum,S 297 74 vs. dec. et capit. eccl. O.
+5,7397,dec.,decano,decano capitulo,wrong_word,step 4 (normalized),"","",not_expanded,wrong_form,wrong_word,dec.,decanus,decanus capitulum,alt. et succentoria ipsis dec. et capit. reserv. sit
+5,7397,dec.,decanus,decanus capitulum,wrong_word,step 3 (mined),"","",not_expanded,exact,wrong_word,dec.,decanus,decanus capitulum,S 303 299 rs. dec. et capit. eccl. O.
+5,7397,dec.,decano,decano capitulo,wrong_word,step 4 (normalized),"","",not_expanded,wrong_form,wrong_word,dec.,decanus,decanus capitulum,novum benef. pro ipsis dec. et capit. ut persone
+5,7397,dec.,decano,decano capitulo,wrong_word,step 4 (normalized),"","",not_expanded,wrong_form,wrong_word,dec.,decanus,decanus capitulum,quam in luminaribus ipsis dec. et capit. soluta erat
 2,2411,decan.,decanatu,decano,wrong_word,step 3 (mined),no,decanis; decanatui; decano; decani; decanatibus; decanatu; decanus; decantare; decanatum; decanatus,not_expanded,not_expanded,wrong_word,decan.,decan.,decano,lic. fundandi collegium c. decan. et can. apud capellam
 4,6189,dim.,dimisso,dimissio,wrong_word,step 2 (candidates),no,dimissio; dimittere,not_expanded,wrong_word,wrong_word,dim.,dimissio,dimissio,Stolpen. in eccl. Camin. dim. 21 sept. 1424 S
-2,2411,el.,eligendi,electionis,wrong_word,step 4 (normalized),"","",not_expanded,wrong_word,wrong_word,el.,electio,electio,L 90 101 lic. el. confess. 31 mart. 1401
+2,2411,el.,eligendi,electionis,wrong_word,step 4 (normalized),"","",not_expanded,wrong_form,wrong_word,el.,eligere,electio,L 90 101 lic. el. confess. 31 mart. 1401
 4,2980,excom.,excommunicatorum,excommunicationis,wrong_word,step 4 (normalized),"","",not_expanded,wrong_word,wrong_word,excom.,excommunicatio,excommunicatio,celebrandi statim post recessum excom. pro Vetericiv. Brandenburg. 30
 4,2980,excom.,excommunicatorum,excommunicationis,wrong_word,step 4 (normalized),"","",not_expanded,wrong_word,wrong_word,excom.,excommunicatio,excommunicatio,divina resumendi post expulsionem excom. pro consul. etc. Noveciv.
 5,885,exec.,executores,executio,wrong_word,step 2 (candidates),no,executere; executio; executor,not_expanded,wrong_word,wrong_word,exec.,executio,executio,S 323 235 vs exec. abb. mon. ss. Petri
@@ -2543,11 +2543,11 @@ volume,nr_RG,abbreviation,gold,system,verdict,step,candidate_miss,candidates,ver
 9,2155,fr.,fratrum,frater,wrong_word,step 1 (rule),"","",wrong_word,wrong_word,wrong_word,frater,frater,frater,lic. erig. domum o. fr. min. sub regulari observ.
 9,3474,fr.,fratrum,frater,wrong_word,step 1 (rule),"","",wrong_word,wrong_word,wrong_word,frater,frater,frater,Francisci in Barbee o. fr. min. Magdeburg. dioc. in
 2,6177,fund.,fundatum,fundatio,wrong_word,step 2 (candidates),no,fundare; fundatio; fundator,not_expanded,wrong_word,wrong_word,fund.,fundatio,fundatio,bonis d. mon. est fund. 22 mart. 1403 L
-2,6177,fund.,fundata,fundatio,wrong_word,step 2 (candidates),no,fundare; fundatio; fundator,not_expanded,wrong_word,wrong_word,fund.,fundatio,fundatio,dioc. capella s. Georgii fund. a Giselberto Dobberkow decr.
-2,6177,fund.,fundata,fundatio,wrong_word,step 2 (candidates),no,fundare; fundatio; fundator,not_expanded,wrong_word,wrong_word,fund.,fundatio,fundatio,dioc. capella s. Georgii fund. a Giselberto Dobberkow decr.
-5,1954,fund.,fundata,fundatione,wrong_word,step 4 (normalized),"","",not_expanded,wrong_word,wrong_word,fund.,fundatio,fundatio,Misnen. ab eorum progenitoribus fund. conc. de 7 an.
+2,6177,fund.,fundata,fundatio,wrong_word,step 3 (mined),"","",not_expanded,wrong_word,wrong_word,fund.,fundator,fundatio,dioc. capella s. Georgii fund. a Giselberto Dobberkow decr.
+2,6177,fund.,fundata,fundatio,wrong_word,step 3 (mined),"","",not_expanded,wrong_word,wrong_word,fund.,fundator,fundatio,dioc. capella s. Georgii fund. a Giselberto Dobberkow decr.
+5,1954,fund.,fundata,fundatione,wrong_word,step 4 (normalized),"","",not_expanded,wrong_word,wrong_word,fund.,fundator,fundatio,Misnen. ab eorum progenitoribus fund. conc. de 7 an.
 6,568,fund.,fundatum,fundationis,wrong_word,step 4 (normalized),"","",not_expanded,wrong_word,wrong_word,fund.,fundatio,fundatio,Brandenburg. et ad mon. fund. p. d. marchionem loco
-9,597,fund.,fundatum,fundatio,wrong_word,step 2 (candidates),no,fundare; fundatio; fundator,not_expanded,wrong_word,wrong_word,fund.,fundatio,fundatio,progenitorum salute de novo fund. fuit supplic. d. duce
+9,597,fund.,fundatum,fundatio,wrong_word,step 3 (mined),"","",not_expanded,wrong_form,wrong_word,fund.,fundare,fundatio,progenitorum salute de novo fund. fuit supplic. d. duce
 9,2155,fund.,fundavit,fundationem,wrong_word,step 4 (normalized),"","",not_expanded,wrong_word,wrong_word,fund.,fundatio,fundatio,de novo erexit et fund. de indulg. 10 an.
 4,1307,gen.,genere,generalis,wrong_word,step 2 (candidates),no,generalis; genitus; genus,not_expanded,wrong_word,wrong_word,gen.,generalis,generalis,ex utr. de mil. gen. de benef. s. e.
 4,6189,gen.,genere,generalis,wrong_word,step 2 (candidates),no,generalis; genitus; genus,not_expanded,wrong_word,wrong_word,gen.,generalis,generalis,v. presb. de mil. gen. can. et min. preb.
@@ -2581,12 +2581,12 @@ volume,nr_RG,abbreviation,gold,system,verdict,step,candidate_miss,candidates,ver
 5,7397,m.,mandato,manu,wrong_word,step 4 (normalized),"","",not_expanded,wrong_word,wrong_word,m.,manus,manus,s. Johannis O. de m. Juliani de Cesarinis s.
 5,7397,m.,mandato,manu,wrong_word,step 4 (normalized),"","",not_expanded,wrong_word,wrong_word,m.,manus,manus,s. Johannis O. de m. Juliani de Cesarinis s.
 9,2155,mart.,martirum,martius,wrong_word,step 2 (candidates),no,martir; martius,not_expanded,wrong_word,wrong_word,mart.,martius,martius,an. in festo 10000 mart. pro par. eccl. in
-4,6189,mil.,militari,militis,wrong_word,step 4 (normalized),"","",not_expanded,wrong_word,wrong_word,mil.,miles,miles,16 v. presb. de mil. gen. can. et min.
+4,6189,mil.,militari,militis,wrong_word,step 4 (normalized),"","",not_expanded,wrong_form,wrong_word,mil.,militaris,miles,16 v. presb. de mil. gen. can. et min.
 5,8513,ord.,ordinis,ordinarii,wrong_word,step 4 (normalized),"","",not_expanded,wrong_word,wrong_word,ord.,ordinarius,ordinarius,frr. provin. Saxonie d. ord. et proconsulum etc. 18
 7,2487,ord.,ordinis,ordinaria,wrong_word,step 2 (candidates),no,ordinaria; ordinarius; ordo,not_expanded,wrong_word,wrong_word,ord.,ordinaria,ordinaria,mon. monial. in Niendorpe ord. et dioc. predictarum inundasset
 4,8386,p.,per,prebenda,wrong_word,step 2 (candidates),no,parvus; per; prebenda; presbiter; purus,not_expanded,wrong_word,wrong_word,p.,prebenda,prebenda,et sacerd. preb. Colon. p. Hermannum Widelerse cler. n.
 5,7372,p.,per,prebenda,wrong_word,step 2 (candidates),no,parvus; per; prebenda; presbiter; purus,not_expanded,wrong_word,wrong_word,p.,prebenda,prebenda,n. can. et preb. p. scolast. sed scolastr. p.
-7,1083,p.,per,prebende,wrong_word,step 4 (normalized),"","",not_expanded,wrong_word,wrong_word,p.,prebenda,prebenda,6 m. arg. vac. p. assec. prepos. eccl. colleg.
+7,1083,p.,per,prebende,wrong_word,step 4 (normalized),"","",not_expanded,exact,wrong_word,p.,per,prebenda,6 m. arg. vac. p. assec. prepos. eccl. colleg.
 7,1083,par.,parente,parochiali,wrong_word,step 4 (normalized),"","",not_expanded,wrong_word,wrong_word,par.,parochialis,parochialis,d. dioc. ex utr. par. de mil. gen. n.
 7,1083,par.,parente,parochiali,wrong_word,step 4 (normalized),"","",not_expanded,wrong_word,wrong_word,par.,parochialis,parochialis,Halberstad. dioc. ex utr. par. de mil. gen. litig.
 5,885,patron.,patronis,patronatus,wrong_word,step 2 (candidates),no,patronatus; patronus,not_expanded,wrong_word,wrong_word,patron.,patronatus,patronatus,Brunswicen. et Luneborgen. ducibus patron. etiam supplic. de incorp.
@@ -2602,9 +2602,9 @@ volume,nr_RG,abbreviation,gold,system,verdict,step,candidate_miss,candidates,ver
 5,7397,reserv.,reservata,reservatio,wrong_word,step 2 (candidates),no,reservare; reservatio,not_expanded,wrong_word,wrong_word,reserv.,reservatio,reservatio,ipsis dec. et capit. reserv. sit conc. quod n.
 4,6189,s.,sub,sine,wrong_word,step 2 (candidates),no,sanctus; sine; soluta; solutus; sub; super,not_expanded,wrong_word,wrong_word,s.,sine,sine,233 40 de can. s. e. preb. Zwerin. et
 6,568,s.,sine,sancti,wrong_word,step 1 (rule),"","",wrong_word,wrong_word,wrong_word,sancti,sancti,sancti,unionis certarum par. eccl. s. d. febr. 1448 V
-6,5915,s.,sine,sub,wrong_word,step 2 (candidates),no,sanctus; sine; soluta; solutus; sub; super,not_expanded,wrong_word,wrong_word,s.,sub,sub,dioc. relax. 7 an. s. d. 48 V 388
+6,5915,s.,sine,sub,wrong_word,step 3 (mined),"","",not_expanded,exact,wrong_word,s.,sine,sub,dioc. relax. 7 an. s. d. 48 V 388
 7,1083,s.,sacri,sub,wrong_word,step 2 (candidates),yes,sanctus; sine; soluta; solutus; sub; super,not_expanded,wrong_word,wrong_word,s.,sub,sub,I. electoris secr. et s. palatii ap. causarum not.
-8,4669,s.,sine,sub,wrong_word,step 2 (candidates),no,sanctus; sine; soluta; solutus; sub; super,not_expanded,wrong_word,wrong_word,s.,sub,sub,dioc. conf. sent. laudi s. d. I 329 149
+8,4669,s.,sine,sub,wrong_word,step 3 (mined),"","",not_expanded,exact,wrong_word,s.,sine,sub,dioc. conf. sent. laudi s. d. I 329 149
 8,547,scol.,scolares,scolasticus,wrong_word,step 2 (candidates),no,scolaris; scolasticus,not_expanded,wrong_word,wrong_word,scol.,scolasticus,scolasticus,indulg. et conf. quod scol. sec. processiones ac stationes
 4,6189,script.,scriptoris,scriptus,wrong_word,step 2 (candidates),no,scriptor; scriptus,not_expanded,wrong_word,wrong_word,script.,scriptus,scriptus,Lowentkoper et Alberti Kregenberch script. n. o. min. preb.
 4,6189,script.,scriptoris,scriptus,wrong_word,step 2 (candidates),no,scriptor; scriptus,not_expanded,wrong_word,wrong_word,script.,scriptus,scriptus,o. Alberti Krekenborch Creyemberg script. et abbrev. ac p.
@@ -2650,8 +2650,8 @@ volume,nr_RG,abbreviation,gold,system,verdict,step,candidate_miss,candidates,ver
 9,528,supplic.,supplicantibus,supplicatio,wrong_word,step 2 (candidates),yes,supplicare; supplicatio,not_expanded,wrong_word,wrong_word,supplic.,supplicatio,supplicatio,de B. Zwerin. dioc. supplic. Wernero ep. Zwerin. et
 9,597,supplic.,supplicante,supplicatio,wrong_word,step 2 (candidates),yes,supplicare; supplicatio,not_expanded,wrong_word,wrong_word,supplic.,supplicatio,supplicatio,de novo fund. fuit supplic. d. duce de indulg.
 9,597,supplic.,supplicante,supplicatio,wrong_word,step 2 (candidates),yes,supplicare; supplicatio,not_expanded,wrong_word,wrong_word,supplic.,supplicatio,supplicatio,guerras ducum Stetinen. restaurandum supplic. d. duce de indulg.
-9,5330,supplic.,supplicante,supplicat,wrong_word,step 3 (mined),no,supplicio; supplicationum; supplicantis; supplicationem; supplicante; supplicat; supplicantibus; supplicium; supplicatio; supplicavit,not_expanded,not_expanded,wrong_word,supplic.,supplic.,supplicat,interdicto auct. ordin. suppositum supplic. d. marchione de conc.
-9,5330,supplic.,supplicantibus,supplicat,wrong_word,step 3 (mined),no,supplicio; supplicationum; supplicantis; supplicationem; supplicante; supplicat; supplicantibus; supplicium; supplicatio; supplicavit,not_expanded,not_expanded,wrong_word,supplic.,supplic.,supplicat,op. P. Havelberg. dioc. supplic. Friderico marchione Brandenburg. necnon
+9,5330,supplic.,supplicante,supplicat,wrong_word,step 3 (mined),no,supplicio; supplicationum; supplicantis; supplicationem; supplicante; supplicat; supplicantibus; supplicium; supplicatio; supplicavit,not_expanded,wrong_word,wrong_word,supplic.,supplicatio,supplicat,interdicto auct. ordin. suppositum supplic. d. marchione de conc.
+9,5330,supplic.,supplicantibus,supplicat,wrong_word,step 3 (mined),no,supplicio; supplicationum; supplicantis; supplicationem; supplicante; supplicat; supplicantibus; supplicium; supplicatio; supplicavit,not_expanded,wrong_word,wrong_word,supplic.,supplicatio,supplicat,op. P. Havelberg. dioc. supplic. Friderico marchione Brandenburg. necnon
 9,5381,supplic.,supplicante,supplicatio,wrong_word,step 2 (candidates),yes,supplicare; supplicatio,not_expanded,wrong_word,wrong_word,supplic.,supplicatio,supplicatio,in R. Zwerin. dioc. supplic. Ulrico duce Magnopolen. de
 9,5679,supplic.,supplicante,supplicatio,wrong_word,step 2 (candidates),yes,supplicare; supplicatio,not_expanded,wrong_word,wrong_word,supplic.,supplicatio,supplicatio,in S. Havelberg. dioc. supplic. Ulrico duce Magnopolen. de
 9,5684,supplic.,supplicantibus,supplicatio,wrong_word,step 2 (candidates),yes,supplicare; supplicatio,not_expanded,wrong_word,wrong_word,supplic.,supplicatio,supplicatio,in S. Misnen. dioc. supplic. barone ac capitaneis marchionatus
