@@ -1,4 +1,3 @@
-import random
 import re
 import threading
 import time
@@ -11,11 +10,6 @@ from openai import (APIConnectionError, APIError, BadRequestError,
 
 ONE_MINUTE = 60
 CALLS_PER_MINUTE = 15  # what the endpoint allows the key
-
-# How far a retry may fall either side of its wait. Without it the requests
-# that were refused together wait the same time and arrive together again, in
-# waves, and the endpoint refuses them for the same reason as the first time.
-JITTER = 0.25
 
 
 def construct_query(abbreviation):
@@ -417,24 +411,27 @@ def _call_chat_ai_once(client: OpenAI, model: str, system_prompt: str, user_prom
     )
     return chat_completion.model_dump()
 
-def call_chat_ai(client: OpenAI, model: str, system_prompt: str, user_prompt: str, settings: dict | None = None, max_retries: int = 5, retry_wait: float = 5, label: str = ""):
+def call_chat_ai(client: OpenAI, model: str, system_prompt: str, user_prompt: str, settings: dict | None = None, max_retries: int = 5, label: str = ""):
     """
-    One answer from the model, waiting out the errors that are worth waiting out.
+    One answer from the model, asking again after the errors worth asking again.
 
-    The response carries `retries`: how many server errors had to be waited out
-    before it arrived. A step that is slow because the endpoint is overloaded
-    then looks different in the report from one that is slow because the model
-    is, which is not something the wall clock alone can tell.
+    A retry is not held back beyond the next slot: `wait_for_a_slot` already
+    stands between it and the endpoint, so a wait of its own would only be a
+    wait on top of a wait.
+
+    The response carries `retries`: how many server errors were asked past
+    before the answer arrived. A step that is slow because the endpoint is
+    overloaded then looks different in the report from one that is slow because
+    the model is, which is not something the wall clock alone can tell.
 
     `label` names what this call is for -- with several vitae in flight the
     waiting is otherwise anonymous, and one vita being retried five times looks
     exactly like five vitae being retried once.
 
     This is meant to be the only retrying there is: a client that retries on its
-    own does it without a slot and without a word, so the waits below are not
-    the ones actually kept and a run can sit for half an hour with nothing
-    printed. `run_step.connect` builds the client with `max_retries=0` for that
-    reason.
+    own does it without a slot and without a word, so nothing here is what
+    actually happens and a run can sit for half an hour with nothing printed.
+    `run_step.connect` builds the client with `max_retries=0` for that reason.
     """
     for retry in range(max_retries + 1):
         try:
@@ -449,19 +446,19 @@ def call_chat_ai(client: OpenAI, model: str, system_prompt: str, user_prompt: st
                 "-- run it without --thinking/--reasoning-effort."
             ) from e
         except (InternalServerError, RateLimitError, APIConnectionError) as e:
-            # A 500 is worth waiting out; so is a 429, since the endpoint counts
-            # its own rate limit and the decorator above only approximates it;
-            # and so is a request that never came back -- with several vitae in
-            # flight the endpoint queues them, and a read timeout
+            # A 500 is worth another try; so is a 429, since the endpoint
+            # counts its own rate limit and the spacing here only approximates
+            # it; and so is a request that never came back -- with several vitae
+            # in flight the endpoint queues them, and a read timeout
             # (APITimeoutError, an APIConnectionError) says the queue was long,
-            # not that this vita is unanswerable. The wait grows, because all of
-            # these mean the endpoint has more work than it can take, and it is
-            # jittered, so that what was refused together does not come back
-            # together.
+            # not that this vita is unanswerable. Nothing is waited out on top
+            # of that: the retry goes through `wait_for_a_slot` like any other
+            # call, so it cannot land on what the endpoint is already refusing,
+            # and calls refused in the same instant take their slots one after
+            # another rather than counting down the same seconds -- which is
+            # what the growing, jittered wait here used to be for.
             if retry == max_retries:
                 raise
-            waiting = retry_wait * (retry + 1) * random.uniform(1 - JITTER, 1 + JITTER)
             reason = getattr(e, "status_code", None) or type(e).__name__
             print(f"  {label + ': ' if label else ''}server error ({reason}), "
-                  f"retrying in {waiting:.1f}s ({retry + 1}/{max_retries})")
-            time.sleep(waiting)
+                  f"asking again at the next slot ({retry + 1}/{max_retries})")

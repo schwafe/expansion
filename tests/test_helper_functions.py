@@ -319,7 +319,7 @@ class TestTakingTurns:
                     model_dump=lambda: {"choices": [{"message": {"content": "ok"}}]})
 
         client = SimpleNamespace(chat=SimpleNamespace(completions=Endpoint()))
-        call_chat_ai(client, "a-model", "system", "user", retry_wait=0)
+        call_chat_ai(client, "a-model", "system", "user")
         assert len(reached) == 2 and reached[1] - reached[0] >= 0.04
 
     def test_a_quiet_minute_does_not_save_up_turns(self):
@@ -351,7 +351,7 @@ class TestWaitingOutTheEndpoint:
         monkeypatch.setattr(helper_functions.time, "sleep", waits.append)
         try:
             response = call_chat_ai(None, "m", "system", "user", max_retries=max_retries,
-                                    retry_wait=5, label=label)
+                                    label=label)
         finally:
             self.calls, self.waits = len(calls), waits
         return response
@@ -361,24 +361,13 @@ class TestWaitingOutTheEndpoint:
         assert response["retries"] == 1  # and the report can say it happened
         assert self.calls == 2
 
-    def test_the_wait_grows_with_every_failure(self, monkeypatch):
-        # all of these mean the endpoint has more work than it can take, so
-        # asking again at the same pace is the one thing not to do
+    def test_nothing_is_waited_out_beyond_the_next_slot(self, monkeypatch):
+        # the retry goes through wait_for_a_slot like any other call, so a wait
+        # here would only be a wait on top of a wait -- and the spacing already
+        # keeps two calls refused in the same instant from coming back in one
         self.answer(monkeypatch, [APITimeoutError(request=None),
                                   APITimeoutError(request=None)])
-        first, second = self.waits
-        assert 5 * 0.75 <= first <= 5 * 1.25
-        assert 10 * 0.75 <= second <= 10 * 1.25
-        assert second > first  # the jitter is never wide enough to undo the growth
-
-    def test_two_requests_refused_together_do_not_come_back_together(self, monkeypatch):
-        # they were refused in the same instant, so an exact wait would have
-        # them arrive in the same instant too, and be refused again
-        waits = set()
-        for _ in range(10):
-            self.answer(monkeypatch, [APITimeoutError(request=None)])
-            waits.add(self.waits[0])
-        assert len(waits) > 1
+        assert self.waits == []
 
     def test_an_endpoint_that_never_comes_back_is_reported(self, monkeypatch):
         with pytest.raises(APITimeoutError):
@@ -394,8 +383,8 @@ class TestWaitingOutTheEndpoint:
 
     def test_without_a_caller_to_name_the_line_still_reads(self, monkeypatch, capsys):
         self.answer(monkeypatch, [APITimeoutError(request=None)])
-        assert re.search(r"server error \(APITimeoutError\), retrying in \d\.\ds \(1/3\)",
-                         capsys.readouterr().out)
+        assert re.search(r"server error \(APITimeoutError\), asking again at the next "
+                         r"slot \(1/3\)", capsys.readouterr().out)
 
 
 if __name__ == "__main__":

@@ -44,8 +44,8 @@ that is overloaded and a model that cannot keep to the format look the same
 from the outside and want different remedies.
 
 **Waiting.** One answer may take `--timeout` seconds (six minutes by default);
-after that the request is given up on and made again, up to five times, with the
-waits printed as they happen. The SDK would rather wait ten minutes and then try
+after that the request is given up on and made again, up to five times, each
+retry queueing for a slot like any other call and printed as it happens. The SDK would rather wait ten minutes and then try
 twice more of its own accord and say nothing, which is half an hour of silence
 per vita and a retry that skips the rate limit's spacing, so the client is built
 with `max_retries=0` and every retry is made here instead.
