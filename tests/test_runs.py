@@ -127,6 +127,58 @@ class TestManifest:
         assert runs.previous_prompt("gemma", 4) is None
 
 
+class TestLineage:
+    """
+    What a step was built on, when the step numbers no longer say it.
+
+    A run that has produced a step of its own and then takes a later one from
+    another run holds two chains in one manifest, so the chain of a step is
+    followed through the file it recorded reading.
+    """
+
+    def test_a_run_of_its_own_is_the_chain_it_produced(self):
+        produce("gemma", 2)
+        produce("gemma", 3)
+        assert [number for number, _ in runs.lineage("gemma", 3)] == [1, 2, 3]
+
+    def test_it_defaults_to_the_last_step_the_run_reached(self):
+        produce("gemma", 2)
+        produce("gemma", 3)
+        assert runs.lineage("gemma") == runs.lineage("gemma", 3)
+
+    def test_a_step_given_another_run_s_output_is_not_credited_to_its_own(self):
+        produce("gemma", 2)
+        produce("qwen-nothink", 2, model="qwen3.8-27b")
+        produce("qwen-nothink", 3, model="qwen3.8-27b", parent="gemma")
+        # the manifest still lists the run's own step 2, which is a real file
+        assert dict(runs.chain("qwen-nothink"))[2]["run"] == "qwen-nothink"
+        # but step 3 read gemma's, so that is what it was built on
+        behind = dict(runs.lineage("qwen-nothink", 3))
+        assert behind[2]["run"] == "gemma"
+        assert behind[3]["run"] == "qwen-nothink"
+
+    def test_the_run_s_own_step_is_still_its_own_lineage(self):
+        produce("gemma", 2)
+        produce("qwen-nothink", 2, model="qwen3.8-27b")
+        produce("qwen-nothink", 3, model="qwen3.8-27b", parent="gemma")
+        assert dict(runs.lineage("qwen-nothink", 2))[2]["run"] == "qwen-nothink"
+
+    def test_a_step_the_run_has_not_got_has_no_lineage(self):
+        produce("gemma", 2)
+        assert runs.lineage("gemma", 4) == []
+        assert runs.lineage("nothing-here") == []
+
+    def test_a_file_is_traced_back_to_the_step_that_wrote_it(self):
+        produce("gemma", 2)
+        number, entry = runs.produced(runs.output_path("gemma", 2))
+        assert (number, entry["run"]) == (2, "gemma")
+        assert runs.produced(runs.STEP1)[0] == 1
+
+    def test_a_file_no_manifest_claims_is_not_guessed_at(self):
+        assert runs.produced(runs.output_path("gemma", 2)) is None
+        assert runs.produced("data/somewhere/else.csv") is None
+
+
 class TestTheRun:
     """Which run a reader means, when it does not say."""
 

@@ -773,18 +773,21 @@ def produced_by(info: dict) -> list[str]:
     What produced every step of the chain being scored.
 
     A step can come from another run (`run_step.py --from`), so the run a number
-    belongs to is worth stating next to it rather than assumed from the heading.
+    belongs to is worth stating next to it rather than assumed from the heading,
+    and so is the file it read -- a step given another run's output is not built
+    on the step above it in this table, however close the two numbers look.
     """
     lines = ["## What produced this", "",
-             "| step | model | thinking | run | written |",
-             "| --- | --- | --- | --- | --- |"]
+             "| step | model | thinking | run | read | written |",
+             "| --- | --- | --- | --- | --- | --- |"]
     for number, entry in sorted(info["produced_by"].items(), key=lambda item: int(item[0])):
         if entry.get("model") is None:  # step 1 applies rules, no model involved
-            lines.append(f"| step {number} | rule (`expand_simple.py`) | | | |")
+            lines.append(f"| step {number} | rule (`expand_simple.py`) | | | | |")
             continue
         lines.append(
             f"| step {number} | `{entry['model']}` | {describe_settings(entry)} "
-            f"| `{entry.get('run') or ''}` | {entry.get('written') or 'unrecorded'} |"
+            f"| `{entry.get('run') or ''}` | `{entry.get('input') or ''}` "
+            f"| {entry.get('written') or 'unrecorded'} |"
         )
     return lines + [""]
 
@@ -1071,6 +1074,22 @@ def model_cell(entry: dict) -> str:
     return f"`{entry['model']} ({describe_settings(entry)})`"
 
 
+def scored_by_file(scored: list[tuple[str, dict, dict]]) -> dict[str, dict]:
+    """
+    The rates of every step output any of the runs has scored, by its path.
+
+    A step's predecessor can belong to another run, so the number to compare it
+    against is not always in its own summary.
+    """
+    found = {}
+    for _, summary, chain in scored:
+        for number, entry in chain.items():
+            name = STAGE_OF_STEP.get(number)
+            if entry.get("output") and name in summary["stages"]:
+                found[entry["output"]] = summary["stages"][name]
+    return found
+
+
 def step_section(step: int, scored: list[tuple[str, dict, dict]]) -> list[str]:
     """
     One step of every chain that has it, scored on the text that step produced.
@@ -1086,17 +1105,22 @@ def step_section(step: int, scored: list[tuple[str, dict, dict]]) -> list[str]:
     stages mostly measures how much of it is still to do. Step 4 is read by form
     accuracy, which is the only thing it can move.
 
-    `gained` is the rise over the stage before it in that same chain. For step 2
-    every chain starts from the same rule-based text, so the column adds little;
-    for steps 3 and 4, which build on whatever their own step 2 produced, it is
-    the part of the number the step is actually responsible for.
+    `gained` is the rise over the file the step was handed. For step 2 every
+    chain starts from the same rule-based text, so the column adds little; for
+    steps 3 and 4, which build on whatever step 2 they were given, it is the
+    part of the number the step is actually responsible for.
 
     A step that several runs share -- one run took it from another with `--from`
     -- is one row, under the run that produced it: the file, and so the score,
     is the same one.
+
+    The models named are those that produced the file this step was given, which
+    after a `--from` is not the run's own earlier step (`runs.lineage`), and
+    `gained` is measured against that same file wherever it was scored.
     """
     stage, before = STAGE_OF_STEP[step], STAGE_OF_STEP[step - 1]
     measure = "form" if step == 4 else "word"
+    by_file = scored_by_file(scored)
     rows, seen = [], set()
     for name, summary, chain in scored:
         if stage not in summary["stages"] or step not in chain:
@@ -1105,10 +1129,13 @@ def step_section(step: int, scored: list[tuple[str, dict, dict]]) -> list[str]:
         if produced in seen:
             continue
         seen.add(produced)
-        reached, previously = summary["stages"][stage], summary["stages"][before]
+        behind = dict(runs.lineage(name, step))
+        reached = summary["stages"][stage]
+        previously = by_file.get(chain[step].get("input")) or summary["stages"][before]
         rows.append({
             "run": chain[step].get("run") or name,
-            "models": [model_cell(chain[number]) for number in range(2, step + 1)],
+            "models": [model_cell(behind.get(number) or chain[number])
+                       for number in range(2, step + 1)],
             "word": reached["word_accuracy"],
             "form": reached["form_accuracy"],
             "gained": reached[f"{measure}_accuracy"] - previously[f"{measure}_accuracy"],
@@ -1127,7 +1154,8 @@ def step_section(step: int, scored: list[tuple[str, dict, dict]]) -> list[str]:
         f"Every chain that has a step {step}, scored on the text it produced -- so the "
         f"rows are comparable whatever the runs did afterwards. Sorted by "
         f"{measure} accuracy, which asks {said}; `gained` is the rise over "
-        f"{LABELS[before]} in the same chain.",
+        f"{LABELS[before]} as this step was handed it -- which after a `--from` "
+        f"is another run's file, and is named in the column for that step.",
         "",
         f"| produced by | {columns} | word accuracy | form accuracy | gained | scoreable |",
         "| --- | " + "--- | " * (step - 1) + "---: | ---: | ---: | ---: |",
@@ -1145,7 +1173,9 @@ def compare(gold_path: Path, names: list[str]) -> str:
 
     The rates are those of the last stage a run has reached, so a chain that
     stops at step 2 is listed with what it did reach rather than left out --
-    the stage is named in its own column so the rows stay comparable. What that
+    the stage is named in its own column so the rows stay comparable. The models
+    named are the chain behind that last stage (`runs.lineage`), which after a
+    `--from` need not be every step the run has in its directory. What that
     table cannot answer is which model to give a single step to, since it scores
     the runs at different stages; the sections after it do, one per step.
     """
@@ -1154,10 +1184,11 @@ def compare(gold_path: Path, names: list[str]) -> str:
     rows = []
     for name, summary, steps in scored:
         final = summary["stages"][summary["final_stage"]]
+        behind = dict(runs.lineage(name))
         rows.append({
             "run": name,
-            "models": [f"{steps[number]['model']} ({describe_settings(steps[number])})"
-                       if number in steps else "" for number in (2, 3, 4)],
+            "models": [f"{behind[number]['model']} ({describe_settings(behind[number])})"
+                       if number in behind else "" for number in (2, 3, 4)],
             "final": LABELS[summary["final_stage"]],
             "word": final["word_accuracy"],
             "form": final["form_accuracy"],

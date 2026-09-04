@@ -24,6 +24,11 @@ the earlier links:
 
 Step 1 is rule-based and the same for every run, so it stays at `data/step1.csv`
 and is only recorded as the first link of every chain.
+
+A run that has a step of its own and then takes a later one from elsewhere holds
+two chains rather than one, and its step numbers no longer say what was built on
+what. Every entry records the file it read, so `lineage` follows that backwards
+instead -- use it, not `chain`, wherever what produced a step is the question.
 """
 
 import json
@@ -172,9 +177,50 @@ def the_run(name: str | None) -> str:
 
 
 def chain(run: str) -> list[tuple[int, dict]]:
-    """The steps of a run in order, each with what produced it."""
+    """Every step a run's manifest lists, in order, each with what produced it."""
     steps = read_manifest(run)["steps"]
     return [(int(number), steps[number]) for number in sorted(steps, key=int)]
+
+
+def produced(path: str | Path) -> tuple[int, dict] | None:
+    """The step and the manifest entry that wrote a file, whichever run that was."""
+    path = Path(path)
+    if path == STEP1:
+        return 1, step1_entry()
+    if path.parent.parent != RUNS_DIR:
+        return None
+    for number, entry in read_manifest(path.parent.name)["steps"].items():
+        if entry.get("output") and Path(entry["output"]) == path:
+            return int(number), entry
+    return None
+
+
+def lineage(run: str, step: int | None = None) -> list[tuple[int, dict]]:
+    """
+    What actually produced a step: its own entry, and every file behind it.
+
+    Not the same as `chain`. A manifest lists everything a run has produced, and
+    after a `--from` that need not be one chain: a run can have a step 2 of its
+    own and a step 3 that read another run's, and then the step number a step
+    carries no longer says what it was built on. So the chain of a step is
+    followed backwards through the file each step recorded reading, which is
+    what it was really given. `step` defaults to the last one the run reached.
+    """
+    steps = read_manifest(run)["steps"]
+    if step is None:
+        step = max((int(number) for number in steps), default=0)
+    if str(step) not in steps:
+        return []
+    number, entry = step, steps[str(step)]
+    found, seen = [(number, entry)], {entry.get("output")}
+    while entry.get("input") and entry["input"] not in seen:
+        seen.add(entry["input"])
+        behind = produced(entry["input"])
+        if behind is None:  # written by a run whose manifest is gone
+            break
+        number, entry = behind
+        found.append((number, entry))
+    return sorted(found, key=lambda item: item[0])
 
 
 def previous_prompt(run: str, step: int) -> str | None:

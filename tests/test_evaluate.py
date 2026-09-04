@@ -419,6 +419,13 @@ class TestStepSections:
     that stopped there.
     """
 
+    @pytest.fixture(autouse=True)
+    def a_temporary_runs_dir(self, tmp_path, monkeypatch):
+        """The chain behind a step is read from the manifests, so keep them here."""
+        monkeypatch.setattr(runs, "RUNS_DIR", tmp_path / "runs")
+        monkeypatch.setattr(runs, "STEP1", tmp_path / "step1.csv")
+        runs.STEP1.write_text("volume,nr_RG\n", encoding="utf-8")
+
     def scored(self, name, chain, **stages):
         """One run: what its stages scored, and which model did which step."""
         summary = {"stages": {stage: {"word_accuracy": word, "form_accuracy": form,
@@ -478,6 +485,51 @@ class TestStepSections:
         rendered = "\n".join(step_section(2, scored))
         assert rendered.count("gemma-4-31b-it") == 1
         assert "qwen-on-gemma" not in rendered
+
+    def record(self, run, step, model, parent=None):
+        """A step's worth of manifest, so the chain behind it can be followed."""
+        source, inherited = runs.resolve_input(run, step, parent)
+        runs.record(run, step, inherited, model=model, thinking=False,
+                    reasoning_effort=None, input=str(source),
+                    output=str(runs.output_path(run, step)))
+
+    def a_run_that_took_its_step_2_from_another(self):
+        """
+        qwen ran step 2 itself, then ran step 3 on gemma's step 2 instead.
+
+        Its manifest holds both, so the step numbers alone would credit step 3
+        with the step 2 it did not read.
+        """
+        self.record("gemma", 2, "gemma-4-31b-it")
+        self.record("qwen-nothink", 2, "qwen3.8-27b")
+        self.record("qwen-nothink", 3, "qwen3.8-27b", parent="gemma")
+        return [
+            self.as_recorded("gemma", once=(0.60, 0.30), twice=(0.89, 0.44)),
+            self.as_recorded("qwen-nothink",
+                             once=(0.60, 0.30), twice=(0.87, 0.43), thrice=(0.92, 0.46)),
+        ]
+
+    def as_recorded(self, name, **stages):
+        """One scored run, its chain read back from the manifest it wrote."""
+        summary = {"stages": {stage: {"word_accuracy": word, "form_accuracy": form,
+                                      "scoreable": 100}
+                              for stage, (word, form) in stages.items()}}
+        return (name, summary, dict(runs.chain(name)))
+
+    def test_a_step_names_the_models_behind_the_file_it_read(self):
+        rendered = "\n".join(step_section(3, self.a_run_that_took_its_step_2_from_another()))
+        row = [line for line in rendered.splitlines() if "qwen3.8-27b" in line][0]
+        assert "gemma-4-31b-it" in row  # step 2 was gemma's, not this run's own
+
+    def test_what_a_step_gained_is_measured_against_the_file_it_read(self):
+        rendered = "\n".join(step_section(3, self.a_run_that_took_its_step_2_from_another()))
+        assert "+3.0pp" in rendered  # 0.92 over gemma's 0.89, not over its own 0.87
+        assert "+5.0pp" not in rendered
+
+    def test_the_run_s_own_step_is_still_scored_at_its_own_step(self):
+        # it is a real file and a real model at step 2, whatever step 3 read
+        rendered = "\n".join(step_section(2, self.a_run_that_took_its_step_2_from_another()))
+        assert "qwen3.8-27b" in rendered and "+27.0pp" in rendered
 
 
 class TestDescribeSettings:
