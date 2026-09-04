@@ -51,13 +51,12 @@ The substitution uses `multiple_choice.occurrence_pattern`, the same pattern ste
 The three passes differ only in what they ask the model and what they let it answer. The loop around them is the same and lives in `run_step.py`: read the output of the previous step, take one vita at a time, mark the occurrences in the text, ask the model, substitute its answer programmatically, record what happened.
 
 ```bash
-python run_step.py 2                       # the whole subset
-python run_step.py 3 --limit 5             # a trial run, writes no output
-python run_step.py 4 --resume              # continue an interrupted run
-python run_step.py 2 --model qwen3.8-27b --no-thinking
+python run_step.py 2 --no-thinking              # the whole subset
+python run_step.py 3 --no-thinking --limit 5    # a trial run, writes no output
+python run_step.py 4 --no-thinking --resume     # continue an interrupted run
 python run_step.py 2 --model qwen3.8-27b --reasoning-effort low
-python run_step.py 4 --model qwen3.8-27b --from gemma-4-31b-it   # only step 4 anew
-python run_step.py 2 --workers 5           # five vitae in flight at once
+python run_step.py 4 --model qwen3.8-27b --no-thinking --from gemma-4-31b-it   # only step 4 anew
+python run_step.py 2 --no-thinking --workers 5  # five vitae in flight at once
 ```
 
 **Runs.** A step is worth running with several models, and the interesting comparisons mix them — one model for the choices, another for the grammar — so the output of a step is not one file but one per run:
@@ -85,7 +84,9 @@ The layout lives in `runs.py`, which is what `run_step.py`, `evaluate.py` and `t
 
 **The model never rewrites the text.** Each occurrence is marked as `[[id|abbreviation]]` and the model returns only a JSON object mapping id to its answer; the substitution happens in code. That replaced an earlier full-text rewrite which corrupted words it should not have touched (`Halberstad.` → `Halhalstad.`), silently expanded abbreviations it had no business expanding, and needed a fragile token diff to validate. Everything the model may change is decided before the call and checked after it, so a bad answer can only leave the text as it was: step 2 accepts only a candidate from the list it offered, step 3 only an expansion that continues the letters of the abbreviation, step 4 only a form from the word's own paradigm.
 
-**Thinking.** The reasoning models think by default, which on a whole vita can take minutes per call — and there is not much for them to reason about, since every step is a choice from a list the code has already narrowed down. `--no-thinking` turns it off, `--reasoning-effort` sets how much of it there is (and turns it on by itself); passing neither leaves the model at its own default. What a run used is recorded in the dump and the report next to the model name, so a run can be told apart from one with the same model and a different setting.
+**Thinking.** The reasoning models think by default, which on a whole vita can take minutes per call — and there is not much for them to reason about, since every step is a choice from a list the code has already narrowed down. `--no-thinking` turns it off, `--reasoning-effort` sets how much of it there is (and turns it on by itself), and **one of the two has to be given**: what a model does when it is not told is written down nowhere, and the deployment may change it between two runs that would then read alike. What a run used is recorded in the dump and the report next to the model name, so a run can be told apart from one with the same model and a different setting.
+
+The price of that is that a model with no entry in the table below cannot be run until it gets one — which is the point: the entry is what makes the setting arrive in the shape that model understands.
 
 Every family wants this asked differently, and **ignores what it does not know without a word**: the settings are mostly not API parameters but variables of the model's chat template (`extra_body={"chat_template_kwargs": ...}`), and a template that does not use the variable renders exactly the prompt it would have rendered anyway — the request is valid, the model answers as usual, and nothing in the response says the setting was dropped. `helper_functions.STYLES` therefore holds one entry per family, taken from the model cards:
 
@@ -104,7 +105,7 @@ The entries were checked against the endpoint by asking one small arithmetic que
 **The model's name.** It is checked against the list the endpoint publishes before anything is loaded, because a name the endpoint does not know is not refused once but once per vita — every one of them is answered with a 404 and left for `--resume`, which reads like a bad day at the endpoint rather than like a typo. The list is short enough to print, and the name that was meant is usually in it:
 
 ```
-$ python run_step.py 2 --model gpt-oss-120b123123
+$ python run_step.py 2 --model gpt-oss-120b123123 --no-thinking
 https://chat-ai.academiccloud.de/v1/ has no model 'gpt-oss-120b123123'. It has:
   apertus-70b-instruct-2509
   deepseek-v4-flash-0731

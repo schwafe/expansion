@@ -44,18 +44,20 @@ CSV and the JSON dump are written only once every vita is done -- an
 interrupted run never overwrites a complete output with a partial one.
 
 Usage:
-    python run_step.py 2                       # the whole subset
-    python run_step.py 3 --limit 5             # a trial run, writes no output
-    python run_step.py 4 --resume              # continue an interrupted run
+    python run_step.py 2 --no-thinking             # the whole subset
+    python run_step.py 3 --no-thinking --limit 5   # a trial run, writes no output
+    python run_step.py 4 --no-thinking --resume    # continue an interrupted run
     python run_step.py 2 --model gemma-4-31b-it --no-thinking
     python run_step.py 2 --model qwen3.8-27b --reasoning-effort low
-    python run_step.py 4 --model qwen3.8-27b --from gemma-4-31b-it
-    python run_step.py 2 --workers 5           # five vitae in flight at once
+    python run_step.py 4 --model qwen3.8-27b --no-thinking --from gemma-4-31b-it
+    python run_step.py 2 --no-thinking --workers 5  # five vitae in flight at once
 
 **Thinking.** The reasoning models think by default, which on a whole vita can
 take minutes per call and rarely changes the answer, since every step is a
 choice from a list. `--no-thinking` turns it off, `--reasoning-effort` sets how
-much of it there is; passing neither leaves the model at its default. Every
+much of it there is, and one of the two has to be given: what a model does when
+it is not told is the deployment's to change, so a run that left it at that
+would not say what it did. Every
 family takes these differently and ignores what it does not know without a
 word, so the request is built from the table in `helper_functions.STYLES` and
 anything the model cannot do is refused before the run starts -- as is a model
@@ -944,11 +946,13 @@ def main() -> None:
     parser.add_argument("--resume", action="store_true",
                         help="continue the run in the checkpoint instead of starting over")
     parser.add_argument("--thinking", action=argparse.BooleanOptionalAction, default=None,
-                        help="switch the model's thinking on or off "
-                             "(default: leave it at the model's own default)")
+                        help="switch the model's thinking on or off; one of this and "
+                             "--reasoning-effort is required, so that what a run did is "
+                             "recorded rather than left to the model")
     parser.add_argument("--reasoning-effort",
-                        help="how much the model may think; implies --thinking. The levels "
-                             f"differ per model -- {known_efforts()}")
+                        help="how much the model may think; implies --thinking, and stands "
+                             "in for it. The levels differ per model -- "
+                             f"{known_efforts()}")
     parser.add_argument("--run", help="the run to write into (default: the model and its "
                                       "settings, e.g. gemma-4-31b-it-nothink)")
     parser.add_argument("--from", dest="parent",
@@ -964,11 +968,19 @@ def main() -> None:
     arguments = parser.parse_args()
     if arguments.workers < 1:
         raise SystemExit("--workers takes at least 1")
+    if arguments.thinking is None and arguments.reasoning_effort is None:
+        # what the model does when it is not told is nowhere in the run: the
+        # deployment may change it between two runs and both would read alike
+        raise SystemExit(
+            "say what the model is to do with its thinking: --no-thinking, --thinking or "
+            f"--reasoning-effort ({known_efforts()}). Left at the model's own default it "
+            "is not recorded anywhere and can change under the run."
+        )
 
     client = connect()
-    try:  # what this model cannot do, and what it is not, before anything is loaded
+    try:  # what this model is not, and what it cannot do, before anything is loaded
+        check_the_model(client, arguments.model)  # first: a typo has no thinking style either
         thinking_kwargs(arguments.model, arguments.thinking, arguments.reasoning_effort)
-        check_the_model(client, arguments.model)
     except ValueError as error:
         raise SystemExit(str(error))
 

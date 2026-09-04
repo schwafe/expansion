@@ -166,7 +166,8 @@ def the_run(name: str | None) -> str:
     if len(available) == 1:
         return available[0]
     if not available:
-        raise LookupError(f"no run in {RUNS_DIR} yet -- run `python run_step.py 2` first")
+        raise LookupError(f"no run in {RUNS_DIR} yet -- "
+                          "run `python run_step.py 2 --no-thinking` first")
     raise LookupError("several runs, so which one? " + ", ".join(available))
 
 
