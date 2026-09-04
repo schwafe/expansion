@@ -26,7 +26,8 @@ what is in `data/runs/<run>/manifest.json`; `runs.py` holds the layout.
 
 **Stopping.** Ctrl+C stops the submitting and waits for the calls that are
 already out -- they are paid for either way. Ctrl+C a second time abandons them
-and leaves at once; `--resume` asks for them again.
+and leaves at once, writing what has been answered but not yet checkpointed
+before it goes; `--resume` asks for the abandoned calls again.
 
 **Workers.** The vitae are independent, so `--workers N` has several of them in
 flight at once. The threads share the process's rate limit rather than
@@ -622,15 +623,31 @@ def start_checkpoint(path: Path, head: dict) -> None:
 
 
 def append_checkpoint(path: Path, entries: list[dict]) -> None:
-    """Append and flush, so an interruption loses at most the last batch."""
+    """
+    Append and fsync, so an interruption loses at most the last batch.
+
+    The lines go out in a single `os.write` on a file opened for appending,
+    rather than through a buffered file object, because this can be entered
+    twice over: the handler for the second Ctrl+C writes what is buffered
+    before it leaves, and it may take the main thread in the middle of this
+    very call. A Python signal handler runs between two bytecodes and never
+    inside a system call, so a write the kernel takes in one go -- which is
+    what a regular file does -- cannot be cut in half by one. The worst a
+    second run can do is write the same lines again, and a checkpoint is read
+    by vita, not by line, so a repeated line costs nothing.
+    """
     if not entries:
         return
     path.parent.mkdir(parents=True, exist_ok=True)
-    with open(path, "a", encoding="utf-8") as file:
-        for entry in entries:
-            file.write(json.dumps(entry, ensure_ascii=False) + "\n")
-        file.flush()
-        os.fsync(file.fileno())
+    data = "".join(json.dumps(entry, ensure_ascii=False) + "\n"
+                   for entry in entries).encode("utf-8")
+    file = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_APPEND, 0o644)
+    try:
+        while data:
+            data = data[os.write(file, data):]
+        os.fsync(file)
+    finally:
+        os.close(file)
 
 
 # --------------------------------------------------------------------------
@@ -665,8 +682,9 @@ def stop_now(message: str) -> None:
 
     Asking politely is not enough: the threads of a pool are joined when the
     interpreter exits, so a run waiting on an answer that takes a quarter of an
-    hour cannot be left before it arrives. Everything that was answered is on
-    disk by the time this is called -- what is abandoned is the calls
+    hour cannot be left before it arrives. `os._exit` runs nothing on the way
+    out -- no `finally`, no buffer flushed -- so whatever called this has to
+    have put the answers on disk first; what is abandoned is the calls
     themselves, which `--resume` asks for again.
     """
     print(message, flush=True)
@@ -762,7 +780,17 @@ def run_batch(run: Run, done: dict, checkpoint: Path, every: int, limit: int | N
               + (f" -- {errors} error(s)" if errors else ""))
 
     def leave_at_once(number: int, frame) -> None:
-        """The second Ctrl+C, taken as it is meant: now, not when the calls come back."""
+        """
+        The second Ctrl+C, taken as it is meant: now, not when the calls come back.
+
+        The answers harvested since the last write are still only in `buffered`
+        -- ten of them at the default -- and `stop_now` leaves by a door that
+        runs no `finally`, so they are written here or not at all. It is what
+        the message that follows promises, and it is the whole difference
+        between abandoning the calls that are out and abandoning the answers
+        that were already paid for.
+        """
+        flush()
         stop_now(f"\nstopped -- {len(done)} vitae are in {checkpoint}; the calls still "
                  "out are abandoned and will be asked for again by "
                  f"`python run_step.py {run.step.number} --run {run.name} --resume`")

@@ -183,6 +183,17 @@ class TestCheckpoint:
         assert set(done) == {(2, 370), (3, 12)}
         assert done[(3, 12)]["record"] == {"x": 1}
 
+    def test_the_same_vita_written_twice_reads_back_once(self, tmp_path):
+        # the handler for the second Ctrl+C may write what a flush of the main
+        # thread was in the middle of writing, so a repeated line has to be
+        # nothing worse than a repeated line
+        path = tmp_path / "step2.jsonl"
+        entry = {"volume": 2, "nr_RG": 370, "text": "t", "record": None}
+        append_checkpoint(path, [entry])
+        append_checkpoint(path, [entry])
+        assert len(path.read_text().splitlines()) == 2
+        assert list(read_checkpoint(path)) == [(2, 370)]
+
     def test_a_missing_checkpoint_is_an_empty_run(self, tmp_path):
         assert read_checkpoint(tmp_path / "nothing.jsonl") == {}
 
@@ -317,8 +328,11 @@ class TestWhenTheEndpointGivesUp:
         stopped = []
 
         def stop(message):
-            stopped.append(message)
-            raise SystemExit(message)  # the real one does not come back either
+            # what the real one does is os._exit, which runs no finally and
+            # flushes no buffer: whatever is not on disk by now is lost, so the
+            # checkpoint is read here rather than after the batch returns
+            stopped.append((message, set(read_checkpoint(path))))
+            raise SystemExit(message)
 
         class AskedAgain(ThreadPoolExecutor):
             """Ctrl+C a second time, while the vitae in flight are waited for."""
@@ -338,8 +352,39 @@ class TestWhenTheEndpointGivesUp:
 
         with pytest.raises(SystemExit):
             run_batch(make_run(process), {}, path, every=10, limit=None)
-        assert stopped and "--resume" in stopped[0]
-        assert (2, 370) in read_checkpoint(path)  # what was answered is still written
+        assert stopped
+        message, written = stopped[0]
+        assert "--resume" in message
+        assert (2, 370) in written  # what was answered is on disk before we go
+
+    def test_what_is_answered_but_not_yet_written_goes_out_first(self, tmp_path, monkeypatch):
+        # every=10 with six vitae to do means nothing has been written yet when
+        # the second Ctrl+C arrives, and os._exit would take the lot with it --
+        # the message says how many are in the checkpoint, and it has to be true
+        path = tmp_path / "step2.jsonl"
+        stopped = []
+
+        def stop(message):
+            stopped.append((message, read_checkpoint(path)))
+            raise SystemExit(message)
+
+        monkeypatch.setattr(run_step, "stop_now", stop)
+
+        def process(volume, nr):
+            if (volume, nr) == (3, 12):  # the last of the three, so two are answered
+                os.kill(os.getpid(), signal.SIGINT)
+                time.sleep(0.05)
+                os.kill(os.getpid(), signal.SIGINT)
+                time.sleep(0.5)
+            return {"text": "t", "record": {"errors": []}}
+
+        with pytest.raises(SystemExit):
+            run_batch(make_run(process), {}, path, every=10, limit=None)
+        message, written = stopped[0]
+        assert written  # the answers of a batch that never reached its first flush
+        # how many of them there are depends on where the interruption landed;
+        # what must hold is that the number in the message is the number on disk
+        assert f"\nstopped -- {len(written)} vitae are in " in message
 
     def test_a_line_cut_short_by_the_leaving_is_left_out(self, tmp_path, capsys):
         # leaving at once can take the process mid-line, and one half-written
