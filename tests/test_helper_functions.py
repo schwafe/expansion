@@ -11,15 +11,17 @@ and which failures of the endpoint are worth another try.
 """
 
 import re
+from types import SimpleNamespace
 
 import polars as pl
 import pytest
-from openai import APITimeoutError
+from openai import APIError, APITimeoutError
 
 import helper_functions
 from helper_functions import (
     VITA_SCHEMA,
     call_chat_ai,
+    check_the_model,
     text_to_vita_df,
     thinking_kwargs,
     vita_df_to_text,
@@ -155,6 +157,50 @@ class TestThinkingKwargs:
 
     def test_an_unknown_model_without_a_setting_is_left_alone(self):
         assert thinking_kwargs("apertus-70b-instruct-2509") == {}
+
+
+def an_endpoint(*models, fails: Exception | None = None):
+    """A client that lists these models, or fails to list anything."""
+    def listing():
+        if fails is not None:
+            raise fails
+        return SimpleNamespace(data=[SimpleNamespace(id=model) for model in models])
+
+    return SimpleNamespace(base_url="https://endpoint/v1",
+                           models=SimpleNamespace(list=listing))
+
+
+class TestTheModelIsThere:
+    """
+    A mistyped model name, caught before the vitae pay for it.
+
+    Without this every vita asks for the unknown name and is answered with a
+    404, which reads like an endpoint that is down rather than like a typo.
+    """
+
+    def test_a_model_the_endpoint_has_is_run(self):
+        check_the_model(an_endpoint("gemma-4-31b-it", "qwen3.8-27b"), "gemma-4-31b-it")
+
+    def test_a_model_the_endpoint_does_not_have_stops_the_run(self):
+        with pytest.raises(ValueError, match="no model 'gpt-oss-120b123123'"):
+            check_the_model(an_endpoint("openai-gpt-oss-120b"), "gpt-oss-120b123123")
+
+    def test_the_refusal_says_what_there_is_instead(self):
+        # the name that was meant is usually in the list
+        with pytest.raises(ValueError) as refused:
+            check_the_model(an_endpoint("openai-gpt-oss-120b", "gemma-4-31b-it"), "gpt-oss")
+        assert "openai-gpt-oss-120b" in str(refused.value)
+        assert "gemma-4-31b-it" in str(refused.value)
+
+    def test_an_endpoint_that_cannot_be_reached_does_not_stop_the_run(self, capsys):
+        # the vitae are asked for over the next hour; this says nothing about them
+        check_the_model(an_endpoint(fails=APITimeoutError(request=None)), "gemma-4-31b-it")
+        assert "could not ask" in capsys.readouterr().out
+
+    def test_an_endpoint_that_refuses_to_list_says_so_and_stops(self):
+        refusal = APIError("no listing for you", request=None, body=None)
+        with pytest.raises(ValueError, match="refused to list its models"):
+            check_the_model(an_endpoint(fails=refusal), "gemma-4-31b-it")
 
 
 class TestWaitingOutTheEndpoint:

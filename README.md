@@ -101,6 +101,19 @@ Every family wants this asked differently, and **ignores what it does not know w
 
 The entries were checked against the endpoint by asking one small arithmetic question per model and setting and counting the completion tokens, which is the only reliable signal — the wall clock says nothing, since the same request can take 0.1s or 90s depending on the load. Thinking off against on: `gemma-4-31b-it` 4 → 225 tokens, `qwen3.8-27b` 4 → 50, `deepseek-v4-flash-0731` 2 → 49, `mistral-medium-3.5-128b` 4 (`none`) → 152 (`high`), `openai-gpt-oss-120b` 20 (`low`) → 45 (`medium`) → 84 (`high`). Only `glm-4.7` answers with the same 3 tokens whatever it is asked, so that deployment seems to have its thinking switched off for good. The levels are worth less than the switch: on deepseek and on qwen3.8 they differ from each other only within the noise of a question this small.
 
+**The model's name.** It is checked against the list the endpoint publishes before anything is loaded, because a name the endpoint does not know is not refused once but once per vita — every one of them is answered with a 404 and left for `--resume`, which reads like a bad day at the endpoint rather than like a typo. The list is short enough to print, and the name that was meant is usually in it:
+
+```
+$ python run_step.py 2 --model gpt-oss-120b123123
+https://chat-ai.academiccloud.de/v1/ has no model 'gpt-oss-120b123123'. It has:
+  apertus-70b-instruct-2509
+  deepseek-v4-flash-0731
+  ...
+  openai-gpt-oss-120b
+```
+
+An endpoint that cannot be reached at all only prints a note: that says nothing about the model, and the vitae are asked for over the next hour anyway.
+
 **Checkpoints.** A run is 150+ model calls at 15 calls a minute, so it has to survive being interrupted. Every vita is appended to `data/checkpoints/<run>/step<n>.jsonl` as it is finished (flushed every ten by default, `--checkpoint-every` to change it), and `--resume` processes only what is missing. The first line records the run, the model and its settings, so a resume with anything else is refused rather than interleaved into one file. The CSV and the JSON dump are written only once every vita is done, so an interrupted or `--limit`ed run never overwrites a complete output with a partial one.
 
 **Workers.** The vitae are independent — each is one prompt built from files that are only read — so `--workers N` hands several of them to the endpoint at once, starting them `STAGGER` (0.5s) apart. Fifteen calls arriving together is what the endpoint refuses — a burst of 429s that then retry together, in waves — while the same fifteen spread over seven seconds go through; only the first call of each worker is held back, since from then on they are spread out by the answers they are waiting for. The rate limiter is shared by the threads of the process (`ratelimit` holds a lock), so more workers use more of the same 15 calls a minute rather than multiplying the budget; everything that writes stays in the main thread, which only collects what the workers return. A model that answers in a minute leaves 14 of the 15 calls unused, and five workers turn that into five. Only one spare vita per worker is ever queued, so a batch that stops early leaves nothing behind but the handful of answers it is already waiting for; on Ctrl+C those are finished and checkpointed — they are paid for — and a second Ctrl+C while they finish still writes them.

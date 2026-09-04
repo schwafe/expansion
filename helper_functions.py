@@ -5,8 +5,8 @@ from dataclasses import dataclass
 
 import polars as pl
 
-from openai import (APIConnectionError, BadRequestError, InternalServerError,
-                    OpenAI, RateLimitError)
+from openai import (APIConnectionError, APIError, BadRequestError,
+                    InternalServerError, OpenAI, RateLimitError)
 from ratelimit import limits, sleep_and_retry
 
 ONE_MINUTE = 60
@@ -195,6 +195,36 @@ def vita_texts_to_vita_dfs(df:pl.DataFrame, column:str="text") -> pl.DataFrame:
         text_to_vita_df(row[column], row["volume"], row["nr_RG"])
         for row in df.iter_rows(named=True)
     )
+
+def available_models(client: OpenAI) -> list[str]:
+    """The names the endpoint answers to, as it lists them."""
+    return sorted(model.id for model in client.models.list().data)
+
+
+def check_the_model(client: OpenAI, model: str) -> None:
+    """
+    Refuse a name the endpoint does not have, before the run starts.
+
+    A mistyped model is not refused once but once per vita: every one of them
+    is answered with a 404 and left for `--resume`, so the run looks like an
+    endpoint having a bad day rather than like a typo. Asking which models
+    there are costs one request, and the answer is short enough to print --
+    the name that was meant is usually in it.
+    """
+    try:
+        available = available_models(client)
+    except APIConnectionError as error:
+        # not an answer about the model: the endpoint may well be there again
+        # by the time the vitae are asked for, so this does not stop the run
+        print(f"note: could not ask {client.base_url} which models it has "
+              f"({type(error).__name__}); running with {model} as given")
+        return
+    except APIError as error:
+        raise ValueError(f"{client.base_url} refused to list its models: {error}") from error
+    if model not in available:
+        raise ValueError(f"{client.base_url} has no model {model!r}. It has:\n  "
+                         + "\n  ".join(available))
+
 
 @dataclass(frozen=True)
 class ThinkingStyle:

@@ -58,8 +58,9 @@ choice from a list. `--no-thinking` turns it off, `--reasoning-effort` sets how
 much of it there is; passing neither leaves the model at its default. Every
 family takes these differently and ignores what it does not know without a
 word, so the request is built from the table in `helper_functions.STYLES` and
-anything the model cannot do is refused before the run starts. What a run used
-is recorded in the dump next to the model name.
+anything the model cannot do is refused before the run starts -- as is a model
+the endpoint does not have, whose name would otherwise cost one 404 per vita.
+What a run used is recorded in the dump next to the model name.
 """
 
 import argparse
@@ -87,6 +88,7 @@ import normalize
 import runs
 from helper_functions import (
     call_chat_ai,
+    check_the_model,
     determine_candidates,
     known_efforts,
     text_to_vita_df,
@@ -963,8 +965,10 @@ def main() -> None:
     if arguments.workers < 1:
         raise SystemExit("--workers takes at least 1")
 
-    try:  # a setting this model has no way of taking, before anything is loaded
+    client = connect()
+    try:  # what this model cannot do, and what it is not, before anything is loaded
         thinking_kwargs(arguments.model, arguments.thinking, arguments.reasoning_effort)
+        check_the_model(client, arguments.model)
     except ValueError as error:
         raise SystemExit(str(error))
 
@@ -981,7 +985,7 @@ def main() -> None:
     warn_about_the_prompt(name, step)
 
     try:  # nothing to build this step on: the message says what is there
-        run = prepare(step, arguments.model, arguments.attempts,
+        run = prepare(step, arguments.model, arguments.attempts, client=client,
                       thinking=arguments.thinking,
                       reasoning_effort=arguments.reasoning_effort,
                       name=name, parent=arguments.parent,
