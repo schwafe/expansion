@@ -24,6 +24,10 @@ thinking settings unless `--run` says otherwise. `--from` takes the input from
 another run, so only the step being tried has to be run again. What produced
 what is in `data/runs/<run>/manifest.json`; `runs.py` holds the layout.
 
+**Stopping.** Ctrl+C stops the submitting and waits for the calls that are
+already out -- they are paid for either way. Ctrl+C a second time abandons them
+and leaves at once; `--resume` asks for them again.
+
 **Workers.** The vitae are independent, so `--workers N` has several of them in
 flight at once. The threads share the process's rate limit rather than
 multiplying it, and they share it by spacing their calls a little over four
@@ -73,6 +77,7 @@ import argparse
 import hashlib
 import json
 import os
+import signal
 import time
 from collections import Counter
 from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, wait
@@ -556,10 +561,26 @@ def read_checkpoint(path: Path) -> dict[tuple[int, int], dict]:
 
 
 def read_checkpoint_lines(path: Path) -> list[dict]:
+    """
+    The entries of a checkpoint, minus a last line that was cut short.
+
+    Leaving at once (a second Ctrl+C) can take the process while a line is
+    half written, and one truncated vita must not make the other hundred
+    unreadable -- it was never a result, so a resume asks for it again.
+    """
     if not path.exists():
         return []
     with open(path, encoding="utf-8") as file:
-        return [json.loads(line) for line in file if line.strip()]
+        lines = [line for line in file if line.strip()]
+    entries = []
+    for number, line in enumerate(lines, start=1):
+        try:
+            entries.append(json.loads(line))
+        except json.JSONDecodeError:
+            if number != len(lines):  # only the last line can have been cut off
+                raise
+            print(f"note: the last line of {path} was cut short and is left out")
+    return entries
 
 
 def read_checkpoint_head(path: Path) -> dict | None:
@@ -615,6 +636,20 @@ def process_vita(run: Run, key: tuple[int, int]) -> dict:
     }
 
 
+def stop_now(message: str) -> None:
+    """
+    Leave without waiting for the calls that are still out.
+
+    Asking politely is not enough: the threads of a pool are joined when the
+    interpreter exits, so a run waiting on an answer that takes a quarter of an
+    hour cannot be left before it arrives. Everything that was answered is on
+    disk by the time this is called -- what is abandoned is the calls
+    themselves, which `--resume` asks for again.
+    """
+    print(message, flush=True)
+    os._exit(1)
+
+
 def run_batch(run: Run, done: dict, checkpoint: Path, every: int, limit: int | None) -> dict:
     """
     Process every vita that is not in the checkpoint yet.
@@ -631,9 +666,15 @@ def run_batch(run: Run, done: dict, checkpoint: Path, every: int, limit: int | N
     A vita the endpoint gave up on (after the waiting `call_chat_ai` already
     did) is not a result and is not recorded: the batch says so, carries on with
     the others, and leaves that vita to be picked up by `--resume`. Whatever
-    ends the batch -- an interruption, a failure of this code, a second Ctrl+C
-    while the vitae in flight are being waited for -- the answers already paid
-    for are written to the checkpoint on the way out.
+    ends the batch -- an interruption, a failure of this code, being asked to
+    stop twice -- the answers already paid for are written to the checkpoint on
+    the way out.
+
+    Ctrl+C stops the submitting and waits for the calls that are out, since
+    they are paid for whether they are read or not. Ctrl+C again abandons them
+    and leaves at once, for when the wait is the thing that matters -- a run
+    started by mistake, or a machine that has to be shut down. What was
+    abandoned was never a result, so `--resume` asks for it again.
     """
     start_checkpoint(checkpoint, checkpoint_head(run))
     todo = [key for key in run.keys() if key not in done]
@@ -697,6 +738,22 @@ def run_batch(run: Run, done: dict, checkpoint: Path, every: int, limit: int | N
               + (f" -- {tries} tries" if tries > 1 else "")
               + (f" -- {errors} error(s)" if errors else ""))
 
+    def leave_at_once(number: int, frame) -> None:
+        """The second Ctrl+C, taken as it is meant: now, not when the calls come back."""
+        stop_now(f"\nstopped -- {len(done)} vitae are in {checkpoint}; the calls still "
+                 "out are abandoned and will be asked for again by "
+                 f"`python run_step.py {run.step.number} --run {run.name} --resume`")
+
+    def interrupt(number: int, frame) -> None:
+        """The first one behaves like the default handler, and arms the second."""
+        signal.signal(signal.SIGINT, leave_at_once)
+        raise KeyboardInterrupt
+
+    # Ctrl+C is handled here rather than left to the interpreter because the
+    # second one has to be told apart from the first, and because what it has
+    # to do -- leave while a thread is still waiting on an answer -- is not
+    # something an exception can do: the threads are joined on the way out.
+    before = signal.signal(signal.SIGINT, interrupt)
     interrupted = False
     number = 0
     try:
@@ -724,14 +781,17 @@ def run_batch(run: Run, done: dict, checkpoint: Path, every: int, limit: int | N
                 # they are answered or being answered, so they are kept and go
                 # on counting; what had not started is what is dropped
                 print(f"\ninterrupted -- {len(outstanding)} vitae are answered or in "
-                      "flight; waiting for them, they count too")
+                      "flight; waiting for them, they count too "
+                      "(Ctrl+C again to leave them and stop now)")
             pool.shutdown(wait=True)
             for future in list(queue):
                 if future.done() and not future.cancelled():
                     number += 1
                     harvest(future, f"[{number}/{len(todo)}] ")
-        finally:  # a second Ctrl+C must not cost the answers already paid for
+                    flush()  # a second Ctrl+C may come at any moment from here on
+        finally:  # no Ctrl+C may cost the answers already paid for
             flush()
+            signal.signal(signal.SIGINT, before)
 
     if interrupted:
         raise SystemExit(

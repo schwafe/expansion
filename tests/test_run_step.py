@@ -16,9 +16,13 @@ and tests_normalize.py; what is tested here is the loop around them:
 """
 
 
+import json
+import os
 import re
+import signal
 import threading
 import time
+from concurrent.futures import ThreadPoolExecutor
 
 import polars as pl
 import pytest
@@ -302,6 +306,76 @@ class TestWhenTheEndpointGivesUp:
         kept = [line for line in after.splitlines() if line.startswith("  ")]
         assert kept  # the wait was not for nothing
         assert all(re.match(r"  \[\d+/3\] \d+/\d+", line) for line in kept), kept
+
+    def test_being_asked_twice_leaves_without_waiting(self, tmp_path, monkeypatch):
+        # the answers that are out are paid for, but a wait of a quarter of an
+        # hour is not what someone shutting their machine down asked for
+        path = tmp_path / "step2.jsonl"
+        stopped = []
+
+        def stop(message):
+            stopped.append(message)
+            raise SystemExit(message)  # the real one does not come back either
+
+        class AskedAgain(ThreadPoolExecutor):
+            """Ctrl+C a second time, while the vitae in flight are waited for."""
+
+            def shutdown(self, *args, **kwargs):
+                os.kill(os.getpid(), signal.SIGINT)
+                return super().shutdown(*args, **kwargs)
+
+        monkeypatch.setattr(run_step, "stop_now", stop)
+        monkeypatch.setattr(run_step, "ThreadPoolExecutor", AskedAgain)
+
+        def process(volume, nr):
+            if (volume, nr) == (3, 12):
+                os.kill(os.getpid(), signal.SIGINT)  # the first one, from a worker
+                time.sleep(0.5)
+            return {"text": "t", "record": {"errors": []}}
+
+        with pytest.raises(SystemExit):
+            run_batch(make_run(process), {}, path, every=10, limit=None)
+        assert stopped and "--resume" in stopped[0]
+        assert (2, 370) in read_checkpoint(path)  # what was answered is still written
+
+    def test_a_line_cut_short_by_the_leaving_is_left_out(self, tmp_path, capsys):
+        # leaving at once can take the process mid-line, and one half-written
+        # vita must not make the hundred before it unreadable
+        path = tmp_path / "step2.jsonl"
+        path.write_text('{"run": "a-run"}\n'
+                        '{"volume": 2, "nr_RG": 370, "text": "t", "record": null}\n'
+                        '{"volume": 2, "nr_RG": 371, "te', encoding="utf-8")
+        assert set(read_checkpoint(path)) == {(2, 370)}
+        assert "cut short" in capsys.readouterr().out
+
+    def test_a_broken_line_anywhere_else_is_not_swallowed(self, tmp_path):
+        path = tmp_path / "step2.jsonl"
+        path.write_text('{"run": "a-run"}\n'
+                        '{"volume": 2, "nr_R\n'
+                        '{"volume": 2, "nr_RG": 371, "text": "t", "record": null}\n',
+                        encoding="utf-8")
+        with pytest.raises(json.JSONDecodeError):
+            read_checkpoint(path)
+
+    def test_the_handler_is_given_back_when_the_batch_is_over(self, tmp_path):
+        # the batch borrows Ctrl+C; a notebook or a test after it must not find
+        # itself unable to interrupt anything
+        before = signal.getsignal(signal.SIGINT)
+        run_batch(make_run(lambda volume, nr: None), {}, tmp_path / "step2.jsonl",
+                  every=10, limit=None)
+        assert signal.getsignal(signal.SIGINT) is before
+
+    def test_the_first_interruption_says_how_to_stop_at_once(self, tmp_path, capsys):
+        def process(volume, nr):
+            if (volume, nr) == (2, 370):
+                raise KeyboardInterrupt
+            time.sleep(0.2)
+            return {"text": "t", "record": {"errors": []}}
+
+        with pytest.raises(SystemExit):
+            run_batch(make_run(process, workers=2), {}, tmp_path / "step2.jsonl",
+                      every=10, limit=None)
+        assert "Ctrl+C again" in capsys.readouterr().out
 
     def test_an_interruption_still_keeps_what_is_answered(self, tmp_path):
         path = tmp_path / "step2.jsonl"
