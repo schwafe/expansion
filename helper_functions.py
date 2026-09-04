@@ -429,6 +429,12 @@ def call_chat_ai(client: OpenAI, model: str, system_prompt: str, user_prompt: st
     `label` names what this call is for -- with several vitae in flight the
     waiting is otherwise anonymous, and one vita being retried five times looks
     exactly like five vitae being retried once.
+
+    This is meant to be the only retrying there is: a client that retries on its
+    own does it without a slot and without a word, so the waits below are not
+    the ones actually kept and a run can sit for half an hour with nothing
+    printed. `run_step.connect` builds the client with `max_retries=0` for that
+    reason.
     """
     for retry in range(max_retries + 1):
         try:

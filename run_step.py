@@ -42,6 +42,13 @@ clock -- and added up in the report, because a model that is slow, an endpoint
 that is overloaded and a model that cannot keep to the format look the same
 from the outside and want different remedies.
 
+**Waiting.** One answer may take `--timeout` seconds (six minutes by default);
+after that the request is given up on and made again, up to five times, with the
+waits printed as they happen. The SDK would rather wait ten minutes and then try
+twice more of its own accord and say nothing, which is half an hour of silence
+per vita and a retry that skips the rate limit's spacing, so the client is built
+with `max_retries=0` and every retry is made here instead.
+
 **Checkpoints.** A run is 150+ model calls at 15 calls a minute, so it has to
 survive being interrupted. Every vita is appended to
 `data/checkpoints/<run>/step<n>.jsonl` as it is finished (flushed every ten by
@@ -119,6 +126,7 @@ DIOCESES = DATA_DIR / "dioceses.csv"
 BASE_URL = "https://chat-ai.academiccloud.de/v1"
 MODEL = "gemma-4-31b-it"
 MAX_ATTEMPTS = 5  # parse attempts per vita before it is left unexpanded
+REPLY_TIMEOUT = 360  # seconds one answer may take before it is asked for again
 CHECKPOINT_EVERY = 10
 WORKERS = 1  # vitae in flight at once; they share the rate limit, not multiply it
 MAX_FAILURES = 10  # vitae the endpoint may fail on before the batch gives up
@@ -492,9 +500,24 @@ STEPS: dict[int, Step] = {
 }
 
 
-def connect() -> OpenAI:
+def connect(timeout: float = REPLY_TIMEOUT) -> OpenAI:
+    """
+    The endpoint, with the waiting and the retrying kept in our own hands.
+
+    The SDK left to itself waits ten minutes for a reply and then tries twice
+    more without saying so, so a request that is never answered takes half an
+    hour to admit it and a refused one goes back out half a second later --
+    without a slot, since `wait_for_a_slot` is passed once per call and not once
+    per attempt of it. `max_retries=0` leaves every retry to `call_chat_ai`,
+    where it is printed, counted into the report and spaced like any other call.
+
+    `timeout` is what one answer may take: long enough for a thinking model on
+    the longest vita, short enough that a request the endpoint has dropped is
+    noticed while the run is still worth watching. `--timeout` says otherwise.
+    """
     load_dotenv()
-    return OpenAI(api_key=os.environ["API_KEY"], base_url=BASE_URL)
+    return OpenAI(api_key=os.environ["API_KEY"], base_url=BASE_URL,
+                  timeout=timeout, max_retries=0)
 
 
 def prepare(step: Step, model: str = MODEL, attempts: int = MAX_ATTEMPTS, client=None,
@@ -1021,6 +1044,9 @@ def main() -> None:
                         help=f"parse attempts per vita (default: {MAX_ATTEMPTS})")
     parser.add_argument("--checkpoint-every", type=int, default=CHECKPOINT_EVERY,
                         help=f"flush after this many vitae (default: {CHECKPOINT_EVERY})")
+    parser.add_argument("--timeout", type=float, default=REPLY_TIMEOUT,
+                        help="seconds one answer may take before it is given up on and "
+                             f"asked for again (default: {REPLY_TIMEOUT})")
     parser.add_argument("--workers", type=int, default=WORKERS,
                         help="how many vitae to have in flight at once; they share the "
                              f"rate limit of {CALLS_PER_MINUTE} calls a minute "
@@ -1028,6 +1054,8 @@ def main() -> None:
     arguments = parser.parse_args()
     if arguments.workers < 1:
         raise SystemExit("--workers takes at least 1")
+    if arguments.timeout <= 0:
+        raise SystemExit("--timeout is the seconds an answer may take, so it takes more than 0")
     if arguments.thinking is None and arguments.reasoning_effort is None:
         # what the model does when it is not told is nowhere in the run: the
         # deployment may change it between two runs and both would read alike
@@ -1037,7 +1065,7 @@ def main() -> None:
             "is not recorded anywhere and can change under the run."
         )
 
-    client = connect()
+    client = connect(arguments.timeout)
     try:  # what this model is not, and what it cannot do, before anything is loaded
         check_the_model(client, arguments.model)  # first: a typo has no thinking style either
         thinking_kwargs(arguments.model, arguments.thinking, arguments.reasoning_effort)

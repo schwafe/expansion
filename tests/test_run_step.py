@@ -13,6 +13,7 @@ and tests_normalize.py; what is tested here is the loop around them:
   knows which model wrote it
 - the assembly of the output CSV, including the vitae with nothing to do
 - the report counts
+- the client: how long one answer may take, and that it retries nowhere but here
 """
 
 
@@ -33,9 +34,11 @@ import run_step
 from helper_functions import thinking_kwargs
 
 from run_step import (
+    REPLY_TIMEOUT,
     Run,
     Step,
     append_checkpoint,
+    connect,
     ask,
     checkpoint_head,
     assemble,
@@ -502,3 +505,75 @@ class TestReport:
                                              "readable": True, "seconds": 60.0}}]
         run.workers = 5
         assert "about 5.0 at 5 vita(e) at a time" in render_report(run, SOURCE, results)
+
+
+class TestConnect:
+    """
+    The waiting belongs to us, not to the SDK.
+
+    Left at its defaults the client waits ten minutes for a reply and then makes
+    two more attempts on its own, so a dropped request costs half an hour and is
+    reported once, and the retries skip `wait_for_a_slot` -- which is the wave
+    the spacing exists to prevent.
+    """
+
+    @pytest.fixture
+    def built(self, monkeypatch):
+        built = {}
+        monkeypatch.setattr(run_step, "load_dotenv", lambda: None)
+        monkeypatch.setattr(run_step, "OpenAI", lambda **kwargs: built.update(kwargs) or "client")
+        monkeypatch.setenv("API_KEY", "a-key")
+        return built
+
+    def test_an_answer_may_take_six_minutes_by_default(self, built):
+        connect()
+        assert built["timeout"] == REPLY_TIMEOUT == 360
+
+    def test_how_long_an_answer_may_take_can_be_said(self, built):
+        connect(12.5)
+        assert built["timeout"] == 12.5
+
+    def test_the_client_retries_nothing_by_itself(self, built):
+        connect()
+        assert built["max_retries"] == 0
+
+    def test_it_is_still_the_endpoint_of_the_run(self, built):
+        connect()
+        assert built["base_url"] == run_step.BASE_URL and built["api_key"] == "a-key"
+
+
+class TestTheTimeoutArgument:
+    @pytest.fixture
+    def command(self, monkeypatch):
+        """`main` up to the connecting, with what it connected with recorded."""
+        given = {}
+
+        def connect(timeout):
+            given["timeout"] = timeout
+            return "client"
+
+        def stop_here(client, model):
+            raise ValueError("far enough")
+
+        monkeypatch.setattr(run_step, "connect", connect)
+        monkeypatch.setattr(run_step, "check_the_model", stop_here)
+
+        def run(*arguments):
+            monkeypatch.setattr("sys.argv", ["run_step.py", *arguments])
+            with pytest.raises(SystemExit) as stopped:
+                run_step.main()
+            return str(stopped.value), given
+
+        return run
+
+    def test_the_default_is_what_the_client_is_built_with(self, command):
+        message, given = command("2", "--no-thinking")
+        assert message == "far enough" and given["timeout"] == REPLY_TIMEOUT
+
+    def test_the_argument_is_passed_on(self, command):
+        message, given = command("2", "--no-thinking", "--timeout", "90")
+        assert message == "far enough" and given["timeout"] == 90.0
+
+    def test_no_time_at_all_is_refused_before_anything_is_asked(self, command):
+        message, given = command("2", "--no-thinking", "--timeout", "0")
+        assert "--timeout" in message and given == {}
