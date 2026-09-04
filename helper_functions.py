@@ -362,12 +362,16 @@ def thinking_kwargs(model: str, thinking: bool | None = None,
     return parameters
 
 
-SPACING = ONE_MINUTE / CALLS_PER_MINUTE  # four seconds between one call and the next
+# A tenth of a second more than the arithmetic asks for: at exactly four
+# seconds the first and the sixteenth call are a minute apart, and an endpoint
+# counting a rolling minute counts both -- one call more than it allows, every
+# minute, for as long as the run lasts.
+SPACING = ONE_MINUTE / CALLS_PER_MINUTE + 0.1
 _slots = threading.Lock()
 _next_slot = 0.0
 
 
-def wait_for_a_slot(spacing: float = SPACING) -> None:
+def wait_for_a_slot(spacing: float) -> None:
     """
     Hold the call back until it is this process's turn to make one.
 
@@ -382,6 +386,10 @@ def wait_for_a_slot(spacing: float = SPACING) -> None:
 
     An idle process does not save up slots: a call that comes after a quiet
     minute goes out at once rather than being followed by fourteen at will.
+
+    Every call goes through here, the retries of a refused one included -- a
+    call that came straight back would arrive on top of whatever the endpoint
+    is already refusing.
     """
     global _next_slot
     with _slots:  # only for the arithmetic: the waiting happens outside it
@@ -394,7 +402,7 @@ def wait_for_a_slot(spacing: float = SPACING) -> None:
 
 def _call_chat_ai_once(client: OpenAI, model: str, system_prompt: str, user_prompt: str,
                        settings: dict | None = None):
-    wait_for_a_slot()
+    wait_for_a_slot(SPACING)
     chat_completion = client.chat.completions.create(
         messages=[
             {

@@ -26,8 +26,9 @@ what is in `data/runs/<run>/manifest.json`; `runs.py` holds the layout.
 
 **Workers.** The vitae are independent, so `--workers N` has several of them in
 flight at once. The threads share the process's rate limit rather than
-multiplying it, and they share it by spacing their calls four seconds apart, so
-that none of them ever ask together -- which is what the endpoint refuses.
+multiplying it, and they share it by spacing their calls a little over four
+seconds apart, retries included, so that none of them ever ask together --
+which is what the endpoint refuses.
 Everything that writes stays in the main thread. A vita the
 endpoint never answered for -- a read timeout is routine once several requests
 are queued there -- is not a result: it is left out of the checkpoint and asked

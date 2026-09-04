@@ -21,6 +21,9 @@ from openai import APIError, APITimeoutError
 
 import helper_functions
 from helper_functions import (
+    CALLS_PER_MINUTE,
+    ONE_MINUTE,
+    SPACING,
     VITA_SCHEMA,
     call_chat_ai,
     check_the_model,
@@ -294,6 +297,30 @@ class TestTakingTurns:
             thread.join()
         taken.sort()
         assert all(later - earlier >= 0.04 for earlier, later in zip(taken, taken[1:]))
+
+    def test_a_minute_never_holds_more_calls_than_the_endpoint_allows(self):
+        # at exactly 60/15 the first and the sixteenth call are a minute apart,
+        # and an endpoint counting a rolling minute counts both
+        assert ONE_MINUTE // SPACING + 1 <= CALLS_PER_MINUTE
+
+    def test_a_refused_call_waits_its_turn_before_it_comes_back(self, monkeypatch):
+        # coming straight back would land it on top of whatever the endpoint is
+        # already refusing, which is what got it refused
+        monkeypatch.setattr(helper_functions, "SPACING", 0.05)
+        reached, refused = [], []
+
+        class Endpoint:
+            def create(self, **kwargs):
+                reached.append(time.monotonic())
+                if not refused:
+                    refused.append(True)
+                    raise APITimeoutError(request=None)
+                return SimpleNamespace(
+                    model_dump=lambda: {"choices": [{"message": {"content": "ok"}}]})
+
+        client = SimpleNamespace(chat=SimpleNamespace(completions=Endpoint()))
+        call_chat_ai(client, "a-model", "system", "user", retry_wait=0)
+        assert len(reached) == 2 and reached[1] - reached[0] >= 0.04
 
     def test_a_quiet_minute_does_not_save_up_turns(self):
         # otherwise the wait would be followed by a burst of everything it saved
