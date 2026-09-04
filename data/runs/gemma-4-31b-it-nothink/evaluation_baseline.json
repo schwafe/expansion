@@ -1,6 +1,6 @@
 {
   "gold": "data/to_compare_with/fable_expanded.csv",
-  "run": "gemma-4-31b-it",
+  "run": "gemma-4-31b-it-nothink",
   "stages": {
     "once": {
       "word_accuracy": 0.590095,
