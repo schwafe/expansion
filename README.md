@@ -212,6 +212,16 @@ Each run keeps its own `evaluation_report.md`, `evaluation_mismatches.csv`, `eva
 | --- | --- | --- | --- | --- | ---: | ---: |
 | `gemma-4-31b-it` | `gemma-4-31b-it (default)` | `gemma-4-31b-it (default)` | `gemma-4-31b-it (default)` | step 4 (normalized) | 92.9% | 64.8% |
 
+That table answers "which chain is best so far", not "which model should do step 2": it scores each run where its own chain has got to, so a run taken through step 4 is read on a normalised text and one that stopped at step 2 on an uninflected one. **One section per step** follows it, where every row is the same stage — the same question, asked of every model that has answered it:
+
+| produced by | step 2 | word accuracy | form accuracy | gained | scoreable |
+| --- | --- | ---: | ---: | ---: | ---: |
+| `gemma-4-31b-it` | `gemma-4-31b-it (default)` | 89.1% | 43.8% | +30.3pp | 4967 |
+| `deepseek-v4-flash-0731-nothink` | `deepseek-v4-flash-0731 (off)` | 89.0% | 43.8% | +30.2pp | 4967 |
+| `qwen3.8-27b-nothink` | `qwen3.8-27b (off)` | 87.4% | 43.3% | +28.6pp | 4967 |
+
+Steps 2 and 3 are sorted by word accuracy, step 4 by form accuracy — the one thing each can move. `gained` is the rise over the stage before it *in the same chain*: step 2 starts from the same rule-based text everywhere, but a step 3 builds on whatever its own step 2 produced, so its own number carries what it inherited and the gain does not. A step several runs share (one took it from another with `--from`) is one row, under the run that produced it, since it is the same file and so the same score.
+
 The unit of measurement is the single abbreviation, not the text: a text-level diff mixes one expansion error with twenty inflection differences and tells you nothing actionable. The abbreviated source text is the anchor — for each vita it is aligned with the gold and with each stage output at word level, so every abbreviation gets a gold expansion and a system expansion that are compared directly. The alignment works because the expansion steps only ever replace abbreviations, so every word that was not abbreviated reappears unchanged and anchors the alignment (the property `normalize.py` already relies on); inside a changed passage each abbreviation is re-anchored on the expansion that continues it (`eccl.` → `ecclesiam`, or via the glossary where it does not, `aep.` → `archiepiscopus`). What cannot be anchored is reported as `unaligned` and left out of every rate rather than scored — that number is the reliability check on the metric itself.
 
 Two rates are reported per stage, because a single exact-match number would score `thrice_expanded` (deliberately base forms) as broken:

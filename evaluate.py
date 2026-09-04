@@ -1066,19 +1066,94 @@ def evaluate(gold_path: Path, run: str, write: bool, baseline: bool,
     return summary
 
 
+def model_cell(entry: dict) -> str:
+    """The model of one step of a chain, as a table cell."""
+    return f"`{entry['model']} ({describe_settings(entry)})`"
+
+
+def step_section(step: int, scored: list[tuple[str, dict, dict]]) -> list[str]:
+    """
+    One step of every chain that has it, scored on the text that step produced.
+
+    The table at the top of the file scores each run where it has got to, which
+    answers "which chain is best so far" but not "which model should do step 2":
+    a run that has been taken through step 4 is scored on a normalised text, one
+    that stopped at step 2 on an uninflected one, and the two numbers are not
+    the same question. Here every row is the same stage.
+
+    Steps 2 and 3 are read by word accuracy -- whether the right word was
+    chosen; the inflection is step 4's business, and form accuracy at these
+    stages mostly measures how much of it is still to do. Step 4 is read by form
+    accuracy, which is the only thing it can move.
+
+    `gained` is the rise over the stage before it in that same chain. For step 2
+    every chain starts from the same rule-based text, so the column adds little;
+    for steps 3 and 4, which build on whatever their own step 2 produced, it is
+    the part of the number the step is actually responsible for.
+
+    A step that several runs share -- one run took it from another with `--from`
+    -- is one row, under the run that produced it: the file, and so the score,
+    is the same one.
+    """
+    stage, before = STAGE_OF_STEP[step], STAGE_OF_STEP[step - 1]
+    measure = "form" if step == 4 else "word"
+    rows, seen = [], set()
+    for name, summary, chain in scored:
+        if stage not in summary["stages"] or step not in chain:
+            continue
+        produced = chain[step].get("output")
+        if produced in seen:
+            continue
+        seen.add(produced)
+        reached, previously = summary["stages"][stage], summary["stages"][before]
+        rows.append({
+            "run": chain[step].get("run") or name,
+            "models": [model_cell(chain[number]) for number in range(2, step + 1)],
+            "word": reached["word_accuracy"],
+            "form": reached["form_accuracy"],
+            "gained": reached[f"{measure}_accuracy"] - previously[f"{measure}_accuracy"],
+            "scoreable": reached["scoreable"],
+        })
+    if not rows:
+        return []
+    rows.sort(key=lambda row: -row[measure])
+
+    said = ("whether the right word was chosen" if measure == "word"
+            else "whether the text is right as it stands")
+    columns = " | ".join(f"step {number}" for number in range(2, step + 1))
+    lines = [
+        f"## Step {step} on its own",
+        "",
+        f"Every chain that has a step {step}, scored on the text it produced -- so the "
+        f"rows are comparable whatever the runs did afterwards. Sorted by "
+        f"{measure} accuracy, which asks {said}; `gained` is the rise over "
+        f"{LABELS[before]} in the same chain.",
+        "",
+        f"| produced by | {columns} | word accuracy | form accuracy | gained | scoreable |",
+        "| --- | " + "--- | " * (step - 1) + "---: | ---: | ---: | ---: |",
+    ]
+    for row in rows:
+        lines.append(f"| `{row['run']}` | {' | '.join(row['models'])} | "
+                     f"{percent(row['word'])} | {percent(row['form'])} | "
+                     f"{row['gained'] * 100:+5.1f}pp | {row['scoreable']} |")
+    return lines + [""]
+
+
 def compare(gold_path: Path, names: list[str]) -> str:
     """
     Every run in one table: which model did which step, and what came of it.
 
     The rates are those of the last stage a run has reached, so a chain that
     stops at step 2 is listed with what it did reach rather than left out --
-    the stage is named in its own column so the rows stay comparable.
+    the stage is named in its own column so the rows stay comparable. What that
+    table cannot answer is which model to give a single step to, since it scores
+    the runs at different stages; the sections after it do, one per step.
     """
+    scored = [(name, score(gold_path, name)[0], dict(runs.chain(name)))
+              for name in names]
     rows = []
-    for name in names:
-        summary, _, stage_names = score(gold_path, name)
+    for name, summary, steps in scored:
         final = summary["stages"][summary["final_stage"]]
-        steps = dict(runs.chain(name))
         rows.append({
             "run": name,
             "models": [f"{steps[number]['model']} ({describe_settings(steps[number])})"
@@ -1104,6 +1179,9 @@ def compare(gold_path: Path, names: list[str]) -> str:
         models = " | ".join(f"`{model}`" if model else "—" for model in row["models"])
         lines.append(f"| `{row['run']}` | {models} | {row['final']} | "
                      f"{percent(row['word'])} | {percent(row['form'])} |")
+    lines.append("")
+    for step in (2, 3, 4):
+        lines += step_section(step, scored)
     return "\n".join(lines) + "\n"
 
 

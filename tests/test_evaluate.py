@@ -26,6 +26,7 @@ from evaluate import (
     candidate_dumps,
     describe_settings,
     produced_by,
+    step_section,
     build_anchor_index,
     build_lemma_index,
     candidate_covers,
@@ -407,6 +408,76 @@ class TestProducedBy:
         rendered = "\n".join(produced_by(self.info({"3": {
             "run": "gemma", "model": "gemma-4-31b-it", "thinking": None, "written": None}})))
         assert "unrecorded" in rendered
+
+
+class TestStepSections:
+    """
+    Every run at the same step, so the models of one step can be compared.
+
+    The table above them scores each run where its chain has got to, which
+    makes a run that has been through step 4 look better at step 2 than one
+    that stopped there.
+    """
+
+    def scored(self, name, chain, **stages):
+        """One run: what its stages scored, and which model did which step."""
+        summary = {"stages": {stage: {"word_accuracy": word, "form_accuracy": form,
+                                      "scoreable": 100}
+                              for stage, (word, form) in stages.items()}}
+        steps = {number: {"run": produced, "model": model, "thinking": False,
+                          "reasoning_effort": None,
+                          "output": f"data/runs/{produced}/step{number}.csv"}
+                 for number, (produced, model) in chain.items()}
+        return (name, summary, steps)
+
+    def two_runs_through_step_2(self):
+        return [
+            self.scored("gemma", {2: ("gemma", "gemma-4-31b-it")},
+                        once=(0.6, 0.3), twice=(0.89, 0.44)),
+            self.scored("qwen-nothink", {2: ("qwen-nothink", "qwen3.8-27b")},
+                        once=(0.6, 0.3), twice=(0.87, 0.43)),
+        ]
+
+    def test_the_best_at_this_step_comes_first(self):
+        rendered = "\n".join(step_section(2, self.two_runs_through_step_2()))
+        assert rendered.index("gemma-4-31b-it") < rendered.index("qwen3.8-27b")
+
+    def test_what_a_step_gained_is_measured_against_the_stage_before_it(self):
+        # the chains differ from step 2 on, so what a later step is worth is
+        # not its own number but the rise over what it was handed
+        rendered = "\n".join(step_section(2, self.two_runs_through_step_2()))
+        assert "+29.0pp" in rendered  # 0.89 over 0.60
+        assert "+27.0pp" in rendered
+
+    def test_a_run_that_has_not_reached_the_step_is_left_out(self):
+        rendered = "\n".join(step_section(3, self.two_runs_through_step_2()))
+        assert rendered == ""
+
+    def test_step_4_is_read_by_the_accuracy_it_can_move(self):
+        # word accuracy is step 4's to keep, not to raise: it only inflects
+        scored = [
+            self.scored("careful", {2: ("careful", "a-model"), 3: ("careful", "a-model"),
+                                    4: ("careful", "a-model")},
+                        thrice=(0.90, 0.40), normalized=(0.90, 0.65)),
+            self.scored("wordy", {2: ("wordy", "b-model"), 3: ("wordy", "b-model"),
+                                  4: ("wordy", "b-model")},
+                        thrice=(0.95, 0.40), normalized=(0.95, 0.55)),
+        ]
+        rendered = "\n".join(step_section(4, scored))
+        assert rendered.index("a-model") < rendered.index("b-model")
+
+    def test_a_step_two_runs_share_is_one_row_under_the_run_that_made_it(self):
+        # --from means the same file, and so the same score, twice
+        scored = [
+            self.scored("gemma", {2: ("gemma", "gemma-4-31b-it")},
+                        once=(0.6, 0.3), twice=(0.89, 0.44)),
+            self.scored("qwen-on-gemma", {2: ("gemma", "gemma-4-31b-it"),
+                                          3: ("qwen-on-gemma", "qwen3.8-27b")},
+                        once=(0.6, 0.3), twice=(0.89, 0.44), thrice=(0.92, 0.46)),
+        ]
+        rendered = "\n".join(step_section(2, scored))
+        assert rendered.count("gemma-4-31b-it") == 1
+        assert "qwen-on-gemma" not in rendered
 
 
 class TestDescribeSettings:
