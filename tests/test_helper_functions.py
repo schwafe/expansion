@@ -151,12 +151,49 @@ class TestThinkingKwargs:
         with pytest.raises(ValueError, match="contradict"):
             thinking_kwargs("mistral-medium-3.5-128b", thinking=False, reasoning_effort="high")
 
+    def test_a_model_with_levels_is_not_only_told_to_think(self):
+        # "thinking on" leaves the level to the model, and the report would
+        # then say the run thought, but not how much
+        with pytest.raises(ValueError, match="say which level"):
+            thinking_kwargs("qwen3.8-27b", thinking=True)
+        with pytest.raises(ValueError, match="low/high/max"):
+            thinking_kwargs("deepseek-v4-flash-0731", thinking=True)
+
+    def test_a_model_without_levels_is_told_to_think_and_that_is_all_there_is(self):
+        assert thinking_kwargs("gemma-4-31b-it", thinking=True) == {
+            "extra_body": {"chat_template_kwargs": {"enable_thinking": True}}
+        }
+
+    def test_a_level_alone_still_says_everything(self):
+        assert thinking_kwargs("qwen3.8-27b", thinking=True, reasoning_effort="low") == {
+            "reasoning_effort": "low",
+            "extra_body": {"chat_template_kwargs": {"enable_thinking": True}},
+        }
+
+    def test_switching_the_thinking_off_needs_no_level(self):
+        assert thinking_kwargs("qwen3.8-27b", thinking=False) == {
+            "extra_body": {"chat_template_kwargs": {"enable_thinking": False}}
+        }
+
+    def test_a_model_that_does_not_think_is_asked_for_nothing(self):
+        assert thinking_kwargs("apertus-70b-instruct-2509", thinking=False) == {}
+        assert thinking_kwargs("meta-llama-3.1-8b-instruct", thinking=False) == {}
+        assert thinking_kwargs("devstral-2-123b-instruct-2512", thinking=False) == {}
+
+    def test_a_model_that_does_not_think_cannot_be_told_to(self):
+        # apertus takes both settings and answers the same either way; the
+        # Mistral tokenizer of devstral answers 400 -- neither is a thought
+        with pytest.raises(ValueError, match="does not think at all"):
+            thinking_kwargs("apertus-70b-instruct-2509", thinking=True)
+        with pytest.raises(ValueError, match="does not think at all"):
+            thinking_kwargs("devstral-2-123b-instruct-2512", reasoning_effort="high")
+
     def test_an_unknown_model_is_not_guessed_at(self):
         with pytest.raises(ValueError, match="no thinking style known"):
-            thinking_kwargs("apertus-70b-instruct-2509", thinking=False)
+            thinking_kwargs("olmo-3-32b-instruct", thinking=False)
 
     def test_an_unknown_model_without_a_setting_is_left_alone(self):
-        assert thinking_kwargs("apertus-70b-instruct-2509") == {}
+        assert thinking_kwargs("olmo-3-32b-instruct") == {}
 
 
 def an_endpoint(*models, fails: Exception | None = None):

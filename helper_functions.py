@@ -241,6 +241,7 @@ class ThinkingStyle:
     not guessed from a shared shape.
     """
 
+    reasons: bool = True             # False: this family does not think at all
     switch: str | None = None        # the template variable that takes a boolean
     efforts: tuple[str, ...] = ()    # the levels this family knows, least first
     effort_parameter: bool = False   # the level is a top-level parameter, not a template variable
@@ -263,6 +264,11 @@ STYLES: dict[str, ThinkingStyle] = {
                                         on="high", off="none"),
     "openai-gpt-oss": ThinkingStyle(efforts=("low", "medium", "high"), effort_parameter=True,
                                     on="high"),
+    # and these do not think at all, so there is nothing to ask of them; they
+    # are in the table because a model that is missing from it cannot be run
+    "apertus": ThinkingStyle(reasons=False),
+    "meta-llama-3.1": ThinkingStyle(reasons=False),
+    "devstral": ThinkingStyle(reasons=False),
 }
 
 
@@ -308,6 +314,11 @@ def thinking_kwargs(model: str, thinking: bool | None = None,
     if thinking is None and reasoning_effort is None:
         return {}
     style = thinking_style(model)
+    if not style.reasons:
+        if thinking or reasoning_effort is not None:
+            raise ValueError(f"{model} does not think at all, so it cannot be told to: "
+                             "run it with --no-thinking, which is what it does anyway")
+        return {}  # nothing to send: it does not think, and it was not asked to
     template: dict[str, object] = {}
     parameters: dict[str, object] = {}
 
@@ -322,6 +333,11 @@ def thinking_kwargs(model: str, thinking: bool | None = None,
             template["reasoning_effort"] = reasoning_effort
 
     wants = thinking if thinking is not None else True
+    if wants and reasoning_effort is None and style.switch is not None and style.efforts:
+        # told to think and nothing else, it thinks as much as it likes, which
+        # is the deployment's to change and appears in no report
+        raise ValueError(f"{model} chooses how hard to think if it is only told to think; "
+                         f"say which level with --reasoning-effort: {'/'.join(style.efforts)}")
     if style.switch is not None:
         template[style.switch] = wants
     elif thinking is not None:

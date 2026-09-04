@@ -55,9 +55,10 @@ Usage:
 **Thinking.** The reasoning models think by default, which on a whole vita can
 take minutes per call and rarely changes the answer, since every step is a
 choice from a list. `--no-thinking` turns it off, `--reasoning-effort` sets how
-much of it there is, and one of the two has to be given: what a model does when
-it is not told is the deployment's to change, so a run that left it at that
-would not say what it did. Every
+much of it there is, and one of the two has to be given -- the level itself
+where the model has levels, since a model that is only told to think thinks as
+much as it likes. What a model does when it is not told is the deployment's to
+change, so a run that left it at that would not say what it did. Every
 family takes these differently and ignores what it does not know without a
 word, so the request is built from the table in `helper_functions.STYLES` and
 anything the model cannot do is refused before the run starts -- as is a model
@@ -948,7 +949,8 @@ def main() -> None:
     parser.add_argument("--thinking", action=argparse.BooleanOptionalAction, default=None,
                         help="switch the model's thinking on or off; one of this and "
                              "--reasoning-effort is required, so that what a run did is "
-                             "recorded rather than left to the model")
+                             "recorded rather than left to the model. Where the model has "
+                             "levels, --thinking alone does not say enough")
     parser.add_argument("--reasoning-effort",
                         help="how much the model may think; implies --thinking, and stands "
                              "in for it. The levels differ per model -- "
